@@ -10,15 +10,20 @@ function App() {
 
   return (
       <>
-          <Header />
-          <div className="size-3">
-                <Routes>
-                    <Route path={"/overview"} element={<OverviewPage />} />
-                    <Route path={"/all-exercises"} element={<ExerciseDashboardPage />} />
-                    <Route path={"/exercise/new"} element={<ExerciseCreatePage />} />
-                </Routes>
+          <div className="flex flex-col items-center justify-center h-screen-dvh bg-gray-100 dark:bg-gray-900">
+              <Header />
+
+              {/* Main Content */}
+              <main className="flex-1 flex flex-col items-center justify-center w-full px-6">
+                  <Routes>
+                      <Route path={"/overview"} element={<OverviewPage />} />
+                      <Route path={"/exercises"} element={<ExerciseDashboardPage />} />
+                      <Route path={"/exercise/new"} element={<ExerciseCreatePage />} />
+                  </Routes>
+              </main>
+
+              <Footer />
           </div>
-          <Footer />
       </>
   )
 }
