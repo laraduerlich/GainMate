@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.NotFoundAllExercises;
 import com.example.backend.model.Excercise;
 import com.example.backend.repo.ExerciseRepo;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ public class ExerciseService {
 
     private final ExerciseRepo exerciseRepo;
 
-    public List<Excercise> getAllExercises() {
+    public List<Excercise> getAllExercises() throws NotFoundAllExercises {
         return exerciseRepo.findAll();
     }
 }

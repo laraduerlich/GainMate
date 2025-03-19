@@ -11,15 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/exercise")
 @RequiredArgsConstructor
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Excercise>> getAllExercises() {
-        List<Excercise> all = exerciseService.getAllExercises();
-        return ResponseEntity.ok(all);
+       try {
+           List<Excercise> all = exerciseService.getAllExercises();
+           return ResponseEntity.ok(all);
+       } catch (Exception e) {
+           return ResponseEntity.badRequest().build();
+       }
     }
 }

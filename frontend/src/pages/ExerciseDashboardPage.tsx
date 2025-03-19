@@ -1,9 +1,18 @@
+import {Exercise} from "../types/Exercise.tsx";
+import ExerciseList from "../components/ExerciseList.tsx";
 
-export default function ExerciseDashboardPage() {
+type ExerciseDashboardProps = {
+    exercises: Exercise[]
+}
+
+export default function ExerciseDashboardPage({exercises}: ExerciseDashboardProps) {
 
     return (
         <>
             <h2>Dashboard Exercise</h2>
+            <div>
+                <ExerciseList exercises={exercises} />
+            </div>
         </>
     )
 }
