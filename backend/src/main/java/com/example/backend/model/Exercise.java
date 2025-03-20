@@ -2,7 +2,7 @@ package com.example.backend.model;
 
 import java.util.List;
 
-public record Excercise(
+public record Exercise(
         String id,
         String name,
         String note,

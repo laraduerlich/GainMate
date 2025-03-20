@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.exception.NotFoundAllExercises;
-import com.example.backend.model.Excercise;
+import com.example.backend.model.Exercise;
 import com.example.backend.repo.ExerciseRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class ExerciseService {
 
     private final ExerciseRepo exerciseRepo;
 
-    public List<Excercise> getAllExercises() throws NotFoundAllExercises {
+    public List<Exercise> getAllExercises() throws NotFoundAllExercises {
         return exerciseRepo.findAll();
     }
 }

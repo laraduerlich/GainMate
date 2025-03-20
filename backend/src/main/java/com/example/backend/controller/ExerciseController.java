@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Excercise;
+import com.example.backend.model.Exercise;
 import com.example.backend.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,9 @@ public class ExerciseController {
     private final ExerciseService exerciseService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Excercise>> getAllExercises() {
+    public ResponseEntity<List<Exercise>> getAllExercises() {
        try {
-           List<Excercise> all = exerciseService.getAllExercises();
+           List<Exercise> all = exerciseService.getAllExercises();
            return ResponseEntity.ok(all);
        } catch (Exception e) {
            return ResponseEntity.badRequest().build();
