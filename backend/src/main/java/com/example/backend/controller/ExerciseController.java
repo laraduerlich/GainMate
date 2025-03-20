@@ -19,11 +19,7 @@ public class ExerciseController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Exercise>> getAllExercises() {
-       try {
-           List<Exercise> all = exerciseService.getAllExercises();
-           return ResponseEntity.ok(all);
-       } catch (Exception e) {
-           return ResponseEntity.badRequest().build();
-       }
+        List<Exercise> all = exerciseService.getAllExercises();
+        return ResponseEntity.ok(all);
     }
 }

@@ -17,7 +17,7 @@ class ExerciseServiceTest {
     // --------------------------------------- GET ALL ---------------------------------------
 
     @Test
-    void getAllExercises_shouldReturnAllExercises_whenCalled() {
+    void getAllExercises_shouldReturnEmptyList_whenCalled() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo);
         List<Exercise> expected = Collections.emptyList();
@@ -27,6 +27,11 @@ class ExerciseServiceTest {
 
         // THEN
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void getAllExercises_shouldThrowException_whenCalledInvalid() {
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo);
     }
 
 
