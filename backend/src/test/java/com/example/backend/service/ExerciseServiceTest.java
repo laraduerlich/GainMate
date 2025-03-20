@@ -29,10 +29,4 @@ class ExerciseServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void getAllExercises_shouldThrowException_whenCalledInvalid() {
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo);
-    }
-
-
 }
