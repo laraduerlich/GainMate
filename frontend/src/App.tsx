@@ -5,8 +5,12 @@ import ExerciseDashboardPage from "./pages/ExerciseDashboardPage.tsx";
 import ExerciseCreatePage from "./pages/ExerciseCreatePage.tsx";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
+import DataServiceExercise from "./utils/DataServiceExercise.ts";
 
 function App() {
+
+    const {allExercises} = DataServiceExercise();
+
 
   return (
       <>
@@ -17,7 +21,7 @@ function App() {
               <main className="flex-1 flex flex-col items-center justify-center w-full px-6">
                   <Routes>
                       <Route path={"/overview"} element={<OverviewPage />} />
-                      <Route path={"/exercises"} element={<ExerciseDashboardPage />} />
+                      <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises} />} />
                       <Route path={"/exercise/new"} element={<ExerciseCreatePage />} />
                   </Routes>
               </main>
