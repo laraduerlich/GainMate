@@ -42,6 +42,7 @@ export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormP
                 </div>
                 <button type="submit">Add</button>
             </form>
+            <button >back</button>
         </>
     )
 }
