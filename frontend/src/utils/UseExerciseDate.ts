@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Exercise} from "../types/Exercise.tsx";
 import {useNavigate} from "react-router-dom";
 
-export default function DataServiceExercise() {
+export default function UseExerciseDate() {
 
     const [allExercises, setAllExercises] = useState<Exercise[]>([]);
     const navigate = useNavigate();
@@ -19,6 +19,11 @@ export default function DataServiceExercise() {
 
     // Create new exercise
     const createExercise = (newExercise: Exercise) => {
+        if (!newExercise.name) {
+            alert("Please enter a name")
+            return;
+        }
+
         axios.post("/api/exercise/new", newExercise)
             .then((response) => {
                 setAllExercises([... allExercises, response.data]);
@@ -26,6 +31,7 @@ export default function DataServiceExercise() {
             })
             .catch(error => {
                 console.error("Error create exercise:", error)
+                alert("Exercise already exists")
             })
     }
 

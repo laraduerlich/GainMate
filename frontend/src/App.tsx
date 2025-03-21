@@ -5,11 +5,11 @@ import ExerciseDashboardPage from "./pages/ExerciseDashboardPage.tsx";
 import ExerciseCreatePage from "./pages/ExerciseCreatePage.tsx";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
-import DataServiceExercise from "./utils/DataServiceExercise.ts";
+import UseExerciseDate from "./utils/UseExerciseDate.ts";
 
 function App() {
 
-    const {allExercises, createExercise} = DataServiceExercise();
+    const {allExercises, createExercise} = UseExerciseDate();
 
 
   return (

@@ -1,5 +1,7 @@
 import {FormEvent, useState} from "react";
 import {Exercise} from "../types/Exercise.tsx";
+import ButtonWithIcon from "./ButtonWithIcon.tsx";
+import {useNavigate} from "react-router-dom";
 
 
 type ExerciseCreateFormProps = {
@@ -8,9 +10,12 @@ type ExerciseCreateFormProps = {
 
 export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormProps) {
 
+    const navigate = useNavigate();
     const [name, setName] = useState<string>("");
     const [note, setNote] = useState<string>("");
 
+
+    // button handlers
     const handleSubmit = (event: FormEvent)=> {
         event.preventDefault()
         const newExercise: Exercise = {
@@ -18,6 +23,10 @@ export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormP
             note: note
         }
         createExercise(newExercise);
+    }
+
+    const handleBackButton = () => {
+        navigate("/exercises");
     }
 
 
@@ -40,9 +49,9 @@ export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormP
                         onChange={(event) => setNote(event.target.value)}
                     />
                 </div>
-                <button type="submit">Add</button>
+                <ButtonWithIcon onSubmit={handleSubmit} icon={"add"} type={"submit"} />
             </form>
-            <button >back</button>
+            <ButtonWithIcon onClick={handleBackButton} icon={"back"} type={"button"} />
         </>
     )
 }
