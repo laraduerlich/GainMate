@@ -8,4 +8,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ExerciseAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String exerciseAlreadyExistsException(ExerciseAlreadyExistsException e) {
+        return e.getMessage();
+    }
 }

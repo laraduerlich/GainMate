@@ -5,11 +5,11 @@ import ExerciseDashboardPage from "./pages/ExerciseDashboardPage.tsx";
 import ExerciseCreatePage from "./pages/ExerciseCreatePage.tsx";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
-import DataServiceExercise from "./utils/DataServiceExercise.ts";
+import UseExerciseDate from "./utils/UseExerciseDate.ts";
 
 function App() {
 
-    const {allExercises} = DataServiceExercise();
+    const {allExercises, createExercise} = UseExerciseDate();
 
 
   return (
@@ -22,7 +22,7 @@ function App() {
                   <Routes>
                       <Route path={"/overview"} element={<OverviewPage />} />
                       <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises} />} />
-                      <Route path={"/exercise/new"} element={<ExerciseCreatePage />} />
+                      <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise} />} />
                   </Routes>
               </main>
 

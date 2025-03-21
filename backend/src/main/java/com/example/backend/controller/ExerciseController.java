@@ -1,12 +1,11 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Exercise;
+import com.example.backend.model.ExerciseDTO;
 import com.example.backend.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,4 +21,15 @@ public class ExerciseController {
         List<Exercise> all = exerciseService.getAllExercises();
         return ResponseEntity.ok(all);
     }
+
+    @PostMapping("/new")
+    public ResponseEntity<Exercise> createExercise(@RequestBody ExerciseDTO newExercise) {
+        try {
+            Exercise createdExercise = exerciseService.createExercise(newExercise);
+            return ResponseEntity.ok(createdExercise);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
