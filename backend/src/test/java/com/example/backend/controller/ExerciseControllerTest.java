@@ -24,7 +24,7 @@ class ExerciseControllerTest {
 
     // --------------------------------------- GET ALL ---------------------------------------
     @Test
-    void getAllExcercises_shouldReturnEmptyList_whenCalledInitially () throws Exception {
+    void getAllExercises_shouldReturnEmptyList_whenCalledInitially () throws Exception {
        // WHEN & THEN
        mockMvc.perform(get("/api/exercise/all"))
                .andExpect(status().isOk())
@@ -33,7 +33,7 @@ class ExerciseControllerTest {
 
    // --------------------------------------- CREATE ---------------------------------------
     @Test
-    void createExercise_shouldReturnExcercise_whenCalledWithDTO () throws Exception {
+    void createExercise_shouldReturnExercise_whenCalledWithDTO () throws Exception {
        // WHEN & THEN
        mockMvc.perform(post("/api/exercise/new")
                        .contentType(MediaType.APPLICATION_JSON)
