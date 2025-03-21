@@ -9,7 +9,7 @@ import DataServiceExercise from "./utils/DataServiceExercise.ts";
 
 function App() {
 
-    const {allExercises} = DataServiceExercise();
+    const {allExercises, createExercise} = DataServiceExercise();
 
 
   return (
@@ -22,7 +22,7 @@ function App() {
                   <Routes>
                       <Route path={"/overview"} element={<OverviewPage />} />
                       <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises} />} />
-                      <Route path={"/exercise/new"} element={<ExerciseCreatePage />} />
+                      <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise} />} />
                   </Routes>
               </main>
 

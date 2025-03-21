@@ -13,13 +13,14 @@ import static org.mockito.Mockito.mock;
 class ExerciseServiceTest {
 
     private ExerciseRepo exerciseRepo = mock(ExerciseRepo.class);
+    private IdService idService = mock(IdService.class);
 
     // --------------------------------------- GET ALL ---------------------------------------
 
     @Test
     void getAllExercises_shouldReturnEmptyList_whenCalled() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
         List<Exercise> expected = Collections.emptyList();
 
         // WHEN
