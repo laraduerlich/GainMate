@@ -10,8 +10,6 @@ type ExerciseCardProps = {
 export default function ExerciseCard({exercise}: ExerciseCardProps) {
 
 
-
-
     return (
         <>
             <div>

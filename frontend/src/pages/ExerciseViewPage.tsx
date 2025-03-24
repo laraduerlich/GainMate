@@ -1,24 +1,27 @@
 import {Exercise} from "../types/Exercise.tsx";
 import ExerciseCard from "../components/ExerciseCard.tsx";
 import {useParams} from "react-router-dom";
+import {useEffect} from "react";
 
 type ExerciseViewProps = {
-    exercises: Exercise[];
+    exercise: Exercise;
+    getExerciseById: (id: string) => void
 }
 
-export default function ExerciseViewPage({exercises}: ExerciseViewProps) {
+export default function ExerciseViewPage ({exercise, getExerciseById}: ExerciseViewProps) {
 
-    const {id} = useParams<{ id: string }>();
+    const {id} = useParams<{id: string}>();
 
-    const getExerciseById: Exercise | undefined = exercises.find((exercise: Exercise) => exercise.id === id)
-
-    if (getExerciseById === undefined) {
-        return console.log("Loading error!")
-    }
+    // Load exercise
+    useEffect(() => {
+        if (id !== undefined) {
+            getExerciseById(id)
+        }
+    }, [id]);
 
     return (
         <>
-            <ExerciseCard exercise={getExerciseById}/>
+            <ExerciseCard exercise={exercise}/>
         </>
     )
 }
