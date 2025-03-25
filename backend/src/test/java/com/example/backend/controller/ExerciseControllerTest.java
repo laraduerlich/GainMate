@@ -1,7 +1,9 @@
 package com.example.backend.controller;
 
+import com.example.backend.exception.ExerciseNotExistsException;
 import com.example.backend.model.Exercise;
 import com.example.backend.repo.ExerciseRepo;
+import com.example.backend.service.ExerciseService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,6 +26,9 @@ class ExerciseControllerTest {
 
     @Autowired
     private ExerciseRepo repo;
+
+    @Autowired
+    private ExerciseService service;
 
     // --------------------------------------- GET ALL ---------------------------------------
     @Test
@@ -53,6 +60,12 @@ class ExerciseControllerTest {
                             note: "Notes"
                         }
                         """));
+    }
+
+    @Test
+    void getExerciseById_shouldThrowException_whenCalledWithInvalidId () throws Exception {
+        mockMvc.perform(get("/api/exercise/1"))
+                .andExpect(status().isNotFound());
     }
 
     // --------------------------------------- CREATE ----------------------------------------
