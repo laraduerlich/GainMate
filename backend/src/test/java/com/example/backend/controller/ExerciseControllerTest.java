@@ -88,6 +88,6 @@ class ExerciseControllerTest {
                           "note": "Do 3 sets of 15 reps",
                           "progressList": null
                        }
-                        """));
+                       """));
    }
 }
