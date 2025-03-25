@@ -10,7 +10,7 @@ import ExerciseViewPage from "./pages/ExerciseViewPage.tsx";
 
 function App() {
 
-    const {allExercises, exercise, createExercise, getExerciseById} = UseExerciseDate();
+    const {allExercises, exercise, createExercise, getExerciseById, updateExercise} = UseExerciseDate();
 
 
   return (
@@ -23,7 +23,7 @@ function App() {
                   <Routes>
                       <Route path={"/overview"} element={<OverviewPage />} />
                       <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises} />} />
-                      <Route path={"/exercise/:id"} element={<ExerciseViewPage exercise={exercise} getExerciseById={getExerciseById}/>} />
+                      <Route path={"/exercise/:id"} element={<ExerciseViewPage exercise={exercise} getExerciseById={getExerciseById} updateExercise={updateExercise}/>} />
                       <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise} />} />
                   </Routes>
               </main>

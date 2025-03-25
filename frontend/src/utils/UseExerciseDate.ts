@@ -46,10 +46,19 @@ export default function UseExerciseDate() {
             })
     }
 
+    // Update exercise
+    const updateExercise = (updatedExercise: Exercise) => {
+        axios.put("/api/exercise/" + updatedExercise.id, updatedExercise)
+            .then((response) => {setExercise(response.data)})
+            .catch(error => {
+                console.error("Error update Exercise:" + error)
+            })
+    }
+
     // useEffect for loading
     useEffect(() => {
         getAllExercises();
     }, []);
 
-    return {allExercises, exercise, createExercise, getExerciseById}
+    return {allExercises, exercise, createExercise, getExerciseById, updateExercise}
 }
