@@ -22,6 +22,16 @@ public class ExerciseController {
         return ResponseEntity.ok(all);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Exercise> getExerciseById(@PathVariable String id) {
+        try {
+            Exercise exercise = exerciseService.getExerciseById(id);
+            return ResponseEntity.ok(exercise);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/new")
     public ResponseEntity<Exercise> createExercise(@RequestBody ExerciseDTO newExercise) {
         try {

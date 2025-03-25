@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.exception.ExerciseAlreadyExistsException;
+import com.example.backend.exception.ExerciseNotExistsException;
 import com.example.backend.model.Exercise;
 import com.example.backend.model.ExerciseDTO;
 import com.example.backend.repo.ExerciseRepo;
@@ -20,7 +21,13 @@ public class ExerciseService {
         return exerciseRepo.findAll();
     }
 
-    public Exercise createExercise(ExerciseDTO newExercise) {
+    public Exercise getExerciseById(String id) throws ExerciseNotExistsException {
+        return exerciseRepo.findById(id)
+                .orElseThrow(() -> new ExerciseNotExistsException("Exercise with id " + id + " does not exist"));
+
+    }
+
+    public Exercise createExercise(ExerciseDTO newExercise) throws ExerciseAlreadyExistsException {
        // Check if the name is already in the repo
         if (exerciseRepo.existsByName(newExercise.name())) {
             throw new ExerciseAlreadyExistsException("Exercise already exists!");

@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 export default function UseExerciseDate() {
 
     const [allExercises, setAllExercises] = useState<Exercise[]>([]);
+    const [exercise, setExercise] = useState<Exercise>({} as Exercise)
     const navigate = useNavigate();
 
     // GET all exercises
@@ -13,12 +14,22 @@ export default function UseExerciseDate() {
         axios.get("/api/exercise/all")
             .then((response) => {setAllExercises(response.data)})
             .catch(error => {
-                console.error("Error fetching data:", error)
+                console.error("Error fetching all exercises:", error)
+            })
+    }
+
+    // Get exercise by id
+    const getExerciseById = (id: string) => {
+        axios.get("/api/exercise/" + id)
+            .then((response) => {setExercise(response.data)})
+            .catch(error => {
+                console.error("Error fetching exercise by id:", error)
             })
     }
 
     // Create new exercise
     const createExercise = (newExercise: Exercise) => {
+        // Check if exercise has a name
         if (!newExercise.name) {
             alert("Please enter a name")
             return;
@@ -35,10 +46,10 @@ export default function UseExerciseDate() {
             })
     }
 
-    // useEffect zum Laden
+    // useEffect for loading
     useEffect(() => {
         getAllExercises();
     }, []);
 
-    return {allExercises, createExercise}
+    return {allExercises, exercise, createExercise, getExerciseById}
 }

@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
     public String exerciseAlreadyExistsException(ExerciseAlreadyExistsException e) {
         return e.getMessage();
     }
+
+    @ExceptionHandler(ExerciseNotExistsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String exerciseNotFoundException(ExerciseNotExistsException e) {
+        return e.getMessage();
+    }
 }

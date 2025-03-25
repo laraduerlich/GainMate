@@ -22,6 +22,14 @@ export default function ExerciseList({exercises}: ExerciseListProps) {
         navigate("/exercise/new");
     }
 
+    const handleViewButton = (id: string | undefined) => {
+        if (id !== undefined) {
+            navigate("/exercise/" + id)
+        } else {
+            console.error("Invalid ID for viewing exercise.");
+        }
+    }
+
 
     return (
         <>
@@ -39,7 +47,7 @@ export default function ExerciseList({exercises}: ExerciseListProps) {
                                     {exercise.name}
                                 </span>
                                 <div>
-                                    {/* Button for view */}
+                                    <ButtonWithIcon onClick={() => {handleViewButton(exercise.id)}} icon={"View"} type={"button"} />
                                 </div>
                             </li>
                         ))}

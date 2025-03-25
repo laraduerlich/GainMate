@@ -18,7 +18,7 @@ class ExerciseServiceTest {
     private final ExerciseRepo exerciseRepo = mock(ExerciseRepo.class);
     private final IdService idService = mock(IdService.class);
 
-    // --------------------------------------- GET ALL ---------------------------------------
+    // --------------------------------------- GET ALL --------------------------------------
 
     @Test
     void getAllExercises_shouldReturnEmptyList_whenCalled() {
@@ -31,6 +31,42 @@ class ExerciseServiceTest {
 
         // THEN
         assertEquals(expected, actual);
+    }
+
+    // --------------------------------------- GET BY ID ------------------------------------
+    @Test
+    void getExerciseById_shouldReturnExercise_whenCalledWithValidId() {
+        // GIVEN
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        String id = "1";
+        Exercise expected = Exercise.builder()
+                .id("1")
+                .name("Test")
+                .note("Test")
+                .build();
+        when(exerciseRepo.existsById(id)).thenReturn(true);
+        when(exerciseRepo.findById(id)).thenReturn(Optional.of(expected));
+
+        // WHEN
+        Exercise actual = exerciseService.getExerciseById(id);
+
+        // THEN
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getExerciseById_ShouldThrowException_whenExerciseNotFound() {
+        // GIVEN
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        String id = "1";
+
+        // WHEN & THEN
+        try {
+            exerciseService.getExerciseById(id);
+            fail("An exception is expected, but none is thrown!");
+        } catch (Exception e) {
+            assertEquals("Exercise with id " + id + " does not exist", e.getMessage());
+        }
     }
 
     // --------------------------------------- CREATE ---------------------------------------
