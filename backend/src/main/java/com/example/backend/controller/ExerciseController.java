@@ -42,4 +42,13 @@ public class ExerciseController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Exercise> updateExercise(@PathVariable String id, @RequestBody Exercise updatedExercise) {
+        try {
+            Exercise exercise = exerciseService.updateExercise(id, updatedExercise);
+            return ResponseEntity.ok(exercise);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
