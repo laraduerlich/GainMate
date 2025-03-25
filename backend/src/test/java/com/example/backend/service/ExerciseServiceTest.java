@@ -59,7 +59,6 @@ class ExerciseServiceTest {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
         String id = "1";
-        when(exerciseRepo.existsById(id)).thenReturn(false);
 
         // WHEN & THEN
         try {

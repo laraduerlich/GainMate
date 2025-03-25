@@ -22,11 +22,9 @@ public class ExerciseService {
     }
 
     public Exercise getExerciseById(String id) throws ExerciseNotExistsException {
-        if (exerciseRepo.existsById(id)) {
-            return exerciseRepo.findById(id).get();
-        } else {
-            throw new ExerciseNotExistsException("Exercise with id " + id + " does not exist");
-        }
+        return exerciseRepo.findById(id)
+                .orElseThrow(() -> new ExerciseNotExistsException("Exercise with id " + id + " does not exist"));
+
     }
 
     public Exercise createExercise(ExerciseDTO newExercise) throws ExerciseAlreadyExistsException {
