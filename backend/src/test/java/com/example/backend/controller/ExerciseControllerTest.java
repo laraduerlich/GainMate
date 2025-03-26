@@ -68,7 +68,7 @@ class ExerciseControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // --------------------------------------- CREATE ----------------------------------------
+    // --------------------------------------- POST ----------------------------------------
     @Test
     void createExercise_shouldReturnExercise_whenCalledWithDTO () throws Exception {
        // WHEN & THEN
@@ -90,4 +90,50 @@ class ExerciseControllerTest {
                        }
                        """));
    }
+
+    // --------------------------------------- PUT ----------------------------------------
+    @Test
+    void updateExercise_shouldReturnExercise_whenCalledWithValidId () throws Exception {
+        // GIVEN
+        Exercise updatedExercise = Exercise.builder()
+                .id("1")
+                .name("Push-Test")
+                .note("Do 3 sets of 15 reps")
+                .build();
+        repo.save(updatedExercise);
+
+        // WHEN & THEN
+        mockMvc.perform(put("/api/exercise/" + updatedExercise.id())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                               {
+                                   "name": "Push-Test",
+                                   "note": "Do 3 sets of 16 reps"
+                               }
+"""
+                ))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                          "name": "Push-Test",
+                          "note": "Do 3 sets of 16 reps",
+                          "progressList": null
+                        }
+                        """));
+    }
+
+    @Test
+    void updateExercise_shouldThrowException_whenCalledWithInvalidId () throws Exception {
+        mockMvc.perform(put("/api/exercise/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                               {
+                                   "name": "Push-Test",
+                                   "note": "Do 3 sets of 16 reps"
+                               }
+"""
+                ))
+                .andExpect(status().isNotFound());
+    }
+
 }

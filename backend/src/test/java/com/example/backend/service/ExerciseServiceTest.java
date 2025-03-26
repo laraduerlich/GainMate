@@ -106,4 +106,45 @@ class ExerciseServiceTest {
             assertEquals("Exercise already exists!", e.getMessage());
         }
     }
+
+    // --------------------------------------- UPDATE --------------------------------------
+    @Test
+    void updateExercise_shouldUpdateExercise_whenCalledWithValidId() {
+        // GIVEN
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        Exercise updatedExercise = Exercise.builder()
+                .id("1")
+                .name("Test")
+                .note("Test")
+                .build();
+        when(exerciseRepo.existsById(updatedExercise.id())).thenReturn(true);
+        when(exerciseRepo.save(updatedExercise)).thenReturn(updatedExercise);
+
+        // WHEN
+        Exercise actual = exerciseService.updateExercise(updatedExercise.id(), updatedExercise);
+
+        // THEN
+        assertEquals(updatedExercise, actual);
+    }
+
+    @Test
+    void updateExercise_shouldThrowException_whenExerciseNotFound() {
+        // GIVEN
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        Exercise updatedExercise = Exercise.builder()
+                .id("1")
+                .name("Test")
+                .note("Test")
+                .build();
+        when(exerciseRepo.existsById(updatedExercise.id())).thenReturn(false);
+
+        // WHEN & THEN
+        try {
+            exerciseService.updateExercise(updatedExercise.id(), updatedExercise);
+            fail("An exception is expected, but none is thrown!");
+        } catch (Exception e) {
+            assertEquals("Exercise with id " + updatedExercise.id() + " does not exist", e.getMessage());
+        }
+    }
+
 }

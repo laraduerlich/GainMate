@@ -1,13 +1,17 @@
 import {Exercise} from "../types/Exercise.tsx";
 import {Progress} from "../types/Progress.tsx";
 import {Sets} from "../types/Set.tsx";
+import ButtonWithIcon from "./ButtonWithIcon.tsx";
 
 type ExerciseCardProps = {
     // type: "view" | "workout";
-    exercise: Exercise
+    exercise: Exercise,
+    editButtonClick: () => void
 }
 
-export default function ExerciseCard({exercise}: ExerciseCardProps) {
+export default function ExerciseCard({exercise, editButtonClick}: ExerciseCardProps) {
+
+
 
 
     return (
@@ -30,6 +34,7 @@ export default function ExerciseCard({exercise}: ExerciseCardProps) {
                         </li>
                     ))}
                 </ul>
+                <ButtonWithIcon onClick={editButtonClick} icon={"edit"} type={"button"} />
             </div>
         </>
     )
