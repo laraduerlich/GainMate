@@ -1,7 +1,7 @@
 import {useState} from "react";
-import {Exercise} from "../types/Exercise.tsx";
-import Searchbar from "./Searchbar.tsx";
-import ButtonWithIcon from "./ButtonWithIcon.tsx";
+import {Exercise} from "../../types/Exercise.tsx";
+import Searchbar from "../Searchbar.tsx";
+import ButtonWithIcon from "../ButtonWithIcon.tsx";
 import {useNavigate} from "react-router-dom";
 
 type ExerciseListProps = {
@@ -18,7 +18,7 @@ export default function ExerciseList({exercises}: ExerciseListProps) {
     exercise.name.toLowerCase().includes(searchInput.toLowerCase()))
 
     // button handler
-    const handleNewExerciseButton = () => {
+    const handleNewExerciseButtonClick = () => {
         navigate("/exercise/new");
     }
 
@@ -53,7 +53,7 @@ export default function ExerciseList({exercises}: ExerciseListProps) {
                         ))}
                     </ul>
                 </div>
-                <ButtonWithIcon onClick={handleNewExerciseButton} icon={"New"} type={"button"} />
+                <ButtonWithIcon onClick={handleNewExerciseButtonClick} icon={"new"} type={"button"} />
             </div>
         </>
     )
