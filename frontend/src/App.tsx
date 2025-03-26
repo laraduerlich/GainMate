@@ -1,12 +1,14 @@
 import './App.css'
 import {Route, Routes} from "react-router-dom";
 import OverviewPage from "./pages/OverviewPage.tsx";
-import ExerciseDashboardPage from "./pages/ExerciseDashboardPage.tsx";
-import ExerciseCreatePage from "./pages/ExerciseCreatePage.tsx";
+import ExerciseDashboardPage from "./pages/exercise/ExerciseDashboardPage.tsx";
+import ExerciseCreatePage from "./pages/exercise/ExerciseCreatePage.tsx";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import UseExerciseDate from "./utils/UseExerciseDate.ts";
-import ExerciseViewPage from "./pages/ExerciseViewPage.tsx";
+import ExerciseViewPage from "./pages/exercise/ExerciseViewPage.tsx";
+import WorkoutDashboardPage from "./pages/workout/WorkoutDashboardPage.tsx";
+import WorkoutCreatePage from "./pages/workout/WorkoutCreatePage.tsx";
 
 function App() {
 
@@ -22,9 +24,13 @@ function App() {
               <main className="flex-1 flex flex-col items-center justify-center w-full px-6">
                   <Routes>
                       <Route path={"/overview"} element={<OverviewPage />} />
+                      {/* Exercise Pages */}
                       <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises} />} />
                       <Route path={"/exercise/:id"} element={<ExerciseViewPage exercise={exercise} getExerciseById={getExerciseById} updateExercise={updateExercise}/>} />
                       <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise} />} />
+                      {/* Workout Pages */}
+                      <Route path={"/workouts"} element={<WorkoutDashboardPage />} />
+                      <Route path={"/workout/new"} element={<WorkoutCreatePage />} />
                   </Routes>
               </main>
 

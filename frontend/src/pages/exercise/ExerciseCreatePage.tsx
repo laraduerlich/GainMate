@@ -1,5 +1,5 @@
-import ExerciseCreateForm from "../components/ExerciseCreateForm.tsx";
-import {Exercise} from "../types/Exercise.tsx";
+import ExerciseCreateForm from "../../components/ExerciseCreateForm.tsx";
+import {Exercise} from "../../types/Exercise.tsx";
 
 type ExerciseCreateProps = {
     createExercise: (newExercise: Exercise) => void

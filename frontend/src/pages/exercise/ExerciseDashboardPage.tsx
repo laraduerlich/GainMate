@@ -1,5 +1,5 @@
-import {Exercise} from "../types/Exercise.tsx";
-import ExerciseList from "../components/ExerciseList.tsx";
+import {Exercise} from "../../types/Exercise.tsx";
+import ExerciseList from "../../components/ExerciseList.tsx";
 
 type ExerciseDashboardProps = {
     exercises: Exercise[]
