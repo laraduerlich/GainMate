@@ -48,7 +48,7 @@ public class ExerciseController {
             Exercise exercise = exerciseService.updateExercise(id, updatedExercise);
             return ResponseEntity.ok(exercise);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 }
