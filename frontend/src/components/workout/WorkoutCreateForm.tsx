@@ -15,11 +15,9 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
     const [name, setName] = useState<string>("")
 
     // added exercises for creating a workout
-    const addedExercises: Exercise[] = exercises.filter(exercise => {
-        if (exercise.id !==undefined) {
-            idList.includes(exercise.id)
-        }
-    })
+    const addedExercises: Exercise[] = exercises.filter(exercise =>
+        exercise.id !== undefined && idList.includes(exercise.id)
+    )
 
     // button handler
     const handleAddButtonClick = (id: string | undefined) => {
@@ -49,8 +47,6 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
         createWorkout(newWorkout)
     }
 
-
-
     return (
         <>
             <div>
@@ -62,24 +58,24 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                         placeholder={"name of the workout ..."}
                         onChange={(event) => setName(event.target.value)}
                     />
-                    {/* List of all exercises for creating workouts with remove button*/}
-                    <div>
-                        <ul>
-                            {addedExercises.map((exercise: Exercise) => (
-                                <li
-                                    key={exercise.id}>
+                </form>
+                {/* List of all exercises for creating workouts with remove button*/}
+                <div>
+                    <ul>
+                        {addedExercises.map((exercise: Exercise) => (
+                            <li
+                                key={exercise.id}>
                                     <span>
                                         {exercise.name}
                                     </span>
-                                    <div>
-                                        <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(exercise.id)}} />
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <ButtonWithIcon icon={"save"} type={"submit"} />
-                </form>
+                                <div>
+                                    <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(exercise.id)}} />
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <ButtonWithIcon icon={"save"} type={"submit"} />
                 <div>
                     <ExerciseList exercises={exercises} use={"workout"} handelButtonClick={handleAddButtonClick} />
                 </div>

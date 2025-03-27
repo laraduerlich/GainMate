@@ -29,10 +29,10 @@ function App() {
                       {/* Exercise Pages */}
                       <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises} />} />
                       <Route path={"/exercise/:id"} element={<ExerciseViewPage exercise={exercise} getExerciseById={getExerciseById} updateExercise={updateExercise}/>} />
-                      <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise} />} />
+                      <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise}/>} />
                       {/* Workout Pages */}
                       <Route path={"/workouts"} element={<WorkoutDashboardPage />} />
-                      <Route path={"/workout/new"} element={<WorkoutCreatePage createWorkout={createWorkout} exercises={allExercises}/>} />
+                      <Route path={"/workout/new"} element={<WorkoutCreatePage exercises={allExercises} createWorkout={createWorkout}/>} />
                   </Routes>
               </main>
 
