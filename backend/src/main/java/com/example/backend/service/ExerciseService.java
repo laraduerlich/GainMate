@@ -27,30 +27,30 @@ public class ExerciseService {
 
     }
 
-    public Exercise createExercise(ExerciseDTO newExercise) throws AlreadyExistsException {
+    public Exercise createExercise(ExerciseDTO exerciseDTO) throws AlreadyExistsException {
        // Check if the name is already in the repo
-        if (exerciseRepo.existsByName(newExercise.name())) {
+        if (exerciseRepo.existsByName(exerciseDTO.name())) {
             throw new AlreadyExistsException("Exercise already exists!");
         } else {
-            Exercise exercise = Exercise.builder()
+            Exercise newExercise = Exercise.builder()
                     .id(idService.generateId())
-                    .name(newExercise.name())
-                    .note(newExercise.note())
+                    .name(exerciseDTO.name())
+                    .note(exerciseDTO.note())
                     .build();
-            exerciseRepo.save(exercise);
-            return exercise;
+            exerciseRepo.save(newExercise);
+            return newExercise;
         }
     }
 
-    public Exercise updateExercise(String id, ExerciseDTO newExercise) throws NotExistsException {
+    public Exercise updateExercise(String id, ExerciseDTO exerciseDTO) throws NotExistsException {
         // Check if the name is already in the repo
         if (exerciseRepo.existsById(id)) {
-            Exercise exercise = Exercise.builder()
+            Exercise updatedExercise = Exercise.builder()
                     .id(id)
-                    .name(newExercise.name())
-                    .note(newExercise.note())
+                    .name(exerciseDTO.name())
+                    .note(exerciseDTO.note())
                     .build();
-            return exerciseRepo.save(exercise);
+            return exerciseRepo.save(updatedExercise);
         } else {
             throw new NotExistsException("Exercise with id " + id + " does not exist");
         }
