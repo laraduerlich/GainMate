@@ -16,7 +16,7 @@ public class WorkoutService {
 
     public Workout createWorkout(WorkoutDTO workout) {
         if (workoutRepo.existsByName(workout.name())) {
-            throw new AlreadyExistsException(workout.name() + " already exists");
+            throw new AlreadyExistsException("Workout already exists");
         } else {
             Workout newWorkout = Workout.builder()
                     .id(idService.generateId())
