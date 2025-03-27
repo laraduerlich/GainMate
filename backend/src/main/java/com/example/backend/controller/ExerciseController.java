@@ -43,7 +43,7 @@ public class ExerciseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exercise> updateExercise(@PathVariable String id, @RequestBody Exercise updatedExercise) {
+    public ResponseEntity<Exercise> updateExercise(@PathVariable String id, @RequestBody ExerciseDTO updatedExercise) {
         try {
             Exercise exercise = exerciseService.updateExercise(id, updatedExercise);
             return ResponseEntity.ok(exercise);

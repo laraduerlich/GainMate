@@ -112,38 +112,36 @@ class ExerciseServiceTest {
     void updateExercise_shouldUpdateExercise_whenCalledWithValidId() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        Exercise updatedExercise = Exercise.builder()
+        ExerciseDTO updatedExercise = new ExerciseDTO("Test", "Test");
+        Exercise expected = Exercise.builder()
                 .id("1")
                 .name("Test")
                 .note("Test")
                 .build();
-        when(exerciseRepo.existsById(updatedExercise.id())).thenReturn(true);
-        when(exerciseRepo.save(updatedExercise)).thenReturn(updatedExercise);
+        when(exerciseRepo.existsById(expected.id())).thenReturn(true);
+        when(exerciseRepo.save(expected)).thenReturn(expected);
 
         // WHEN
-        Exercise actual = exerciseService.updateExercise(updatedExercise.id(), updatedExercise);
+        Exercise actual = exerciseService.updateExercise(expected.id(), updatedExercise);
 
         // THEN
-        assertEquals(updatedExercise, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     void updateExercise_shouldThrowException_whenExerciseNotFound() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        Exercise updatedExercise = Exercise.builder()
-                .id("1")
-                .name("Test")
-                .note("Test")
-                .build();
-        when(exerciseRepo.existsById(updatedExercise.id())).thenReturn(false);
+        ExerciseDTO updatedExercise = new ExerciseDTO("Test", "Test");
+
+        when(exerciseRepo.existsById("1")).thenReturn(false);
 
         // WHEN & THEN
         try {
-            exerciseService.updateExercise(updatedExercise.id(), updatedExercise);
+            exerciseService.updateExercise("1", updatedExercise);
             fail("An exception is expected, but none is thrown!");
         } catch (Exception e) {
-            assertEquals("Exercise with id " + updatedExercise.id() + " does not exist", e.getMessage());
+            assertEquals("Exercise with id " + "1" + " does not exist", e.getMessage());
         }
     }
 
