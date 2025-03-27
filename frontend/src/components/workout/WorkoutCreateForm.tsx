@@ -1,4 +1,4 @@
-import ExerciseList from "../exercise/ExerciseList.tsx";
+import List from "../List.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
 import {FormEvent, useState} from "react";
 import ButtonWithIcon from "../ButtonWithIcon.tsx";
@@ -77,7 +77,7 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                 </div>
                 <ButtonWithIcon icon={"save"} type={"submit"} />
                 <div>
-                    <ExerciseList exercises={exercises} use={"workout"} handelButtonClick={handleAddButtonClick} />
+                    <List elements={exercises} use={"workout"} handelButtonClick={handleAddButtonClick} />
                 </div>
             </div>
         </>

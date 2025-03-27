@@ -1,21 +1,22 @@
 import {useState} from "react";
-import {Exercise} from "../../types/Exercise.tsx";
-import Searchbar from "../Searchbar.tsx";
-import ButtonWithIcon from "../ButtonWithIcon.tsx";
+import {Exercise} from "../types/Exercise.tsx";
+import Searchbar from "./Searchbar.tsx";
+import ButtonWithIcon from "./ButtonWithIcon.tsx";
+import {Workout} from "../types/Workout.tsx";
 
 type ExerciseListProps = {
-    exercises: Exercise[],
+    elements: Exercise[] | Workout[],
     use: "dashboard" | "workout",
     handelButtonClick: (id: string | undefined) => void
 }
 
-export default function ExerciseList({exercises, use, handelButtonClick}: ExerciseListProps) {
+export default function List({elements, use, handelButtonClick}: ExerciseListProps) {
 
     const [searchInput, setSearchInput] = useState('');
 
     // Filtered exercises based on search input
-    const filteredExercises: Exercise[] = exercises.filter(exercise =>
-    exercise.name.toLowerCase().includes(searchInput.toLowerCase()))
+    const filteredElements: Exercise[] | Workout[] = elements.filter(element =>
+    element.name.toLowerCase().includes(searchInput.toLowerCase()))
 
 
     // button handler
@@ -37,18 +38,18 @@ export default function ExerciseList({exercises, use, handelButtonClick}: Exerci
                 <div>
                     {/* List of all exercises with view and add button */}
                     <ul>
-                        {filteredExercises.map((exercise) => (
+                        {filteredElements.map((element) => (
                             <li
-                                key={exercise.id}>
+                                key={element.id}>
                                 <span>
-                                    {exercise.name}
+                                    {element.name}
                                 </span>
                                 <div>
                                     {(use === "dashboard") ? (
-                                        <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewButtonClick(exercise.id)}} />)
+                                        <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewButtonClick(element.id)}} />)
 
                                     :(use === "workout") ? (
-                                        <ButtonWithIcon icon={"add"} type={"button"} onClick={() => {handleAddButtonClick(exercise.id)}} />)
+                                        <ButtonWithIcon icon={"add"} type={"button"} onClick={() => {handleAddButtonClick(element.id)}} />)
 
                                     : null }
                                 </div>
