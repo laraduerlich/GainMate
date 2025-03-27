@@ -16,7 +16,6 @@ public class WorkoutController {
 
     private final WorkoutService workoutService;
 
-
     @GetMapping("/all")
     public ResponseEntity<List<Workout>> getAllWorkouts() {
         List<Workout> allWorkouts = workoutService.getAllWorkouts();
