@@ -3,31 +3,55 @@ import {Exercise} from "../types/Exercise.tsx";
 import Searchbar from "./Searchbar.tsx";
 import ButtonWithIcon from "./ButtonWithIcon.tsx";
 import {Workout} from "../types/Workout.tsx";
+import {useNavigate} from "react-router-dom";
 
 type ExerciseListProps = {
     elements: Exercise[] | Workout[],
-    use: "dashboard" | "workout",
-    handelButtonClick: (id: string | undefined) => void
+    use: "dashboardExercise" | "dashboardWorkouts" | "newWorkout",
+    handelButtonClick?: (id: string | undefined) => void
 }
 
 export default function List({elements, use, handelButtonClick}: ExerciseListProps) {
 
+    const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState('');
 
-    // Filtered exercises based on search input
+    // Filtered elements based on search input
     const filteredElements: Exercise[] | Workout[] = elements.filter(element =>
     element.name.toLowerCase().includes(searchInput.toLowerCase()))
 
 
     // button handler
-    const handleViewButtonClick = (id: string | undefined) => {
-        handelButtonClick(id)
+    const handleViewExerciseButtonClick = (id: string | undefined) => {
+        if (id !== undefined) {
+            navigate("/exercise/" + id)
+        } else {
+            console.error("Invalid ID for viewing exercise.");
+        }
     }
 
+    const handleViewWorkoutButtonClick = (id: string | undefined) => {
+        if (id !== undefined) {
+            navigate("/workout/" + id)
+        } else {
+            console.error("Invalid ID for viewing workout.");
+        }
+    }
+
+    const handleStartWorkoutButtonClick = (id: string | undefined) => {
+        if (id !== undefined) {
+            navigate("/start-workout/" + id)
+        } else {
+            console.error("Invalid ID for starting workout.");
+        }
+    }
+
+    // to add exercise id to a new workout
     const handleAddButtonClick = (id: string | undefined) => {
-        handelButtonClick(id)
+        if (handelButtonClick) {
+            handelButtonClick(id)
+        }
     }
-
 
     return (
         <>
@@ -45,13 +69,19 @@ export default function List({elements, use, handelButtonClick}: ExerciseListPro
                                     {element.name}
                                 </span>
                                 <div>
-                                    {(use === "dashboard") ? (
-                                        <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewButtonClick(element.id)}} />)
+                                    {(use === "dashboardExercise") ? (
+                                                <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewExerciseButtonClick(element.id)}} />)
 
-                                    :(use === "workout") ? (
-                                        <ButtonWithIcon icon={"add"} type={"button"} onClick={() => {handleAddButtonClick(element.id)}} />)
+                                        :(use === "dashboardWorkouts") ? (
+                                            <div>
+                                                <ButtonWithIcon icon={"start"} type={"button"} onClick={() => {handleStartWorkoutButtonClick(element.id)}} />
+                                                <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewWorkoutButtonClick(element.id)}} />
+                                            </div>)
 
-                                    : null }
+                                        :(use === "newWorkout") ? (
+                                                <ButtonWithIcon icon={"add"} type={"button"} onClick={() => {handleAddButtonClick(element.id)}} />)
+
+                                        : null }
                                 </div>
                             </li>
                         ))}

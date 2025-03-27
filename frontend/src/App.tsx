@@ -14,7 +14,7 @@ import UseWorkoutData from "./utils/UseWorkoutData.ts";
 function App() {
 
     const {allExercises, exercise, createExercise, getExerciseById, updateExercise} = UseExerciseData();
-    const {createWorkout} = UseWorkoutData();
+    const {allWorkouts, createWorkout} = UseWorkoutData();
 
 
   return (
@@ -31,7 +31,7 @@ function App() {
                       <Route path={"/exercise/:id"} element={<ExerciseViewPage exercise={exercise} getExerciseById={getExerciseById} updateExercise={updateExercise}/>} />
                       <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise}/>} />
                       {/* Workout Pages */}
-                      <Route path={"/workouts"} element={<WorkoutDashboardPage />} />
+                      <Route path={"/workouts"} element={<WorkoutDashboardPage workouts={allWorkouts}/>} />
                       <Route path={"/workout/new"} element={<WorkoutCreatePage exercises={allExercises} createWorkout={createWorkout}/>} />
                   </Routes>
               </main>

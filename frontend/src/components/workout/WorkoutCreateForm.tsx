@@ -58,6 +58,7 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                         placeholder={"name of the workout ..."}
                         onChange={(event) => setName(event.target.value)}
                     />
+                    <ButtonWithIcon icon={"save"} type={"submit"} />
                 </form>
                 {/* List of all exercises for creating workouts with remove button*/}
                 <div>
@@ -75,9 +76,8 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                         ))}
                     </ul>
                 </div>
-                <ButtonWithIcon icon={"save"} type={"submit"} />
                 <div>
-                    <List elements={exercises} use={"workout"} handelButtonClick={handleAddButtonClick} />
+                    <List elements={exercises} use={"newWorkout"} handelButtonClick={handleAddButtonClick} />
                 </div>
             </div>
         </>

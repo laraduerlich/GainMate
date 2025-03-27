@@ -16,20 +16,12 @@ export default function ExerciseDashboardPage({exercises}: ExerciseDashboardProp
         navigate("/exercise/new");
     }
 
-    const handleViewButtonClick = (id: string | undefined) => {
-        if (id !== undefined) {
-            navigate("/exercise/" + id)
-        } else {
-            console.error("Invalid ID for viewing exercise.");
-        }
-    }
-
     return (
         <>
             <h2>Dashboard Exercise</h2>
             <div>
                 <ButtonWithIcon onClick={handleNewExerciseButtonClick} icon={"new"} type={"button"} />
-                <List elements={exercises} use={"dashboard"} handelButtonClick={handleViewButtonClick}/>
+                <List elements={exercises} use={"dashboardExercise"} />
             </div>
         </>
     )
