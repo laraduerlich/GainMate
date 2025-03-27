@@ -1,8 +1,8 @@
-import {Exercise} from "../types/Exercise.tsx";
-import ExerciseCard from "../components/ExerciseCard.tsx";
+import {Exercise} from "../../types/Exercise.tsx";
+import ExerciseCard from "../../components/exercise/ExerciseCard.tsx";
 import {useParams} from "react-router-dom";
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
-import ButtonWithIcon from "../components/ButtonWithIcon.tsx";
+import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 
 type ExerciseViewProps = {
     exercise: Exercise;

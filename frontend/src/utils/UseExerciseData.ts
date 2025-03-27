@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Exercise} from "../types/Exercise.tsx";
 import {useNavigate} from "react-router-dom";
 
-export default function UseExerciseDate() {
+export default function UseExerciseData() {
 
     const [allExercises, setAllExercises] = useState<Exercise[]>([]);
     const [exercise, setExercise] = useState<Exercise>({} as Exercise)

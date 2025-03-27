@@ -1,6 +1,6 @@
 import {FormEvent, useState} from "react";
-import {Exercise} from "../types/Exercise.tsx";
-import ButtonWithIcon from "./ButtonWithIcon.tsx";
+import {Exercise} from "../../types/Exercise.tsx";
+import ButtonWithIcon from "../ButtonWithIcon.tsx";
 import {useNavigate} from "react-router-dom";
 
 

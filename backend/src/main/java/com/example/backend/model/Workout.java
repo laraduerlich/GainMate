@@ -6,10 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Builder
-@Document("exercises")
-public record Exercise(
+@Document("workouts")
+public record Workout(
         String id,
         String name,
-        String note,
-        List<Progress> progressList
-) {}
+        List<String> exerciseIdList
+) { }
