@@ -19,7 +19,7 @@ class WorkoutServiceTest {
 
     // --------------------------------------- GET ALL --------------------------------------
     @Test
-    void getAllWorkouts_shouldReturnEmptyList_whenCalledInitally() {
+    void getAllWorkouts_shouldReturnEmptyList_whenCalledInitially() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
         List<Workout> expected = Collections.emptyList();
