@@ -1,15 +1,18 @@
 import ExerciseList from "../exercise/ExerciseList.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import ButtonWithIcon from "../ButtonWithIcon.tsx";
+import {Workout} from "../../types/Workout.tsx";
 
 type WorkoutCreateFormProps = {
     exercises: Exercise[]
+    createWorkout: (workout: Workout) => void
 }
 
-export default function WorkoutCreateForm({exercises}: WorkoutCreateFormProps) {
+export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCreateFormProps) {
 
     const [idList, setIdList] = useState<string[]>([])
+    const [name, setName] = useState<string>("")
 
     // added exercises for creating a workout
     const addedExercises: Exercise[] = exercises.filter(exercise => {
@@ -18,6 +21,7 @@ export default function WorkoutCreateForm({exercises}: WorkoutCreateFormProps) {
         }
     })
 
+    // button handler
     const handleAddButtonClick = (id: string | undefined) => {
         if (id !== undefined) {
             setIdList([...idList, id])
@@ -25,6 +29,7 @@ export default function WorkoutCreateForm({exercises}: WorkoutCreateFormProps) {
             console.error("Invalid ID for adding exercise.");
         }
     }
+
     const handleRemoveButtonClick = (id: string | undefined) => {
         if (id !== undefined) {
             setIdList(idList.filter(idExercise => idExercise !== id))
@@ -33,26 +38,48 @@ export default function WorkoutCreateForm({exercises}: WorkoutCreateFormProps) {
         }
     }
 
-    
+    const handleSaveButtonClick = (event: FormEvent) => {
+        event.preventDefault();
+
+        const newWorkout: Workout = {
+            name: name,
+            exerciseIdList: idList
+        }
+
+        createWorkout(newWorkout)
+    }
+
+
+
     return (
         <>
             <div>
-                {/* List of all exercises for creating workouts with remove button*/}
-                <div>
-                    <ul>
-                        {addedExercises.map((exercise: Exercise) => (
-                            <li
-                                key={exercise.id}>
-                                <span>
-                                    {exercise.name}
-                                </span>
-                                <div>
-                                    <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(exercise.id)}} />
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <form onSubmit={handleSaveButtonClick}>
+                    <input
+                        id={"name"}
+                        name={"name"}
+                        type={"text"}
+                        placeholder={"name of the workout ..."}
+                        onChange={(event) => setName(event.target.value)}
+                    />
+                    {/* List of all exercises for creating workouts with remove button*/}
+                    <div>
+                        <ul>
+                            {addedExercises.map((exercise: Exercise) => (
+                                <li
+                                    key={exercise.id}>
+                                    <span>
+                                        {exercise.name}
+                                    </span>
+                                    <div>
+                                        <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(exercise.id)}} />
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <ButtonWithIcon icon={"save"} type={"submit"} />
+                </form>
                 <div>
                     <ExerciseList exercises={exercises} use={"workout"} handelButtonClick={handleAddButtonClick} />
                 </div>
