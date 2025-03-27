@@ -7,12 +7,18 @@ import com.example.backend.repo.WorkoutRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class WorkoutService {
 
     private final WorkoutRepo workoutRepo;
     private final IdService idService;
+
+    public List<Workout> getAllWorkouts() {
+        return workoutRepo.findAll();
+    }
 
     public Workout createWorkout(WorkoutDTO workout) {
         if (workoutRepo.existsByName(workout.name())) {
