@@ -46,6 +46,7 @@ public class ExerciseService {
         // Check if the name is already in the repo
         if (exerciseRepo.existsById(id)) {
             Exercise exercise = Exercise.builder()
+                    .id(id)
                     .name(newExercise.name())
                     .note(newExercise.note())
                     .build();
