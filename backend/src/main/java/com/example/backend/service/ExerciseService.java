@@ -42,10 +42,15 @@ public class ExerciseService {
         }
     }
 
-    public Exercise updateExercise(String id, Exercise newExercise) throws NotExistsException {
+    public Exercise updateExercise(String id, ExerciseDTO newExercise) throws NotExistsException {
         // Check if the name is already in the repo
         if (exerciseRepo.existsById(id)) {
-            return exerciseRepo.save(newExercise);
+            Exercise exercise = Exercise.builder()
+                    .id(id)
+                    .name(newExercise.name())
+                    .note(newExercise.note())
+                    .build();
+            return exerciseRepo.save(exercise);
         } else {
             throw new NotExistsException("Exercise with id " + id + " does not exist");
         }

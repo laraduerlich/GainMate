@@ -23,6 +23,15 @@ class WorkoutControllerTest {
     @Autowired
     private WorkoutRepo workoutRepo;
 
+    // --------------------------------------- GET ALL --------------------------------------
+    @Test
+    void getAllWorkouts_shouldReturnEmptyList_whenCalledInitially() throws Exception {
+        // WHEN & THEN
+        mockMvc.perform(get("/api/workout/all"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
     // --------------------------------------- POST ----------------------------------------
     @Test
     void createWorkout_shouldReturnWorkout_WhenCalledWithDTO() throws Exception {

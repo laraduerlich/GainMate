@@ -5,10 +5,9 @@ import com.example.backend.model.WorkoutDTO;
 import com.example.backend.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/workout")
@@ -16,6 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class WorkoutController {
 
     private final WorkoutService workoutService;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Workout>> getAllWorkouts() {
+        List<Workout> allWorkouts = workoutService.getAllWorkouts();
+        return ResponseEntity.ok(allWorkouts);
+    }
 
     @PostMapping("/new")
     public ResponseEntity<Workout> createWorkout(@RequestBody WorkoutDTO workout) {

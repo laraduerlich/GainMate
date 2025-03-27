@@ -1,5 +1,5 @@
 import {Exercise} from "../../types/Exercise.tsx";
-import ExerciseList from "../../components/exercise/ExerciseList.tsx";
+import List from "../../components/List.tsx";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import {useNavigate} from "react-router-dom";
 
@@ -16,20 +16,12 @@ export default function ExerciseDashboardPage({exercises}: ExerciseDashboardProp
         navigate("/exercise/new");
     }
 
-    const handleViewButtonClick = (id: string | undefined) => {
-        if (id !== undefined) {
-            navigate("/exercise/" + id)
-        } else {
-            console.error("Invalid ID for viewing exercise.");
-        }
-    }
-
     return (
         <>
             <h2>Dashboard Exercise</h2>
             <div>
                 <ButtonWithIcon onClick={handleNewExerciseButtonClick} icon={"new"} type={"button"} />
-                <ExerciseList exercises={exercises} use={"dashboard"} handelButtonClick={handleViewButtonClick}/>
+                <List elements={exercises} use={"dashboardExercise"} />
             </div>
         </>
     )
