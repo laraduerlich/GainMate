@@ -5,6 +5,7 @@ import com.example.backend.model.WorkoutDTO;
 import com.example.backend.repo.WorkoutRepo;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,6 +16,20 @@ class WorkoutServiceTest {
 
     private final WorkoutRepo workoutRepo = mock(WorkoutRepo.class);
     private final IdService idService = mock(IdService.class);
+
+    // --------------------------------------- GET ALL --------------------------------------
+    @Test
+    void getAllWorkouts_shouldReturnEmptyList_whenCalledInitally() {
+        // GIVEN
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        List<Workout> expected = Collections.emptyList();
+
+        // WHEN
+        List<Workout> actual = workoutService.getAllWorkouts();
+
+        // THEN
+        assertEquals(expected, actual);
+    }
 
     // --------------------------------------- CREATE ---------------------------------------
     @Test
