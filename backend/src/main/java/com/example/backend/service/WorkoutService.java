@@ -1,6 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.exception.ExerciseAlreadyExistsException;
+import com.example.backend.exception.AlreadyExistsException;
 import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
 import com.example.backend.repo.WorkoutRepo;
@@ -16,7 +16,7 @@ public class WorkoutService {
 
     public Workout createWorkout(WorkoutDTO workout) {
         if (workoutRepo.existsByName(workout.name())) {
-            throw new ExerciseAlreadyExistsException("Exercise already exists!");
+            throw new AlreadyExistsException(workout.name() + " already exists");
         } else {
             Workout newWorkout = Workout.builder()
                     .id(idService.generateId())

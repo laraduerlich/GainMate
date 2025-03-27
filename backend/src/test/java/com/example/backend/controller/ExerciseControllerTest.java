@@ -1,6 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.exception.ExerciseNotExistsException;
 import com.example.backend.model.Exercise;
 import com.example.backend.repo.ExerciseRepo;
 import com.example.backend.service.ExerciseService;
@@ -12,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

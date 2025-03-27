@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
-import com.example.backend.exception.ExerciseAlreadyExistsException;
-import com.example.backend.exception.ExerciseNotExistsException;
+import com.example.backend.exception.AlreadyExistsException;
+import com.example.backend.exception.NotExistsException;
 import com.example.backend.model.Exercise;
 import com.example.backend.model.ExerciseDTO;
 import com.example.backend.repo.ExerciseRepo;
@@ -21,16 +21,16 @@ public class ExerciseService {
         return exerciseRepo.findAll();
     }
 
-    public Exercise getExerciseById(String id) throws ExerciseNotExistsException {
+    public Exercise getExerciseById(String id) throws NotExistsException {
         return exerciseRepo.findById(id)
-                .orElseThrow(() -> new ExerciseNotExistsException("Exercise with id " + id + " does not exist"));
+                .orElseThrow(() -> new NotExistsException("Exercise with id " + id + " does not exist"));
 
     }
 
-    public Exercise createExercise(ExerciseDTO newExercise) throws ExerciseAlreadyExistsException {
+    public Exercise createExercise(ExerciseDTO newExercise) throws AlreadyExistsException {
        // Check if the name is already in the repo
         if (exerciseRepo.existsByName(newExercise.name())) {
-            throw new ExerciseAlreadyExistsException("Exercise already exists!");
+            throw new AlreadyExistsException("Exercise already exists!");
         } else {
             Exercise exercise = Exercise.builder()
                     .id(idService.generateId())
@@ -42,12 +42,12 @@ public class ExerciseService {
         }
     }
 
-    public Exercise updateExercise(String id, Exercise newExercise) throws ExerciseNotExistsException {
+    public Exercise updateExercise(String id, Exercise newExercise) throws NotExistsException {
         // Check if the name is already in the repo
         if (exerciseRepo.existsById(id)) {
             return exerciseRepo.save(newExercise);
         } else {
-            throw new ExerciseNotExistsException("Exercise with id " + id + " does not exist");
+            throw new NotExistsException("Exercise with id " + id + " does not exist");
         }
     }
 }

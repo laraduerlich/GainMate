@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ExerciseAlreadyExistsException.class)
+    @ExceptionHandler(AlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String exerciseAlreadyExistsException(ExerciseAlreadyExistsException e) {
+    public String alreadyExistsException(AlreadyExistsException e) {
         return e.getMessage();
     }
 
-    @ExceptionHandler(ExerciseNotExistsException.class)
+    @ExceptionHandler(NotExistsException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String exerciseNotFoundException(ExerciseNotExistsException e) {
+    public String notExistsException(NotExistsException e) {
         return e.getMessage();
     }
 }
