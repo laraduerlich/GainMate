@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 
 type ExerciseListProps = {
     elements: Exercise[] | Workout[],
-    use: "dashboardExercise" | "dashboardWorkouts" | "newWorkout",
+    use: "dashboardExercise" | "dashboardWorkouts" | "addWorkout" | "removeWorkout",
     handelButtonClick?: (id: string | undefined) => void
 }
 
@@ -53,6 +53,12 @@ export default function List({elements, use, handelButtonClick}: ExerciseListPro
         }
     }
 
+    const handleRemoveButtonClick = (id: string | undefined) => {
+        if (handelButtonClick) {
+            handelButtonClick(id)
+        }
+    }
+
     return (
         <>
             <div>
@@ -78,8 +84,11 @@ export default function List({elements, use, handelButtonClick}: ExerciseListPro
                                                 <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewWorkoutButtonClick(element.id)}} />
                                             </div>)
 
-                                        :(use === "newWorkout") ? (
+                                        :(use === "addWorkout") ? (
                                                 <ButtonWithIcon icon={"add"} type={"button"} onClick={() => {handleAddButtonClick(element.id)}} />)
+
+                                        :(use === "removeWorkout") ? (
+                                                <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(element.id)}} />)
 
                                         : null }
                                 </div>
