@@ -48,7 +48,7 @@ public class WorkoutController {
             Workout updatedWorkout = workoutService.updateWorkout(id, workoutDTO);
             return ResponseEntity.ok(updatedWorkout);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 }
