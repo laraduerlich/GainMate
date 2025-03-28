@@ -12,7 +12,7 @@ export default function UseWorkoutData(){
     // Get all workouts
     const getAllWorkouts = () => {
         axios.get("/api/workout/all")
-            .then((response) => setAllWorkouts(response.data))
+            .then((response) => {setAllWorkouts(response.data)})
             .catch(error => {
                 console.error("Error fetching all workouts: ", error)
             })
@@ -21,7 +21,7 @@ export default function UseWorkoutData(){
     // Get workout by id
     const getWorkoutById = (id: string) => {
         axios.get("/api/workout/" + id)
-            .then((response) => setWorkout(response.data))
+            .then((response) => {setWorkout(response.data)})
             .catch(error => {
                 console.error("Error fetching workout by id: ", error)
             })
@@ -43,7 +43,7 @@ export default function UseWorkoutData(){
     // update workout
     const updateWorkout = (updatedWorkout: Workout) => {
         axios.put("/api/workout/" + updatedWorkout.id, updatedWorkout)
-            .then((response) => setWorkout(response.data))
+            .then((response) => {setWorkout(response.data)})
             .then(error => {
                 console.error("Error update workout: ", error)
             })

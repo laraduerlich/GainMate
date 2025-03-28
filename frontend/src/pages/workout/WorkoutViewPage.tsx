@@ -2,7 +2,6 @@ import {Workout} from "../../types/Workout.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import WorkoutExerciseList from "../../components/workout/WorkoutExerciseList.tsx";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import List from "../../components/List.tsx";
 
@@ -17,43 +16,41 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
 
     const {id} = useParams<{id: string}>();
     const [isEditing, setIsEditing] = useState(false);
-    const [editWorkout, setEditWorkout] = useState<Workout>(workout)
+    const [editName, setEditName] = useState<string>(workout.name)
+    const [idList, setIdList] = useState<string[]>(workout.exerciseIdList)
 
     // exercises form the workout
     const exerciseList: Exercise[] = exercises.filter(exercise =>
-        exercise.id !== undefined && workout.exerciseIdList.includes(exercise.id)
+        exercise.id !== undefined && idList.includes(exercise.id)
     )
-
-    const handleEditChange = (event) => {
-        setEditWorkout({
-            ...editWorkout,
-            // key (name) of the input is dynamically set
-            [event.target.name]: event.target.value,
-        })
-    }
 
     // button handler
     const handleAddButtonClick = (exerciseId: string | undefined) => {
         if (exerciseId !== undefined) {
-            setEditWorkout({
-                ...editWorkout,
-                exerciseIdList: [...workout.exerciseIdList, exerciseId]
-            })
+            setIdList([...idList, exerciseId])
+        } else {
+            console.error("Invalid ID for adding exercise.");
         }
     }
 
     const handleRemoveButtonClick = (exerciseId: string | undefined) => {
         if (exerciseId !== undefined) {
-            setEditWorkout({
-                ...editWorkout,
-                exerciseIdList: workout.exerciseIdList.filter(idExercise => idExercise !== id)
-            })
+            setIdList(idList.filter(idExercise => idExercise !== exerciseId))
+        } else {
+            console.error("Invalid ID for removing exercise.");
         }
     }
 
-    const handleSaveButtonClick = (event) => {
+    const handleSaveButtonClick = (event: any) => {
         event.preventDefault()
-        updateWorkout(editWorkout)
+
+        const updatedWorkout: Workout = {
+            id: id,
+            name: editName,
+            exerciseIdList: idList
+        }
+
+        updateWorkout(updatedWorkout)
         setIsEditing(false)
     }
 
@@ -77,7 +74,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                             <input
                                 name={"name"}
                                 value={workout.name}
-                                onChange={handleEditChange}
+                                onChange={(event) => setEditName(event.target.value)}
                                 className="bg-white text-black border border-gray-300 p-2 rounded-md"
                             />
                         </div>
@@ -96,7 +93,15 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                 <div>
                     <p>{workout.name}</p>
                     <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
-                    <WorkoutExerciseList exerciseList={exerciseList} />
+                    <ul>
+                        {exerciseList.map((exercise) => (
+                            <li
+                                key={exercise.id}
+                            >
+                                {exercise.name}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
         </>

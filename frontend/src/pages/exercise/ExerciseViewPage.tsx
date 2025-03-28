@@ -1,7 +1,7 @@
 import {Exercise} from "../../types/Exercise.tsx";
 import ExerciseCard from "../../components/exercise/ExerciseCard.tsx";
 import {useParams} from "react-router-dom";
-import {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 
 type ExerciseViewProps = {
@@ -17,7 +17,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     const [editExercise, setEditExercise] = useState<Exercise>(exercise)
 
     //
-    const handleEditChange = (event) => {
+    const handleEditChange = (event: any) => {
         setEditExercise({
             ...editExercise,
             // key (name) of the input is dynamically set
@@ -26,7 +26,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     }
 
     // button handler
-    const handleSaveButtonClick = (event) => {
+    const handleSaveButtonClick = (event: any) => {
         event.preventDefault()
         updateExercise(editExercise)
         setIsEditing(false)
