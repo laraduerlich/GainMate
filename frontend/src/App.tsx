@@ -10,6 +10,7 @@ import ExerciseViewPage from "./pages/exercise/ExerciseViewPage.tsx";
 import WorkoutDashboardPage from "./pages/workout/WorkoutDashboardPage.tsx";
 import WorkoutCreatePage from "./pages/workout/WorkoutCreatePage.tsx";
 import UseWorkoutData from "./utils/UseWorkoutData.ts";
+import WorkoutViewPage from "./pages/workout/WorkoutViewPage.tsx";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
                       {/* Workout Pages */}
                       <Route path={"/workouts"} element={<WorkoutDashboardPage workouts={allWorkouts}/>} />
                       <Route path={"/workout/new"} element={<WorkoutCreatePage exercises={allExercises} createWorkout={createWorkout}/>} />
+                      <Route path={"/workout/:id"} element={<WorkoutViewPage workout={} exercises={} getWorkoutById={} updateWorkout={} />} />
                   </Routes>
               </main>
 
