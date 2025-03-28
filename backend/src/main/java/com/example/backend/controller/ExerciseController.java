@@ -33,20 +33,20 @@ public class ExerciseController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Exercise> createExercise(@RequestBody ExerciseDTO newExercise) {
+    public ResponseEntity<Exercise> createExercise(@RequestBody ExerciseDTO exerciseDTO) {
         try {
-            Exercise createdExercise = exerciseService.createExercise(newExercise);
-            return ResponseEntity.ok(createdExercise);
+            Exercise newExercise = exerciseService.createExercise(exerciseDTO);
+            return ResponseEntity.ok(newExercise);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exercise> updateExercise(@PathVariable String id, @RequestBody ExerciseDTO updatedExercise) {
+    public ResponseEntity<Exercise> updateExercise(@PathVariable String id, @RequestBody ExerciseDTO exerciseDTO) {
         try {
-            Exercise exercise = exerciseService.updateExercise(id, updatedExercise);
-            return ResponseEntity.ok(exercise);
+            Exercise updatedExercise = exerciseService.updateExercise(id, exerciseDTO);
+            return ResponseEntity.ok(updatedExercise);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

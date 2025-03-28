@@ -62,22 +62,11 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                 </form>
                 {/* List of all exercises for creating workouts with remove button*/}
                 <div>
-                    <ul>
-                        {addedExercises.map((exercise: Exercise) => (
-                            <li
-                                key={exercise.id}>
-                                    <span>
-                                        {exercise.name}
-                                    </span>
-                                <div>
-                                    <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(exercise.id)}} />
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                    <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
                 </div>
+                {/* List of all exercises for creating workouts with add button*/}
                 <div>
-                    <List elements={exercises} use={"newWorkout"} handelButtonClick={handleAddButtonClick} />
+                    <List elements={exercises} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
                 </div>
             </div>
         </>

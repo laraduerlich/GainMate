@@ -44,7 +44,6 @@ class ExerciseServiceTest {
                 .name("Test")
                 .note("Test")
                 .build();
-        when(exerciseRepo.existsById(id)).thenReturn(true);
         when(exerciseRepo.findById(id)).thenReturn(Optional.of(expected));
 
         // WHEN

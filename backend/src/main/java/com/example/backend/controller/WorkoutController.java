@@ -22,13 +22,33 @@ public class WorkoutController {
         return ResponseEntity.ok(allWorkouts);
     }
 
-    @PostMapping("/new")
-    public ResponseEntity<Workout> createWorkout(@RequestBody WorkoutDTO workout) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Workout> getWorkoutById(@PathVariable String id) {
         try {
-            Workout newWorkout = workoutService.createWorkout(workout);
+            Workout workout = workoutService.getWorkoutById(id);
+            return ResponseEntity.ok(workout);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<Workout> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
+        try {
+            Workout newWorkout = workoutService.createWorkout(workoutDTO);
             return ResponseEntity.ok(newWorkout);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Workout> updateWorkout(@PathVariable String id, @RequestBody WorkoutDTO workoutDTO) {
+        try {
+            Workout updatedWorkout = workoutService.updateWorkout(id, workoutDTO);
+            return ResponseEntity.ok(updatedWorkout);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

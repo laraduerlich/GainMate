@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Workout;
 import com.example.backend.repo.WorkoutRepo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ class WorkoutControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private WorkoutRepo workoutRepo;
+    private WorkoutRepo repo;
 
     // --------------------------------------- GET ALL --------------------------------------
     @Test
@@ -30,6 +31,33 @@ class WorkoutControllerTest {
         mockMvc.perform(get("/api/workout/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
+    }
+
+    // --------------------------------------- GET BY ID -------------------------------------
+    @Test
+    void getWorkoutById_shouldReturnWorkout_whenCalledWithValidId() throws Exception {
+        // GIVEN
+        Workout workout = Workout.builder()
+                .id("1")
+                .name("Test")
+                .build();
+        repo.save(workout);
+
+        // WHEN & THEN
+        mockMvc.perform(get("/api/workout/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                          id: "1",
+                          name: "Test"
+                        }
+                        """));
+    }
+
+    @Test
+    void getWorkoutById_shouldThrowException_whenCalledWithInvalidId() throws Exception {
+        mockMvc.perform(get("/api/workout/1"))
+                .andExpect(status().isNotFound());
     }
 
     // --------------------------------------- POST ----------------------------------------
@@ -54,4 +82,46 @@ class WorkoutControllerTest {
                         """));
     }
 
+    // --------------------------------------- PUT ----------------------------------------
+    @Test
+    void updateWorkout_shouldReturnWorkout_WhenCalledWithValidId() throws Exception {
+        // GIVEN
+        Workout workout = Workout.builder()
+                .id("1")
+                .name("Test")
+                .build();
+        repo.save(workout);
+
+        // WHEN & THEN
+        mockMvc.perform(put("/api/workout/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                        "id": "1",
+                        "name": "Test2"
+                        }
+"""
+                ))
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                          id: "1",
+                          "name": "Test2"
+                        }
+                        """));
+    }
+
+    @Test
+    void updateWorkout_shouldThrowException_whenCalledWithInvalidId() throws Exception {
+        mockMvc.perform(put("/api/workout/1")
+        .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                          "id": "1",
+                          "name": "Test2"
+                        }
+"""
+                ))
+                .andExpect(status().isNotFound());
+    }
 }
