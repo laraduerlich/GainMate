@@ -3,7 +3,6 @@ import {Exercise} from "../../types/Exercise.tsx";
 import {FormEvent, useState} from "react";
 import ButtonWithIcon from "../ButtonWithIcon.tsx";
 import {Workout} from "../../types/Workout.tsx";
-import WorkoutExerciseList from "./WorkoutExerciseList.tsx";
 
 type WorkoutCreateFormProps = {
     exercises: Exercise[]
