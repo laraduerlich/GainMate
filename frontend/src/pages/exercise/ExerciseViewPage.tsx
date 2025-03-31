@@ -1,12 +1,13 @@
 import {Exercise} from "../../types/Exercise.tsx";
 import ExerciseCard from "../../components/exercise/ExerciseCard.tsx";
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
+import {AxiosResponse} from "axios";
 
 type ExerciseViewProps = {
-    exercise: Exercise;
-    getExerciseById: (id: string) => void;
+    exercise: Exercise | undefined,
+    getExerciseById: (id: string) => Promise<AxiosResponse>,
     updateExercise: (updatedExercise: Exercise) => void
 }
 
@@ -14,9 +15,8 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
 
     const {id} = useParams<{id: string}>();
     const [isEditing, setIsEditing] = useState(false);
-    const [editExercise, setEditExercise] = useState<Exercise>(exercise)
+    const [editExercise, setEditExercise] = useState<Exercise>(exercise ? exercise : {id: "", name: ""})
 
-    //
     const handleEditChange = (event: any) => {
         setEditExercise({
             ...editExercise,
@@ -26,7 +26,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     }
 
     // button handler
-    const handleSaveButtonClick = (event: any) => {
+    const handleSaveButtonClick = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         updateExercise(editExercise)
         setIsEditing(false)
@@ -37,7 +37,9 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     }
 
     const handleBackButtonClick = () => {
-        setEditExercise(exercise)
+        if (exercise !== undefined) {
+            setEditExercise(exercise)
+        }
         setIsEditing(false)
     }
 
@@ -45,6 +47,13 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     useEffect(() => {
         if (id !== undefined) {
             getExerciseById(id)
+                .then((response) => {
+                    return setEditExercise({
+                        id: response.data.id,
+                        name: response.data.name,
+                        note: response.data.note
+                    })
+                })
         }
     }, [id]);
 
@@ -74,7 +83,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
 
             ) : (
                 <div>
-                    <ExerciseCard exercise={exercise} editButtonClick={handleEditButtonClick}/>
+                    <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} editButtonClick={handleEditButtonClick}/>
                 </div>
             )}
         </>

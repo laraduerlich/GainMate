@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 export default function UseExerciseData() {
 
     const [allExercises, setAllExercises] = useState<Exercise[]>([]);
-    const [exercise, setExercise] = useState<Exercise>({} as Exercise)
+    const [exercise, setExercise] = useState<Exercise>()
     const navigate = useNavigate();
 
     // GET all exercises
@@ -20,10 +20,13 @@ export default function UseExerciseData() {
 
     // Get exercise by id
     const getExerciseById = (id: string) => {
-        axios.get("/api/exercise/" + id)
-            .then((response) => {setExercise(response.data)})
+        return axios.get("/api/exercise/" + id)
+            .then((response) => {
+                setExercise(response.data)
+                return response})
             .catch(error => {
                 console.error("Error fetching exercise by id:", error)
+                throw error
             })
     }
 
