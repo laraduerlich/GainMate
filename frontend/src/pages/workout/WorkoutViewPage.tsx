@@ -1,6 +1,6 @@
 import {Workout} from "../../types/Workout.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import List from "../../components/List.tsx";
@@ -9,12 +9,14 @@ type WorkoutViewProps = {
     workout: Workout,
     exercises: Exercise[],
     getWorkoutById: (id: string) => void,
-    updateWorkout: (updatedWorkout: Workout) => void
+    updateWorkout: (updatedWorkout: Workout) => void,
+    deleteWorkout: (id: string) => void
 }
 
-export default function WorkoutViewPage({workout, exercises, getWorkoutById, updateWorkout}: WorkoutViewProps) {
+export default function WorkoutViewPage({workout, exercises, getWorkoutById, updateWorkout, deleteWorkout}: WorkoutViewProps) {
 
     const {id} = useParams<{id: string}>();
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [editName, setEditName] = useState<string>(workout.name)
     const [idList, setIdList] = useState<string[]>(workout.exerciseIdList)
@@ -58,6 +60,15 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
         setIsEditing(true)
     }
 
+    const handleDeleteButtonClick = () => {
+        if (id !== undefined) {
+            deleteWorkout(id);
+            navigate("/workouts")
+        } else {
+            console.error("Id is undefined")
+        }
+    }
+
     // Load workout
     useEffect(() => {
         if (id !== undefined){
@@ -93,6 +104,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                 <div>
                     <p>{workout.name}</p>
                     <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
+                    <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick} />
                     <ul>
                         {exerciseList.map((exercise) => (
                             <li
