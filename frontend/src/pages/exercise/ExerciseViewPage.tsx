@@ -8,10 +8,11 @@ import {AxiosResponse} from "axios";
 type ExerciseViewProps = {
     exercise: Exercise | undefined,
     getExerciseById: (id: string) => Promise<AxiosResponse>,
-    updateExercise: (updatedExercise: Exercise) => void
+    updateExercise: (updatedExercise: Exercise) => void,
+    deleteExercise: (id: string) => void
 }
 
-export default function ExerciseViewPage ({exercise, getExerciseById, updateExercise}: ExerciseViewProps) {
+export default function ExerciseViewPage ({exercise, getExerciseById, updateExercise, deleteExercise}: ExerciseViewProps) {
 
     const {id} = useParams<{id: string}>();
     const [isEditing, setIsEditing] = useState(false);
@@ -41,6 +42,14 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
             setEditExercise(exercise)
         }
         setIsEditing(false)
+    }
+
+    const handleDeleteButtonClick = () => {
+        if (id !== undefined) {
+            deleteExercise(id)
+        } else {
+            console.log("Id is undefined")
+        }
     }
 
     // Load exercise
@@ -84,6 +93,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
             ) : (
                 <div>
                     <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} editButtonClick={handleEditButtonClick}/>
+                    <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick}/>
                 </div>
             )}
         </>

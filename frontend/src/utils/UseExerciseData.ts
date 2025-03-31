@@ -58,10 +58,22 @@ export default function UseExerciseData() {
             })
     }
 
+    // delete exercise
+    const deleteExercise = (id: string) => {
+        axios.delete("/api/exercise/" + id)
+            .then(() => {
+                navigate("/exercises")
+                getAllExercises()
+            })
+            .catch(error => {
+                console.error("Error delete Exercise: " + error)
+            })
+    }
+
     // useEffect for loading
     useEffect(() => {
         getAllExercises();
     }, []);
 
-    return {allExercises, exercise, createExercise, getExerciseById, updateExercise}
+    return {allExercises, exercise, createExercise, getExerciseById, updateExercise, deleteExercise}
 }

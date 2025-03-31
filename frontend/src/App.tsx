@@ -14,7 +14,7 @@ import WorkoutViewPage from "./pages/workout/WorkoutViewPage.tsx";
 
 function App() {
 
-    const {allExercises, exercise, createExercise, getExerciseById, updateExercise} = UseExerciseData();
+    const {allExercises, exercise, createExercise, getExerciseById, updateExercise, deleteExercise} = UseExerciseData();
     const {allWorkouts, workout, getWorkoutById, createWorkout, updateWorkout, deleteWorkout} = UseWorkoutData();
 
 
@@ -28,11 +28,12 @@ function App() {
                   <Routes>
                       <Route path={"/overview"} element={<OverviewPage />} />
                       {/* Exercise Pages */}
-                      <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises} />} />
+                      <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises}/>} />
                       <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise}/>} />
                       <Route path={"/exercise/:id"} element={<ExerciseViewPage exercise={exercise}
                                                                                getExerciseById={getExerciseById}
-                                                                               updateExercise={updateExercise}/>} />
+                                                                               updateExercise={updateExercise}
+                                                                               deleteExercise={deleteExercise}/>} />
                       {/* Workout Pages */}
                       <Route path={"/workouts"} element={<WorkoutDashboardPage workouts={allWorkouts}/>} />
                       <Route path={"/workout/new"} element={<WorkoutCreatePage exercises={allExercises}
@@ -41,7 +42,7 @@ function App() {
                                                                              exercises={allExercises}
                                                                              getWorkoutById={getWorkoutById}
                                                                              updateWorkout={updateWorkout}
-                                                                             deleteWorkout={deleteWorkout} />} />
+                                                                             deleteWorkout={deleteWorkout}/>} />
                   </Routes>
               </main>
 
