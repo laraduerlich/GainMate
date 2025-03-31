@@ -54,4 +54,12 @@ public class WorkoutService {
             throw new NotExistsException("Workout with id " + id + " does not exist");
         }
     }
+
+    public void deleteWorkout(String id) throws NotExistsException {
+        if (workoutRepo.existsById(id)) {
+            workoutRepo.deleteById(id);
+        } else {
+            throw new NotExistsException("Workout with id " + id + " does not exist");
+        }
+    }
 }
