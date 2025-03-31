@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ExerciseServiceTest {
 
@@ -144,4 +143,35 @@ class ExerciseServiceTest {
         }
     }
 
+    // --------------------------------------- DELETE --------------------------------------
+    @Test
+    void deleteExercise_shouldDeleteExercise_whenCalledWithValidId() {
+        // GIVEN
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        Exercise deletedExercise = Exercise.builder().id("1").build();
+
+        when(exerciseRepo.existsById(deletedExercise.id())).thenReturn(true);
+
+        // WHEN
+        exerciseService.deleteExercise(deletedExercise.id());
+
+        // THEN
+        verify(exerciseRepo).deleteById(deletedExercise.id());
+    }
+
+    @Test
+    void deleteExercise_shouldThrowException_whenExerciseNotFound() {
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        String id = "1";
+
+        when(exerciseRepo.existsById(id)).thenReturn(false);
+
+        // WHEN & THEN
+        try {
+            exerciseService.deleteExercise(id);
+            fail("An exception is expected, but none is thrown!");
+        } catch (Exception e) {
+            assertEquals("Exercise with id " + id + " does not exist", e.getMessage());
+        }
+    }
 }
