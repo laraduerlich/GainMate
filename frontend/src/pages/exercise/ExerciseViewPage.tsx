@@ -92,7 +92,8 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
 
             ) : (
                 <div>
-                    <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} editButtonClick={handleEditButtonClick}/>
+                    <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
+                    <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
                     <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick}/>
                 </div>
             )}
