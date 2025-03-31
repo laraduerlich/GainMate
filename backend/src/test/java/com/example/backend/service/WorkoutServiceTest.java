@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class WorkoutServiceTest {
 
@@ -100,4 +99,80 @@ class WorkoutServiceTest {
             assertEquals("Workout already exists", e.getMessage());
         }
     }
+
+    // --------------------------------------- UPDATE --------------------------------------
+    @Test
+    void updateWorkout_shouldUpdateWorkout_whenCalledWithValidId() {
+        // GIVEN
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
+        Workout expected = Workout.builder()
+                .id("1")
+                .name("Test1")
+                .exerciseIdList(List.of("1", "2", "3"))
+                .build();
+        when(workoutRepo.existsById("1")).thenReturn(true);
+        when(workoutRepo.save(expected)).thenReturn(expected);
+
+        // WHEN
+        Workout actual = workoutService.updateWorkout("1", updatedWorkout);
+
+        // THEN
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void updateWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
+        // GIVEN
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
+
+        when(workoutRepo.existsById("1")).thenReturn(false);
+
+        // WHEN & THEN
+        try {
+            workoutService.updateWorkout("1", updatedWorkout);
+            fail("An exception is expected, but none is thrown!");
+        } catch (Exception e) {
+            assertEquals("Workout with id 1 does not exist", e.getMessage());
+        }
+
+    }
+
+    // --------------------------------------- DELETE --------------------------------------
+    @Test
+    void deleteWorkout_shouldDeleteWorkout_whenCalledWithValidId() {
+        // GIVEN
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        Workout workout = Workout.builder()
+                .id("1")
+                .name("Test")
+                .build();
+        when(workoutRepo.existsById("1")).thenReturn(true);
+
+        // WHEN
+        workoutService.deleteWorkout("1");
+
+        // THEN
+        verify(workoutRepo, times(1)).deleteById(anyString());
+    }
+
+    @Test
+    void deleteWorkout_shouldThrowException_whenWorkoutDoesNotExist() {
+        // GIVEN
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        String id = "2";
+
+        when(workoutRepo.existsById(id)).thenReturn(false);
+
+        // WHEN & THEN
+        try {
+            workoutService.deleteWorkout(id);
+            fail("An exception is expected, but none is thrown!");
+        } catch (Exception e) {
+            assertEquals("Workout with id 2 does not exist", e.getMessage());
+        }
+    }
+
+
 }

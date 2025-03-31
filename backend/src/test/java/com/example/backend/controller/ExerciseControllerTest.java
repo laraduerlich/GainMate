@@ -134,4 +134,25 @@ class ExerciseControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    // --------------------------------------- DELETE ----------------------------------------
+    @Test
+    void deleteExercise_shouldReturnExercise_whenCalledWithValidId () throws Exception {
+        // GIVEN
+        Exercise exercise = Exercise.builder()
+                .id("1")
+                .name("Test")
+                .build();
+        repo.save(exercise);
+
+        // WHEN & THEN
+        mockMvc.perform(delete("/api/exercise/" + exercise.id()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteExercise_shouldThrowException_whenCalledWithInvalidId () throws Exception {
+        mockMvc.perform(delete("/api/exercise/1"))
+                .andExpect(status().isNotFound());
+    }
+
 }

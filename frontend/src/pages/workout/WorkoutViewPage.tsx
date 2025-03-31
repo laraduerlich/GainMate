@@ -1,27 +1,30 @@
 import {Workout} from "../../types/Workout.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import List from "../../components/List.tsx";
+import {AxiosResponse} from "axios";
 
 type WorkoutViewProps = {
-    workout: Workout,
+    workout: Workout | undefined,
     exercises: Exercise[],
-    getWorkoutById: (id: string) => void,
-    updateWorkout: (updatedWorkout: Workout) => void
+    getWorkoutById: (id: string) => Promise<AxiosResponse>,
+    updateWorkout: (updatedWorkout: Workout) => void,
+    deleteWorkout: (id: string) => void
 }
 
-export default function WorkoutViewPage({workout, exercises, getWorkoutById, updateWorkout}: WorkoutViewProps) {
+export default function WorkoutViewPage({workout, exercises, getWorkoutById, updateWorkout, deleteWorkout}: WorkoutViewProps) {
 
+    console.log(workout)
     const {id} = useParams<{id: string}>();
     const [isEditing, setIsEditing] = useState(false);
-    const [editName, setEditName] = useState<string>(workout.name)
-    const [idList, setIdList] = useState<string[]>(workout.exerciseIdList)
+    const [editName, setEditName] = useState<string>(workout ? workout.name : "")
+    const [idList, setIdList] = useState<string[]>(workout ? workout.exerciseIdList : [])
 
     // exercises form the workout
-    const exerciseList: Exercise[] = exercises.filter(exercise =>
-        exercise.id !== undefined && idList.includes(exercise.id)
+    const exerciseList: Exercise[] = exercises.filter((exercise: Exercise) =>
+            exercise.id !== undefined && idList.includes(exercise.id)
     )
 
     // button handler
@@ -41,7 +44,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
         }
     }
 
-    const handleSaveButtonClick = (event: any) => {
+    const handleSaveButtonClick = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         const updatedWorkout: Workout = {
@@ -58,11 +61,25 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
         setIsEditing(true)
     }
 
+    const handleDeleteButtonClick = () => {
+        if (id !== undefined) {
+            deleteWorkout(id);
+        } else {
+            console.error("Id is undefined")
+        }
+    }
+
     // Load workout
     useEffect(() => {
         if (id !== undefined){
             getWorkoutById(id)
+                .then((response) => {
+                    setEditName(response.data.name)
+                    setIdList(response.data.exerciseIdList)
+                }
+                )
         }
+
     }, [id]);
 
     return (
@@ -73,7 +90,8 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                         <div>
                             <input
                                 name={"name"}
-                                value={workout.name}
+                                value={editName}
+                                placeholder={workout?.name}
                                 onChange={(event) => setEditName(event.target.value)}
                                 className="bg-white text-black border border-gray-300 p-2 rounded-md"
                             />
@@ -91,8 +109,9 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                 </div>
             ) : (
                 <div>
-                    <p>{workout.name}</p>
+                    {workout? workout.name : "Workoutname does not exsit"}
                     <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
+                    <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick} />
                     <ul>
                         {exerciseList.map((exercise) => (
                             <li

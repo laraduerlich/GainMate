@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 export default function UseWorkoutData(){
 
     const navigate = useNavigate();
-    const [workout, setWorkout] = useState<Workout>({} as Workout)
+    const [workout, setWorkout] = useState<Workout>()
     const [allWorkouts, setAllWorkouts] = useState<Workout[]>([])
 
     // Get all workouts
@@ -20,10 +20,14 @@ export default function UseWorkoutData(){
 
     // Get workout by id
     const getWorkoutById = (id: string) => {
-        axios.get("/api/workout/" + id)
-            .then((response) => {setWorkout(response.data)})
+        return axios.get("/api/workout/" + id)
+            .then((response) => {
+                setWorkout(response.data)
+                return response
+            })
             .catch(error => {
                 console.error("Error fetching workout by id: ", error)
+                throw error;
             })
     }
 
@@ -49,10 +53,22 @@ export default function UseWorkoutData(){
             })
     }
 
+    // delete workout
+    const deleteWorkout = (id: string) => {
+        axios.delete("/api/workout/" + id)
+            .then(() => {
+                navigate("/workouts");
+                getAllWorkouts()
+            })
+            .catch(error => {
+                console.error("Error delete workout: ", error)
+            })
+    }
+
     // useEffect for loading
     useEffect(() => {
         getAllWorkouts()
     }, []);
 
-    return {allWorkouts, workout, createWorkout, getWorkoutById, updateWorkout}
+    return {allWorkouts, workout, createWorkout, getWorkoutById, updateWorkout, deleteWorkout}
 }
