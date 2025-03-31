@@ -55,4 +55,13 @@ public class ExerciseService {
             throw new NotExistsException("Exercise with id " + id + " does not exist");
         }
     }
+
+    public void deleteExercise(String id) throws NotExistsException {
+        // Check if the id is  in the repo
+        if (exerciseRepo.existsById(id)) {
+            exerciseRepo.deleteById(id);
+        } else {
+            throw new NotExistsException("Exercise with id " + id + " does not exist");
+        }
+    }
 }

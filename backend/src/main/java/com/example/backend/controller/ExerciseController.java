@@ -4,6 +4,7 @@ import com.example.backend.model.Exercise;
 import com.example.backend.model.ExerciseDTO;
 import com.example.backend.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +48,16 @@ public class ExerciseController {
         try {
             Exercise updatedExercise = exerciseService.updateExercise(id, exerciseDTO);
             return ResponseEntity.ok(updatedExercise);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteExercise(@PathVariable String id) {
+        try {
+            exerciseService.deleteExercise(id);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
