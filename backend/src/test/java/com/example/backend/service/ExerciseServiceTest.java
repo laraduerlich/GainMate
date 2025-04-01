@@ -73,7 +73,10 @@ class ExerciseServiceTest {
     void createExercise_shouldCreateExercise_whenCalled() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO newExercise = new ExerciseDTO("Test", "Test");
+        ExerciseDTO newExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .build();
         Exercise expected = Exercise.builder()
                 .id("1")
                 .name("Test")
@@ -93,7 +96,10 @@ class ExerciseServiceTest {
     void createExercise_shouldThrowException_whenExerciseAlreadyExists() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO newExercise = new ExerciseDTO("Test", "Test");
+        ExerciseDTO newExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .build();
         when(exerciseRepo.existsByName("Test")).thenReturn(true);
 
         // WHEN & THEN
@@ -110,7 +116,10 @@ class ExerciseServiceTest {
     void updateExercise_shouldUpdateExercise_whenCalledWithValidId() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO updatedExercise = new ExerciseDTO("Test", "Test");
+        ExerciseDTO updatedExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .build();
         Exercise expected = Exercise.builder()
                 .id("1")
                 .name("Test")
@@ -130,8 +139,10 @@ class ExerciseServiceTest {
     void updateExercise_shouldThrowException_whenExerciseNotFound() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO updatedExercise = new ExerciseDTO("Test", "Test");
-
+        ExerciseDTO updatedExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .build();
         when(exerciseRepo.existsById("1")).thenReturn(false);
 
         // WHEN & THEN

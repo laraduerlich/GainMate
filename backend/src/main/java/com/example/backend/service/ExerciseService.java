@@ -49,6 +49,7 @@ public class ExerciseService {
                     .id(id)
                     .name(exerciseDTO.name())
                     .note(exerciseDTO.note())
+                    .progressList(exerciseDTO.progressList())
                     .build();
             return exerciseRepo.save(updatedExercise);
         } else {
