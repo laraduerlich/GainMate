@@ -1,5 +1,5 @@
 
 export type Sets = {
-    repetion: string,
+    repetition: string,
     weight: string
 }
