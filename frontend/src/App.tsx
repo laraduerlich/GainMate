@@ -11,6 +11,8 @@ import WorkoutDashboardPage from "./pages/workout/WorkoutDashboardPage.tsx";
 import WorkoutCreatePage from "./pages/workout/WorkoutCreatePage.tsx";
 import UseWorkoutData from "./utils/UseWorkoutData.ts";
 import WorkoutViewPage from "./pages/workout/WorkoutViewPage.tsx";
+import WorkoutRunPage from "./pages/workout/WorkoutRunPage.tsx";
+import ExerciseRunPage from "./pages/exercise/ExerciseRunPage.tsx";
 
 function App() {
 
@@ -34,6 +36,10 @@ function App() {
                                                                                getExerciseById={getExerciseById}
                                                                                updateExercise={updateExercise}
                                                                                deleteExercise={deleteExercise}/>} />
+                      <Route path={"/workout/:workoutId/exercise/:exerciseId"} element={<ExerciseRunPage exercise={exercise}
+                                                                                                         getExerciseById={getExerciseById}
+                                                                                                         updateExercise={updateExercise}/>} />
+
                       {/* Workout Pages */}
                       <Route path={"/workouts"} element={<WorkoutDashboardPage workouts={allWorkouts}/>} />
                       <Route path={"/workout/new"} element={<WorkoutCreatePage exercises={allExercises}
@@ -43,6 +49,9 @@ function App() {
                                                                              getWorkoutById={getWorkoutById}
                                                                              updateWorkout={updateWorkout}
                                                                              deleteWorkout={deleteWorkout}/>} />
+                      <Route path={"/start-workout/:id"} element={<WorkoutRunPage workout={workout}
+                                                                                  exercises={allExercises}
+                                                                                  getWorkoutById={getWorkoutById}/>} />
                   </Routes>
               </main>
 

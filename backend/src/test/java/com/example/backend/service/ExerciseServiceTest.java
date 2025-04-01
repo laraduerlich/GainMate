@@ -2,12 +2,12 @@ package com.example.backend.service;
 
 import com.example.backend.model.Exercise;
 import com.example.backend.model.ExerciseDTO;
+import com.example.backend.model.Progress;
+import com.example.backend.model.Sets;
 import com.example.backend.repo.ExerciseRepo;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -73,7 +73,10 @@ class ExerciseServiceTest {
     void createExercise_shouldCreateExercise_whenCalled() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO newExercise = new ExerciseDTO("Test", "Test");
+        ExerciseDTO newExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .build();
         Exercise expected = Exercise.builder()
                 .id("1")
                 .name("Test")
@@ -93,7 +96,10 @@ class ExerciseServiceTest {
     void createExercise_shouldThrowException_whenExerciseAlreadyExists() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO newExercise = new ExerciseDTO("Test", "Test");
+        ExerciseDTO newExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .build();
         when(exerciseRepo.existsByName("Test")).thenReturn(true);
 
         // WHEN & THEN
@@ -110,11 +116,16 @@ class ExerciseServiceTest {
     void updateExercise_shouldUpdateExercise_whenCalledWithValidId() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO updatedExercise = new ExerciseDTO("Test", "Test");
+        ExerciseDTO updatedExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .progressList(Collections.emptyList())
+                .build();
         Exercise expected = Exercise.builder()
                 .id("1")
                 .name("Test")
                 .note("Test")
+                .progressList(Collections.emptyList())
                 .build();
         when(exerciseRepo.existsById(expected.id())).thenReturn(true);
         when(exerciseRepo.save(expected)).thenReturn(expected);
@@ -130,8 +141,10 @@ class ExerciseServiceTest {
     void updateExercise_shouldThrowException_whenExerciseNotFound() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        ExerciseDTO updatedExercise = new ExerciseDTO("Test", "Test");
-
+        ExerciseDTO updatedExercise = ExerciseDTO.builder()
+                .name("Test")
+                .note("Test")
+                .build();
         when(exerciseRepo.existsById("1")).thenReturn(false);
 
         // WHEN & THEN
@@ -142,6 +155,28 @@ class ExerciseServiceTest {
             assertEquals("Exercise with id " + "1" + " does not exist", e.getMessage());
         }
     }
+
+    // ------------------------------------ CLEAN PROGRESS ----------------------------------
+    @Test
+    void mergeDuplicateProgressEntries_shouldCleanProgressEntries_whenCalled() {
+        // GIVEN
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        List<Sets> sets1 = new ArrayList<>(Arrays.asList(new Sets("10 reps", "50kg"), new Sets("12 reps", "55kg")));
+        List<Sets> sets2 = new ArrayList<>(Collections.singletonList(new Sets("8 reps", "60kg")));
+        List<Sets> sets3 = new ArrayList<>(Collections.singletonList(new Sets("15 reps", "40kg")));
+
+        Progress p1 = new Progress("2024-03-01", sets1);
+        Progress p2 = new Progress("2024-03-01", sets2);
+        Progress p3 = new Progress("2024-03-02", sets3);
+        List<Progress> inputList = Arrays.asList(p1, p2, p3);
+
+        // WHEN
+        List<Progress> result = exerciseService.mergeDuplicateProgressEntries(inputList);
+
+        // THEN
+        assertEquals(2, result.size());
+    }
+
 
     // --------------------------------------- DELETE --------------------------------------
     @Test

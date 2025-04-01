@@ -35,7 +35,7 @@ class ExerciseTest {
         assertEquals(2, exercise.progressList().get(0).sets().size());
 
         // Assertions for Sets
-        assertEquals("10", exercise.progressList().get(0).sets().get(0).repetion());
+        assertEquals("10", exercise.progressList().get(0).sets().get(0).repetition());
         assertEquals("50kg", exercise.progressList().get(0).sets().get(0).weight());
     }
 
@@ -64,7 +64,7 @@ class ExerciseTest {
         Sets set = new Sets("10", "50kg");
 
         assertNotNull(set);
-        assertEquals("10", set.repetion());
+        assertEquals("10", set.repetition());
         assertEquals("50kg", set.weight());
     }
 }

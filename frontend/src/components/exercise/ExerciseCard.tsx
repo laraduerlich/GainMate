@@ -1,17 +1,12 @@
 import {Exercise} from "../../types/Exercise.tsx";
 import {Progress} from "../../types/Progress.tsx";
 import {Sets} from "../../types/Set.tsx";
-import ButtonWithIcon from "../ButtonWithIcon.tsx";
 
 type ExerciseCardProps = {
-    // type: "view" | "workout";
     exercise: Exercise,
-    editButtonClick: () => void
 }
 
-export default function ExerciseCard({exercise, editButtonClick}: ExerciseCardProps) {
-
-
+export default function ExerciseCard({exercise}: ExerciseCardProps) {
 
 
     return (
@@ -21,12 +16,14 @@ export default function ExerciseCard({exercise, editButtonClick}: ExerciseCardPr
                 <p>{exercise.note}</p>
                 <ul>
                     {exercise.progressList?.map((progress: Progress) =>(
-                        <li>
+                        <li
+                            key={progress.date}>
                             {progress.date}
                             <ul>
-                                {progress.sets.map((sets: Sets)=> (
-                                    <li>
-                                        {sets.repetion} x {sets.weight}
+                                {progress.sets.map((oneSet: Sets)=> (
+                                    <li
+                                        key={`${oneSet.repetition}-${oneSet.weight}`}>
+                                        {oneSet.repetition} x {oneSet.weight} kg
                                     </li>
                                 ))}
                             </ul>
@@ -34,7 +31,6 @@ export default function ExerciseCard({exercise, editButtonClick}: ExerciseCardPr
                         </li>
                     ))}
                 </ul>
-                <ButtonWithIcon onClick={editButtonClick} icon={"edit"} type={"button"} />
             </div>
         </>
     )

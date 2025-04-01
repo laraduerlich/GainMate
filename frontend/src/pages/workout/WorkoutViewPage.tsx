@@ -16,7 +16,6 @@ type WorkoutViewProps = {
 
 export default function WorkoutViewPage({workout, exercises, getWorkoutById, updateWorkout, deleteWorkout}: WorkoutViewProps) {
 
-    console.log(workout)
     const {id} = useParams<{id: string}>();
     const [isEditing, setIsEditing] = useState(false);
     const [editName, setEditName] = useState<string>(workout ? workout.name : "")
@@ -76,8 +75,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                 .then((response) => {
                     setEditName(response.data.name)
                     setIdList(response.data.exerciseIdList)
-                }
-                )
+                })
         }
 
     }, [id]);

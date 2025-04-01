@@ -1,7 +1,7 @@
 import {Exercise} from "../../types/Exercise.tsx";
 import ExerciseCard from "../../components/exercise/ExerciseCard.tsx";
 import {useParams} from "react-router-dom";
-import {FormEvent, useEffect, useState} from "react";
+import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import {AxiosResponse} from "axios";
 
@@ -18,7 +18,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     const [isEditing, setIsEditing] = useState(false);
     const [editExercise, setEditExercise] = useState<Exercise>(exercise ? exercise : {id: "", name: ""})
 
-    const handleEditChange = (event: any) => {
+    const handleEditChange = (event: ChangeEvent<HTMLInputElement>) => {
         setEditExercise({
             ...editExercise,
             // key (name) of the input is dynamically set
@@ -77,7 +77,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
                             onChange={handleEditChange}
                             className="bg-white text-black border border-gray-300 p-2 rounded-md"
                         />
-                        <textarea
+                        <input
                             name={"note"}
                             value={editExercise.note}
                             onChange={handleEditChange}
@@ -92,7 +92,8 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
 
             ) : (
                 <div>
-                    <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} editButtonClick={handleEditButtonClick}/>
+                    <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
+                    <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
                     <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick}/>
                 </div>
             )}

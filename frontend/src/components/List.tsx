@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom";
 
 type ExerciseListProps = {
     elements: Exercise[] | Workout[],
-    use: "dashboardExercise" | "dashboardWorkouts" | "addWorkout" | "removeWorkout",
+    use: "dashboardExercise" | "dashboardWorkouts" | "addWorkout" | "removeWorkout" | "inWorkout",
     handelButtonClick?: (id: string | undefined) => void
 }
 
@@ -46,14 +46,22 @@ export default function List({elements, use, handelButtonClick}: ExerciseListPro
         }
     }
 
-    // to add exercise id to a new workout
+    // to add exercise id to a workout
     const handleAddButtonClick = (id: string | undefined) => {
         if (handelButtonClick) {
             handelButtonClick(id)
         }
     }
 
+    // to remove exercise id to a workout
     const handleRemoveButtonClick = (id: string | undefined) => {
+        if (handelButtonClick) {
+            handelButtonClick(id)
+        }
+    }
+
+    // to start an exercise
+    const handleStartButtonClick = (id: string | undefined) => {
         if (handelButtonClick) {
             handelButtonClick(id)
         }
@@ -90,6 +98,8 @@ export default function List({elements, use, handelButtonClick}: ExerciseListPro
                                         :(use === "removeWorkout") ? (
                                                 <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(element.id)}} />)
 
+                                        :(use === "inWorkout") ? (
+                                                <ButtonWithIcon icon={"start"} type={"button"} onClick={() => {handleStartButtonClick(element.id)}} />)
                                         : null }
                                 </div>
                             </li>
