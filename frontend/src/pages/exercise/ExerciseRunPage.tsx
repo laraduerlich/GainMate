@@ -23,8 +23,6 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
     const [reps, setReps] = useState<string>("")
     const [sets, setSets] = useState<Sets[]>([])
 
-
-
     // button handler
     const handleAddButtonClick = (event: FormEvent) => {
         event.preventDefault()
@@ -54,7 +52,6 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
 
         navigate("/start-workout/" + workoutId)
     }
-
 
     // Load exercise & current date
     useEffect(() => {
@@ -124,7 +121,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
                         <li
                             key={`${oneSet.repetition}-${oneSet.weight}`}>
                                 <span>
-                                    {oneSet.repetition} x {oneSet.weight}
+                                    {oneSet.repetition} x {oneSet.weight} kg
                                 </span>
                         </li>
                     ))}

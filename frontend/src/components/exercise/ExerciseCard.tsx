@@ -23,7 +23,7 @@ export default function ExerciseCard({exercise}: ExerciseCardProps) {
                                 {progress.sets.map((oneSet: Sets)=> (
                                     <li
                                         key={`${oneSet.repetition}-${oneSet.weight}`}>
-                                        {oneSet.repetition} x {oneSet.weight}
+                                        {oneSet.repetition} x {oneSet.weight} kg
                                     </li>
                                 ))}
                             </ul>
