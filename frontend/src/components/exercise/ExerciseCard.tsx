@@ -16,12 +16,14 @@ export default function ExerciseCard({exercise}: ExerciseCardProps) {
                 <p>{exercise.note}</p>
                 <ul>
                     {exercise.progressList?.map((progress: Progress) =>(
-                        <li>
+                        <li
+                            key={progress.date}>
                             {progress.date}
                             <ul>
-                                {progress.sets.map((sets: Sets)=> (
-                                    <li>
-                                        {sets.repetion} x {sets.weight}
+                                {progress.sets.map((oneSet: Sets)=> (
+                                    <li
+                                        key={`${oneSet.repetition}-${oneSet.weight}`}>
+                                        {oneSet.repetition} x {oneSet.weight}
                                     </li>
                                 ))}
                             </ul>
