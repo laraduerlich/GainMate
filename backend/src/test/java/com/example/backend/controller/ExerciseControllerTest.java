@@ -11,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -97,6 +99,7 @@ class ExerciseControllerTest {
                 .id("1")
                 .name("Push-Test")
                 .note("Do 3 sets of 15 reps")
+                .progressList(Collections.emptyList())
                 .build();
         repo.save(updatedExercise);
 
@@ -106,7 +109,8 @@ class ExerciseControllerTest {
                 .content("""
                                {
                                    "name": "Push-Test",
-                                   "note": "Do 3 sets of 16 reps"
+                                   "note": "Do 3 sets of 16 reps",
+                                   "progressList": []
                                }
 """
                 ))
@@ -115,7 +119,7 @@ class ExerciseControllerTest {
                         {
                           "name": "Push-Test",
                           "note": "Do 3 sets of 16 reps",
-                          "progressList": null
+                          "progressList": []
                         }
                         """));
     }

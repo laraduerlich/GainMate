@@ -119,11 +119,13 @@ class ExerciseServiceTest {
         ExerciseDTO updatedExercise = ExerciseDTO.builder()
                 .name("Test")
                 .note("Test")
+                .progressList(Collections.emptyList())
                 .build();
         Exercise expected = Exercise.builder()
                 .id("1")
                 .name("Test")
                 .note("Test")
+                .progressList(Collections.emptyList())
                 .build();
         when(exerciseRepo.existsById(expected.id())).thenReturn(true);
         when(exerciseRepo.save(expected)).thenReturn(expected);
