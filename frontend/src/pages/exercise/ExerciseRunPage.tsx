@@ -1,7 +1,7 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {Exercise} from "../../types/Exercise.tsx";
 import {AxiosResponse} from "axios";
-import {FormEvent, useEffect, useState} from "react";
+import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import ExerciseCard from "../../components/exercise/ExerciseCard.tsx";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import {Sets} from "../../types/Set.tsx";
@@ -18,7 +18,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
     const navigate = useNavigate();
     const [formattedDate, setFormattedDate] = useState("");
 
-    const [editExercise, setEditExercise] = useState<Exercise>(exercise ? exercise : {id: "", name: ""})
+    const [editExercise, setEditExercise] = useState<Exercise>(exercise ? exercise : {id: "", name: "", progressList: []})
     const [weight, setWeight] = useState<string>("")
     const [reps, setReps] = useState<string>("")
     const [sets, setSets] = useState<Sets[]>([])
@@ -27,12 +27,23 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
     const handleAddButtonClick = (event: FormEvent) => {
         event.preventDefault()
 
-        // new set and add it to list
+        // create new set and add it to list
         const newSet: Sets = {
             repetition: reps.toString(),
             weight: weight.toString()
         }
+
         setSets([...sets, newSet])
+
+        // add Progress to Exercise
+        setEditExercise({
+            ...editExercise,
+            progressList: [...editExercise.progressList || [],
+                {
+                    date: formattedDate,
+                    sets: [...sets, newSet]
+                }]
+        })
 
         // reset
         setReps("")
@@ -40,14 +51,6 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
     }
 
     const handleDoneButtonClick = () => {
-        setEditExercise({
-            ...editExercise,
-            progressList: [
-                ...editExercise.progressList ? editExercise.progressList : [],
-                { date: formattedDate, sets: sets }
-            ]
-        })
-
         updateExercise(editExercise);
 
         navigate("/start-workout/" + workoutId)
@@ -93,7 +96,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
                             <input
                                 type="number"
                                 value={reps}
-                                onChange={(e) => setReps(e.target.value)}
+                                onChange={(event: ChangeEvent<HTMLInputElement>) => setReps(event.target.value)}
                                 min="1"
                                 step="1"
                                 required
@@ -105,7 +108,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
                             <input
                                 type="number"
                                 value={weight}
-                                onChange={(e) => setWeight(e.target.value)}
+                                onChange={(event: ChangeEvent<HTMLInputElement>) => setWeight(event.target.value)}
                                 min="1"
                                 step="0.5"
                                 required
