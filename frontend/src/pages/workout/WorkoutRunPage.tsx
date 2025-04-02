@@ -33,6 +33,10 @@ export default function WorkoutRunPage({workout, exercises, getWorkoutById}: Wor
         navigate("/workouts")
     }
 
+    const handleBackButtonClick = () => {
+        navigate("/workouts")
+    }
+
     // Load workout
     useEffect(() => {
         if (id !== undefined){
@@ -50,6 +54,7 @@ export default function WorkoutRunPage({workout, exercises, getWorkoutById}: Wor
                 <List elements={openExerciseList} use={"inWorkout"} handelButtonClick={handleStartButtonClick} />
             </div>
             <ButtonWithIcon icon={"finish"} type={"button"} onClick={handleFinishedButtonClick}/>
+            <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
         </>
     )
 }
