@@ -1,6 +1,6 @@
 import {Workout} from "../../types/Workout.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {FormEvent, useEffect, useState} from "react";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import List from "../../components/List.tsx";
@@ -16,8 +16,9 @@ type WorkoutViewProps = {
 
 export default function WorkoutViewPage({workout, exercises, getWorkoutById, updateWorkout, deleteWorkout}: WorkoutViewProps) {
 
-    const {id} = useParams<{id: string}>();
-    const [isEditing, setIsEditing] = useState(false);
+    const {id} = useParams<{id: string}>()
+    const navigate = useNavigate()
+    const [isEditing, setIsEditing] = useState(false)
     const [editName, setEditName] = useState<string>(workout ? workout.name : "")
     const [idList, setIdList] = useState<string[]>(workout ? workout.exerciseIdList : [])
 
@@ -68,6 +69,10 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
         }
     }
 
+    const handleBackButtonClick = () => {
+        navigate("/workouts");
+    }
+
     // Load workout
     useEffect(() => {
         if (id !== undefined){
@@ -104,10 +109,11 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                     <div>
                         <List elements={exercises} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
                     </div>
+                    <ButtonWithIcon icon={"back"} type={"button"} onClick={() => setIsEditing(false)} />
                 </div>
             ) : (
                 <div>
-                    {workout? workout.name : "Workoutname does not exsit"}
+                    {workout? workout.name : ""}
                     <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
                     <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick} />
                     <ul>
@@ -119,6 +125,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                             </li>
                         ))}
                     </ul>
+                    <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
                 </div>
             )}
         </>

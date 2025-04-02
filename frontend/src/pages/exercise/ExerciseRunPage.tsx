@@ -56,6 +56,10 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
         navigate("/start-workout/" + workoutId)
     }
 
+    const handleBackButtonClick = () => {
+        navigate("/start-workout/" + workoutId)
+    }
+
     // Load exercise & current date
     useEffect(() => {
         if (exerciseId !== undefined) {
@@ -132,6 +136,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
             </div>
 
             <ButtonWithIcon icon={"done"} type={"button"} onClick={handleDoneButtonClick} />
+            <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
         </>
     )
 }

@@ -1,6 +1,6 @@
 import {Exercise} from "../../types/Exercise.tsx";
 import ExerciseCard from "../../components/exercise/ExerciseCard.tsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import {AxiosResponse} from "axios";
@@ -14,8 +14,9 @@ type ExerciseViewProps = {
 
 export default function ExerciseViewPage ({exercise, getExerciseById, updateExercise, deleteExercise}: ExerciseViewProps) {
 
-    const {id} = useParams<{id: string}>();
-    const [isEditing, setIsEditing] = useState(false);
+    const {id} = useParams<{id: string}>()
+    const navigate = useNavigate()
+    const [isEditing, setIsEditing] = useState(false)
     const [editExercise, setEditExercise] = useState<Exercise>(exercise ? exercise : {id: "", name: ""})
 
     const handleEditChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,10 +39,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     }
 
     const handleBackButtonClick = () => {
-        if (exercise !== undefined) {
-            setEditExercise(exercise)
-        }
-        setIsEditing(false)
+        navigate("/exercises");
     }
 
     const handleDeleteButtonClick = () => {
@@ -86,7 +84,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
                     </div>
                     <div>
                         <ButtonWithIcon icon={"save"} type={"submit"} />
-                        <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
+                        <ButtonWithIcon icon={"back"} type={"button"} onClick={() => setIsEditing(false)} />
                     </div>
                 </form>
 
@@ -95,6 +93,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
                     <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
                     <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
                     <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick}/>
+                    <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
                 </div>
             )}
         </>
