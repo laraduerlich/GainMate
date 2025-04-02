@@ -14,14 +14,14 @@ export default function WorkoutCreatePage({createWorkout, exercises}: WorkoutCre
     const navigate = useNavigate()
 
     // button handler
-    const handleBackButton = () => {
+    const handleBackButtonClick = () => {
         navigate("/workouts");
     }
 
     return (
         <>
             <WorkoutCreateForm createWorkout={createWorkout} exercises={exercises}/>
-            <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButton}/>
+            <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick}/>
         </>
     )
 }

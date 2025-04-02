@@ -69,7 +69,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
         }
     }
 
-    const handleBackButton = () => {
+    const handleBackButtonClick = () => {
         navigate("/workouts");
     }
 
@@ -125,7 +125,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                             </li>
                         ))}
                     </ul>
-                    <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButton} />
+                    <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
                 </div>
             )}
         </>
