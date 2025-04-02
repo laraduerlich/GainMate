@@ -13,17 +13,25 @@ import UseWorkoutData from "./utils/UseWorkoutData.ts";
 import WorkoutViewPage from "./pages/workout/WorkoutViewPage.tsx";
 import WorkoutRunPage from "./pages/workout/WorkoutRunPage.tsx";
 import ExerciseRunPage from "./pages/exercise/ExerciseRunPage.tsx";
+import {useState} from "react";
+import Sidebar from "./components/Sidebar.tsx";
 
 function App() {
 
     const {allExercises, exercise, createExercise, getExerciseById, updateExercise, deleteExercise} = UseExerciseData();
     const {allWorkouts, workout, getWorkoutById, createWorkout, updateWorkout, deleteWorkout} = UseWorkoutData();
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
   return (
       <>
+          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}/>
           <div className="flex flex-col items-center justify-center h-screen-dvh bg-gray-100 dark:bg-gray-900">
-              <Header />
+              <Header toggleSidebar={toggleSidebar}/>
 
               {/* Main Content */}
               <main className="flex-1 flex flex-col items-center justify-center w-full px-6">
