@@ -9,6 +9,7 @@ public record AppUser(
         String id,
         String username,
         String password,
+        String name,
         List<String> exerciseIdList,
         List<String> workoutIdList
 ) { }
