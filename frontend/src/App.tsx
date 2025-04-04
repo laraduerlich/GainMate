@@ -19,6 +19,7 @@ import {AppUser} from "./types/AppUser.tsx";
 import axios from "axios";
 import ProtectedRoutes from "./pages/ProtectedRoutes.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
+import RegisterPage from "./pages/RegisterPage.tsx";
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
               <main className="flex-1 flex flex-col items-center justify-center w-full px-6">
                   <Routes>
                       <Route path={"/login"} element={<LoginPage fetchUser={fetchUser}/>} />
+                      <Route path={"/register"} element={<RegisterPage />} />
                       <Route element={<ProtectedRoutes appUser={appUser} />}/>
                           <Route path={"/welcome"} element={<OverviewPage />} />
                           {/* Exercise Pages */}
