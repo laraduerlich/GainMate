@@ -22,7 +22,7 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
             }
             })
             .then(() => {
-                navigate("/overview");
+                navigate("/welcome");
                 fetchUser();
             })
             .catch(() => {
