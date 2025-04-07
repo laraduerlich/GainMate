@@ -1,5 +1,5 @@
 import './App.css'
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import OverviewPage from "./pages/OverviewPage.tsx";
 import ExerciseDashboardPage from "./pages/exercise/ExerciseDashboardPage.tsx";
 import ExerciseCreatePage from "./pages/exercise/ExerciseCreatePage.tsx";
@@ -20,14 +20,17 @@ import axios from "axios";
 import ProtectedRoutes from "./pages/ProtectedRoutes.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
+import LandingPage from "./pages/LandingPage.tsx";
 
 function App() {
 
-    const {allExercises, exercise, createExercise, getExerciseById, updateExercise, deleteExercise} = UseExerciseData();
-    const {allWorkouts, workout, getWorkoutById, createWorkout, updateWorkout, deleteWorkout} = UseWorkoutData();
+    const navigate = useNavigate()
+
+    const {allExercises, exercise,getAllExercises, getExerciseById, createExercise, updateExercise, deleteExercise} = UseExerciseData()
+    const {allWorkouts, workout, getAllWorkouts, getWorkoutById, createWorkout, updateWorkout, deleteWorkout} = UseWorkoutData()
 
     // Sidebar
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
@@ -35,14 +38,30 @@ function App() {
     // Auth
     const [appUser, setAppUser] = useState<AppUser | undefined | null>(undefined)
 
-    function fetchUser() {
+    const fetchUser = () => {
         axios.get("/api/auth/me")
             .then((response) => {
+                console.log(response.data)
                 setAppUser(response.data)
+                navigate("/welcome")
             })
             .catch(error => {
                 setAppUser(null)
                 console.error("User could not login", error)
+            })
+    }
+
+    // logout
+    const handleLogoutButtonClick = () => {
+        axios.post("/api/auth/logout")
+            .then(() => {
+                setAppUser(null)
+                fetchUser()
+                setIsSidebarOpen(!isSidebarOpen)
+                navigate("/login")
+            })
+            .catch(error => {
+                console.error("User could not logout", error)
             })
     }
 
@@ -52,40 +71,73 @@ function App() {
 
     return (
       <>
-          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}/>
+          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} logoutButtonClick={handleLogoutButtonClick}/>
           <div className="flex flex-col items-center justify-center h-screen-dvh bg-gray-100 dark:bg-gray-900">
               <Header toggleSidebar={toggleSidebar}/>
 
               {/* Main Content */}
               <main className="flex-1 flex flex-col items-center justify-center w-full px-6">
                   <Routes>
-                      <Route path={"/login"} element={<LoginPage fetchUser={fetchUser}/>} />
-                      <Route path={"/register"} element={<RegisterPage />} />
-                      <Route element={<ProtectedRoutes appUser={appUser} />}/>
-                          <Route path={"/welcome"} element={<OverviewPage />} />
+                      <Route path="/login" element={<LoginPage fetchUser={fetchUser} />} />
+                      <Route path="/register" element={<RegisterPage />} />
+                      <Route path="/" element={<LandingPage />} />
+
+                      {/* Protected Routes */}
+                      <Route element={<ProtectedRoutes appUser={appUser} />}>
+                          <Route path="/welcome" element={<OverviewPage appUser={appUser}/>} />
+
                           {/* Exercise Pages */}
-                          <Route path={"/exercises"} element={<ExerciseDashboardPage exercises={allExercises}/>} />
-                          <Route path={"/exercise/new"} element={<ExerciseCreatePage createExercise={createExercise}/>} />
-                          <Route path={"/exercise/:id"} element={<ExerciseViewPage exercise={exercise}
-                                                                                   getExerciseById={getExerciseById}
-                                                                                   updateExercise={updateExercise}
-                                                                                   deleteExercise={deleteExercise}/>} />
-                          <Route path={"/workout/:workoutId/exercise/:exerciseId"} element={<ExerciseRunPage exercise={exercise}
-                                                                                                             getExerciseById={getExerciseById}
-                                                                                                             updateExercise={updateExercise}/>} />
+                          <Route path="/exercises" element={
+                              <ExerciseDashboardPage
+                                  exercises={allExercises}
+                                  getAllWorkouts={getAllExercises}
+                              />}
+                          />
+                          <Route path="/exercise/new" element={<ExerciseCreatePage createExercise={createExercise} />} />
+                          <Route path="/exercise/:id" element={
+                              <ExerciseViewPage
+                                  exercise={exercise}
+                                  getExerciseById={getExerciseById}
+                                  updateExercise={updateExercise}
+                                  deleteExercise={deleteExercise}
+                              />}
+                          />
+                          <Route path="/workout/:workoutId/exercise/:exerciseId" element={
+                              <ExerciseRunPage
+                                  exercise={exercise}
+                                  getExerciseById={getExerciseById}
+                                  updateExercise={updateExercise}
+                              />}
+                          />
 
                           {/* Workout Pages */}
-                          <Route path={"/workouts"} element={<WorkoutDashboardPage workouts={allWorkouts}/>} />
-                          <Route path={"/workout/new"} element={<WorkoutCreatePage exercises={allExercises}
-                                                                                   createWorkout={createWorkout}/>} />
-                          <Route path={"/workout/:id"} element={<WorkoutViewPage workout={workout}
-                                                                                 exercises={allExercises}
-                                                                                 getWorkoutById={getWorkoutById}
-                                                                                 updateWorkout={updateWorkout}
-                                                                                 deleteWorkout={deleteWorkout}/>} />
-                          <Route path={"/start-workout/:id"} element={<WorkoutRunPage workout={workout}
-                                                                                      exercises={allExercises}
-                                                                                     getWorkoutById={getWorkoutById}/>} />
+                          <Route path="/workouts" element={
+                              <WorkoutDashboardPage
+                                  workouts={allWorkouts}
+                                  getAllWorkouts={getAllWorkouts}/>} />
+                          <Route path="/workout/new" element={
+                              <WorkoutCreatePage
+                                  exercises={allExercises}
+                                  createWorkout={createWorkout}
+                              />}
+                          />
+                          <Route path="/workout/:id" element={
+                              <WorkoutViewPage
+                                  workout={workout}
+                                  exercises={allExercises}
+                                  getWorkoutById={getWorkoutById}
+                                  updateWorkout={updateWorkout}
+                                  deleteWorkout={deleteWorkout}
+                              />}
+                          />
+                          <Route path="/start-workout/:id" element={
+                              <WorkoutRunPage
+                                  workout={workout}
+                                  exercises={allExercises}
+                                  getWorkoutById={getWorkoutById}
+                              />}
+                          />
+                      </Route>
                   </Routes>
               </main>
 
