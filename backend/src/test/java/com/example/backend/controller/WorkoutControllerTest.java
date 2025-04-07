@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +27,7 @@ class WorkoutControllerTest {
 
     // --------------------------------------- GET ALL --------------------------------------
     @Test
+    @WithMockUser
     void getAllWorkouts_shouldReturnEmptyList_whenCalledInitially() throws Exception {
         // WHEN & THEN
         mockMvc.perform(get("/api/workout/all"))
@@ -35,6 +37,7 @@ class WorkoutControllerTest {
 
     // --------------------------------------- GET BY ID -------------------------------------
     @Test
+    @WithMockUser
     void getWorkoutById_shouldReturnWorkout_whenCalledWithValidId() throws Exception {
         // GIVEN
         Workout workout = Workout.builder()
@@ -55,6 +58,7 @@ class WorkoutControllerTest {
     }
 
     @Test
+    @WithMockUser
     void getWorkoutById_shouldThrowException_whenCalledWithInvalidId() throws Exception {
         mockMvc.perform(get("/api/workout/1"))
                 .andExpect(status().isNotFound());
@@ -62,6 +66,7 @@ class WorkoutControllerTest {
 
     // --------------------------------------- POST ----------------------------------------
     @Test
+    @WithMockUser
     void createWorkout_shouldReturnWorkout_WhenCalledWithDTO() throws Exception {
         // WHEN & THEN
         mockMvc.perform(post("/api/workout/new")
@@ -84,6 +89,7 @@ class WorkoutControllerTest {
 
     // --------------------------------------- PUT ----------------------------------------
     @Test
+    @WithMockUser
     void updateWorkout_shouldReturnWorkout_WhenCalledWithValidId() throws Exception {
         // GIVEN
         Workout workout = Workout.builder()
@@ -112,6 +118,7 @@ class WorkoutControllerTest {
     }
 
     @Test
+    @WithMockUser
     void updateWorkout_shouldThrowException_whenCalledWithInvalidId() throws Exception {
         mockMvc.perform(put("/api/workout/1")
         .contentType(MediaType.APPLICATION_JSON)
@@ -127,6 +134,7 @@ class WorkoutControllerTest {
 
     // --------------------------------------- DELETE ----------------------------------------
     @Test
+    @WithMockUser
     void deleteWorkout_shouldReturnWorkout_WhenCalledWithValidId() throws Exception {
         // GIVEN
         Workout workout = Workout.builder()
@@ -141,6 +149,7 @@ class WorkoutControllerTest {
     }
 
     @Test
+    @WithMockUser
     void deleteWorkout_shouldThrowException_whenCalledWithInvalidId() throws Exception {
         mockMvc.perform(delete("/api/workout/1"))
                 .andExpect(status().isNotFound());
