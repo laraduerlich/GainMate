@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import ButtonWithIcon from "../components/ButtonWithIcon.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -14,24 +14,30 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
     const [password, setPassword] = useState<string>("")
 
     // button handler
-    const handleLoginButtonClick = () => {
-        axios.post("api/auth/login", {}, {
+    const handleLoginButtonClick = (event: FormEvent) => {
+        event.preventDefault()
+        axios.post("/api/auth/login", {}, {
             auth: {
                 username: username,
                 password: password
             }
             })
             .then(() => {
-                navigate("/welcome");
                 fetchUser();
+                navigate("/welcome");
             })
             .catch(() => {
                 console.error("Invalid credentials")
             })
     }
 
+    const handleGoToRegisterButtonClick = () => {
+        navigate("/register")
+    }
+
     return (
         <>
+            <h2>Login</h2>
             <div>
                 <form onSubmit={handleLoginButtonClick}>
                     <input
@@ -50,6 +56,10 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
                     />
                     <ButtonWithIcon icon={"login"} type={"submit"} />
                 </form>
+                <div>
+                    <h3>No account yet?</h3>
+                    <ButtonWithIcon icon={"register"} type={"button"} onClick={handleGoToRegisterButtonClick} />
+                </div>
             </div>
         </>
     )

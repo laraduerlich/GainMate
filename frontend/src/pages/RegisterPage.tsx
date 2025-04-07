@@ -33,33 +33,42 @@ export default function RegisterPage() {
             })
     }
 
+    const handleGoToLoginButton = () => {
+        navigate("/login")
+    }
+
     return (
         <>
             <div>
+                <h2>Bitte register</h2>
                 <form onSubmit={handleRegisterButtonClick}>
                     <input
                         id={"name"}
+                        name={"name"}
                         type={"text"}
                         placeholder={"Name..."}
-                        value={newAppUser.name}
                         onChange={handleChange}
                     />
                     <input
                         id={"username"}
+                        name={"username"}
                         type={"text"}
                         placeholder={"Username..."}
-                        value={newAppUser.username}
                         onChange={handleChange}
                     />
                     <input
                         id={"password"}
+                        name={"password"}
                         type={"password"}
                         placeholder={"Password..."}
-                        value={newAppUser.password}
                         onChange={handleChange}
                     />
                     <ButtonWithIcon icon={"register"} type={"submit"} />
                 </form>
+            </div>
+            <div>
+                <h3>Already register?</h3>
+                <ButtonWithIcon icon={"Go to Login"} type={"button"} onClick={handleGoToLoginButton} />
             </div>
         </>
     )
