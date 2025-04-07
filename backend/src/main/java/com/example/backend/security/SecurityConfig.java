@@ -1,5 +1,6 @@
 package com.example.backend.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,15 +21,21 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                // Define authorization rules
-                .authorizeHttpRequests(c -> {
-                    c.requestMatchers(HttpMethod.GET, "/api/v1/auth/**").permitAll();
-                    c.anyRequest().authenticated();
-                })
-                // Configure session management (ALWAYS creates a session)
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                // Enable HTTP Basic authentication
-                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().denyAll()
+                )
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .httpBasic(httpBasic -> httpBasic
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                        })
+                )
                 .build();
     }
 
