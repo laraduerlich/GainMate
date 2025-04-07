@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Workout} from "../types/Workout.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -65,10 +65,5 @@ export default function UseWorkoutData(){
             })
     }
 
-    // useEffect for loading
-    useEffect(() => {
-        getAllWorkouts()
-    }, []);
-
-    return {allWorkouts, workout, createWorkout, getWorkoutById, updateWorkout, deleteWorkout}
+    return {allWorkouts, workout, getAllWorkouts, getWorkoutById, createWorkout, updateWorkout, deleteWorkout}
 }

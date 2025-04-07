@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Exercise} from "../types/Exercise.tsx";
 import {useNavigate} from "react-router-dom";
 
@@ -70,10 +70,5 @@ export default function UseExerciseData() {
             })
     }
 
-    // useEffect for loading
-    useEffect(() => {
-        getAllExercises();
-    }, []);
-
-    return {allExercises, exercise, createExercise, getExerciseById, updateExercise, deleteExercise}
+    return {allExercises, exercise, getAllExercises,getExerciseById, createExercise, updateExercise, deleteExercise}
 }
