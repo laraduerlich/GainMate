@@ -11,12 +11,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
 class AuthorizationControllerTest {
 
@@ -54,7 +54,6 @@ class AuthorizationControllerTest {
 
     // --------------------------------------- REGISTER ---------------------------------------
     @Test
-    @DirtiesContext
     @WithMockUser
     void registerUser_shouldReturnUserDto() throws Exception {
         // GIVEN
