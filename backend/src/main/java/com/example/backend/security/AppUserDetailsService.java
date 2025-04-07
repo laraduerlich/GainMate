@@ -1,5 +1,6 @@
 package com.example.backend.security;
 
+import com.example.backend.security.model.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

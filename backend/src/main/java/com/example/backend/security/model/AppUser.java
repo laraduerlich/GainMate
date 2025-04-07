@@ -1,8 +1,7 @@
-package com.example.backend.security;
+package com.example.backend.security.model;
 
 import lombok.Builder;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 

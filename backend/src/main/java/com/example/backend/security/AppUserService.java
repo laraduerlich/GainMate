@@ -1,6 +1,9 @@
 package com.example.backend.security;
 
 import com.example.backend.exception.AlreadyExistsException;
+import com.example.backend.security.model.AppUser;
+import com.example.backend.security.model.AppUserDTO;
+import com.example.backend.security.model.AppUserResponse;
 import com.example.backend.service.IdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,10 +18,10 @@ public class AppUserService {
     private final PasswordEncoder passwordEncoder;
     private final IdService idService;
 
-    public AppUserDTO findByUsername(String username) {
+    public AppUserResponse findByUsername(String username) {
         AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        return AppUserDTO.builder()
+        return AppUserResponse.builder()
                 .username(appUser.username())
                 .name(appUser.name())
                 .exerciseIdList(appUser.exerciseIdList())
@@ -26,7 +29,7 @@ public class AppUserService {
                 .build();
     }
 
-    public AppUserDTO createUser(AppUser newUser) throws AlreadyExistsException {
+    public AppUserResponse createUser(AppUserDTO newUser) throws AlreadyExistsException {
         if (appUserRepository.findByUsername(newUser.username()).isPresent()) {
             throw new AlreadyExistsException("User already exists!");
         } else {
@@ -37,7 +40,7 @@ public class AppUserService {
                     .password(password)
                     .name(newUser.name())
                     .build());
-            return AppUserDTO.builder()
+            return AppUserResponse.builder()
                     .username(appUser.username())
                     .name(appUser.name())
                     .build();

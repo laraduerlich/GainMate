@@ -1,6 +1,8 @@
 package com.example.backend.security;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.backend.security.model.AppUser;
+import com.example.backend.security.model.AppUserDTO;
+import com.example.backend.security.model.AppUserResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,10 @@ public class AuthorizationController {
     private final AppUserService appUserService;
 
     @GetMapping("/me")
-    public ResponseEntity<AppUserDTO> getCurrentUser(@AuthenticationPrincipal User user) {
+    public ResponseEntity<AppUserResponse> getCurrentUser(@AuthenticationPrincipal User user) {
         String username = user.getUsername();
-        AppUserDTO dto = appUserService.findByUsername(username);
-        return ResponseEntity.ok(dto);
+        AppUserResponse response = appUserService.findByUsername(username);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
@@ -29,10 +31,10 @@ public class AuthorizationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AppUserDTO> registerUser(@RequestBody AppUser newUser) {
+    public ResponseEntity<AppUserResponse> registerUser(@RequestBody AppUserDTO newUser) {
         try {
-            AppUserDTO dto = appUserService.createUser(newUser);
-            return ResponseEntity.ok(dto);
+            AppUserResponse response = appUserService.createUser(newUser);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

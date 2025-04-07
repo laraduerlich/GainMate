@@ -1,11 +1,11 @@
-package com.example.backend.security;
+package com.example.backend.security.model;
 
 import lombok.Builder;
 
 import java.util.List;
 
 @Builder
-public record AppUserDTO(
+public record AppUserResponse (
         String username,
         String name,
         List<String> exerciseIdList,
