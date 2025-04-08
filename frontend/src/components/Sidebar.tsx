@@ -4,11 +4,16 @@ import {useNavigate} from "react-router-dom";
 type SidebarProps = {
     isOpen: boolean,
     setIsOpen: (isOpen: boolean) => void
+    logoutButtonClick: () => void
 }
 
-export default function Sidebar({isOpen, setIsOpen}: SidebarProps) {
+export default function Sidebar({isOpen, setIsOpen, logoutButtonClick}: SidebarProps) {
 
     const navigate = useNavigate()
+
+    const handleLogoutButtonClick = () => {
+        logoutButtonClick()
+    }
 
     return (
         <>
@@ -38,6 +43,9 @@ export default function Sidebar({isOpen, setIsOpen}: SidebarProps) {
                                     setIsOpen(!isOpen)
                                     navigate("/workouts")
                                 }} />
+                            </li>
+                            <li className="rounded-sm">
+                                <ButtonWithIcon icon={"Logout"} type={"button"} onClick={handleLogoutButtonClick} />
                             </li>
                         </ul>
                     </div>
