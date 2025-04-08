@@ -4,8 +4,9 @@ import com.example.backend.model.Exercise;
 import com.example.backend.model.ExerciseDTO;
 import com.example.backend.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +19,13 @@ public class ExerciseController {
     private final ExerciseService exerciseService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Exercise>> getAllExercises() {
-        List<Exercise> all = exerciseService.getAllExercises();
-        return ResponseEntity.ok(all);
+    public ResponseEntity<List<Exercise>> getAllExercises(@AuthenticationPrincipal User user) {
+        try {
+            List<Exercise> all = exerciseService.getAllExercises(user);
+            return ResponseEntity.ok(all);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -34,9 +39,9 @@ public class ExerciseController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Exercise> createExercise(@RequestBody ExerciseDTO exerciseDTO) {
+    public ResponseEntity<Exercise> createExercise(@RequestBody ExerciseDTO exerciseDTO, @AuthenticationPrincipal User user) {
         try {
-            Exercise newExercise = exerciseService.createExercise(exerciseDTO);
+            Exercise newExercise = exerciseService.createExercise(exerciseDTO, user);
             return ResponseEntity.ok(newExercise);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

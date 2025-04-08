@@ -5,6 +5,7 @@ import com.example.backend.model.ExerciseDTO;
 import com.example.backend.model.Progress;
 import com.example.backend.model.Sets;
 import com.example.backend.repo.ExerciseRepo;
+import com.example.backend.security.model.AppUserDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -26,7 +27,7 @@ class ExerciseServiceTest {
         List<Exercise> expected = Collections.emptyList();
 
         // WHEN
-        List<Exercise> actual = exerciseService.getAllExercises();
+        List<Exercise> actual = exerciseService.getAllExercises(AppUserDTO.builder().build());
 
         // THEN
         assertEquals(expected, actual);

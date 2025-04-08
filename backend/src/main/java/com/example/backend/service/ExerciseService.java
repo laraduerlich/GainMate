@@ -6,7 +6,11 @@ import com.example.backend.model.Exercise;
 import com.example.backend.model.ExerciseDTO;
 import com.example.backend.model.Progress;
 import com.example.backend.repo.ExerciseRepo;
+import com.example.backend.security.AppUserService;
+import com.example.backend.security.model.AppUserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,9 +23,14 @@ public class ExerciseService {
 
     private final ExerciseRepo exerciseRepo;
     private final IdService idService;
+    private final AppUserService appUserService;
 
-    public List<Exercise> getAllExercises() {
-        return exerciseRepo.findAll();
+    public List<Exercise> getAllExercises(User user) throws NotExistsException {
+        AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+        List<Exercise> all = exerciseRepo.findAll();
+        return all.stream()
+                .filter(exercise -> appUserResponse.exerciseIdList().contains(exercise.id()))
+                .collect(Collectors.toList());
     }
 
     public Exercise getExerciseById(String id) throws NotExistsException {
@@ -30,17 +39,23 @@ public class ExerciseService {
 
     }
 
-    public Exercise createExercise(ExerciseDTO exerciseDTO) throws AlreadyExistsException {
+    public Exercise createExercise(ExerciseDTO exerciseDTO, User user) throws AlreadyExistsException, UsernameNotFoundException {
        // Check if the name is already in the repo
         if (exerciseRepo.existsByName(exerciseDTO.name())) {
             throw new AlreadyExistsException("Exercise already exists!");
         } else {
+            // Save new exercise
             Exercise newExercise = Exercise.builder()
                     .id(idService.generateId())
                     .name(exerciseDTO.name())
                     .note(exerciseDTO.note())
                     .build();
             exerciseRepo.save(newExercise);
+            // Update user with the new exercise ID
+            AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+            appUserResponse.exerciseIdList().add(newExercise.id());
+            appUserService.updateUser(appUserResponse);
+
             return newExercise;
         }
     }
