@@ -26,7 +26,7 @@ function App() {
 
     const navigate = useNavigate()
 
-    const {allExercises, exercise,getAllExercises, getExerciseById, createExercise, updateExercise, deleteExercise} = UseExerciseData()
+    const {allExercises, exercise, getAllExercises, getExerciseById, createExercise, updateExercise, deleteExercise} = UseExerciseData()
     const {allWorkouts, workout, getAllWorkouts, getWorkoutById, createWorkout, updateWorkout, deleteWorkout} = UseWorkoutData()
 
     // Sidebar
@@ -93,7 +93,7 @@ function App() {
                           <Route path="/exercises" element={
                               <ExerciseDashboardPage
                                   exercises={allExercises}
-                                  getAllWorkouts={getAllExercises}
+                                  getAllExercises={getAllExercises}
                               />}
                           />
                           <Route path="/exercise/new" element={
@@ -126,6 +126,7 @@ function App() {
                               <WorkoutCreatePage
                                   exercises={allExercises}
                                   createWorkout={createWorkout}
+                                  getAllExercises={getAllExercises}
                               />}
                           />
                           <Route path="/workout/:id" element={
