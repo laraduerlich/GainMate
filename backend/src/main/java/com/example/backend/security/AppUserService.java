@@ -6,14 +6,11 @@ import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
 import com.example.backend.service.IdService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
