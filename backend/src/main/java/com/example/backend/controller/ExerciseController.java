@@ -59,9 +59,9 @@ public class ExerciseController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteExercise(@PathVariable String id) {
+    public ResponseEntity<Void> deleteExercise(@PathVariable String id, @AuthenticationPrincipal User user) {
         try {
-            exerciseService.deleteExercise(id);
+            exerciseService.deleteExercise(id, user);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

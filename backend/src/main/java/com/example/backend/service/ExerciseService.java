@@ -92,10 +92,14 @@ public class ExerciseService {
                 .values()); // Convert map values back to a list
     }
 
-    public void deleteExercise(String id) throws NotExistsException {
+    public void deleteExercise(String id, User user) throws NotExistsException, UsernameNotFoundException {
         // Check if the id is  in the repo
         if (exerciseRepo.existsById(id)) {
             exerciseRepo.deleteById(id);
+            // Update user
+            AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+            appUserResponse.exerciseIdList().remove(id);
+            appUserService.updateUser(appUserResponse);
         } else {
             throw new NotExistsException("Exercise with id " + id + " does not exist");
         }

@@ -72,9 +72,13 @@ public class WorkoutService {
         }
     }
 
-    public void deleteWorkout(String id) throws NotExistsException {
+    public void deleteWorkout(String id, User user) throws NotExistsException, UsernameNotFoundException {
         if (workoutRepo.existsById(id)) {
             workoutRepo.deleteById(id);
+            // Update user
+            AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+            appUserResponse.workoutIdList().remove(id);
+            appUserService.updateUser(appUserResponse);
         } else {
             throw new NotExistsException("Workout with id " + id + " does not exist");
         }
