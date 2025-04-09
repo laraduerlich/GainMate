@@ -23,7 +23,7 @@ public class AppUserService {
     private final PasswordEncoder passwordEncoder;
     private final IdService idService;
 
-    public AppUserResponse findByUsername(String username) {
+    public AppUserResponse findByUsername(String username) throws UsernameNotFoundException {
         AppUser appUser = appUserRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         return AppUserResponse.builder()
