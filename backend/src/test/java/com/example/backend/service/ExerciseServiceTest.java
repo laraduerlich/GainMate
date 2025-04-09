@@ -192,27 +192,31 @@ class ExerciseServiceTest {
     void deleteExercise_shouldDeleteExercise_whenCalledWithValidId() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
-        Exercise deletedExercise = Exercise.builder().id("1").build();
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUserResponse appUserResponse = AppUserResponse.builder().exerciseIdList(new ArrayList<>()).build();
+        when(exerciseRepo.existsById("1")).thenReturn(true);
+        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
+        doNothing().when(appUserService).updateUser(appUserResponse);
 
-        when(exerciseRepo.existsById(deletedExercise.id())).thenReturn(true);
 
         // WHEN
-        exerciseService.deleteExercise(deletedExercise.id());
+        exerciseService.deleteExercise("1", user);
 
         // THEN
-        verify(exerciseRepo).deleteById(deletedExercise.id());
+        verify(exerciseRepo).deleteById(anyString());
     }
 
     @Test
     void deleteExercise_shouldThrowException_whenExerciseNotFound() {
         ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
         String id = "1";
 
         when(exerciseRepo.existsById(id)).thenReturn(false);
 
         // WHEN & THEN
         try {
-            exerciseService.deleteExercise(id);
+            exerciseService.deleteExercise(id, user);
             fail("An exception is expected, but none is thrown!");
         } catch (Exception e) {
             assertEquals("Exercise with id " + id + " does not exist", e.getMessage());

@@ -157,14 +157,14 @@ class WorkoutServiceTest {
     void deleteWorkout_shouldDeleteWorkout_whenCalledWithValidId() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        Workout workout = Workout.builder()
-                .id("1")
-                .name("Test")
-                .build();
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUserResponse appUserResponse = AppUserResponse.builder().workoutIdList(new ArrayList<>()).build();
         when(workoutRepo.existsById("1")).thenReturn(true);
+        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
+        doNothing().when(appUserService).updateUser(appUserResponse);
 
         // WHEN
-        workoutService.deleteWorkout("1");
+        workoutService.deleteWorkout("1", user);
 
         // THEN
         verify(workoutRepo, times(1)).deleteById(anyString());
@@ -174,13 +174,14 @@ class WorkoutServiceTest {
     void deleteWorkout_shouldThrowException_whenWorkoutDoesNotExist() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
         String id = "2";
 
         when(workoutRepo.existsById(id)).thenReturn(false);
 
         // WHEN & THEN
         try {
-            workoutService.deleteWorkout(id);
+            workoutService.deleteWorkout(id, user);
             fail("An exception is expected, but none is thrown!");
         } catch (Exception e) {
             assertEquals("Workout with id 2 does not exist", e.getMessage());

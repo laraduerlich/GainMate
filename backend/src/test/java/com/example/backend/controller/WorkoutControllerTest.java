@@ -165,24 +165,45 @@ class WorkoutControllerTest {
 
     // --------------------------------------- DELETE ----------------------------------------
     @Test
-    @WithMockUser
     void deleteWorkout_shouldReturnWorkout_WhenCalledWithValidId() throws Exception {
         // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
         Workout workout = Workout.builder()
                 .id("1")
                 .name("test")
                 .build();
         repo.save(workout);
+        userRepo.save(appUser);
 
         // WHEN & THEN
-        mockMvc.perform(delete("/api/workout/1"))
+        mockMvc.perform(delete("/api/workout/1")
+                .with(user(user.getUsername())))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser
     void deleteWorkout_shouldThrowException_whenCalledWithInvalidId() throws Exception {
-        mockMvc.perform(delete("/api/workout/1"))
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
+        userRepo.save(appUser);
+
+        // WHEN & THEN
+        mockMvc.perform(delete("/api/workout/1")
+                        .with(user(user.getUsername())))
                 .andExpect(status().isNotFound());
     }
 }
