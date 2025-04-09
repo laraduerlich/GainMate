@@ -3,8 +3,12 @@ package com.example.backend.service;
 import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
 import com.example.backend.repo.WorkoutRepo;
+import com.example.backend.security.AppUserService;
+import com.example.backend.security.model.AppUserResponse;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.userdetails.User;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -16,16 +20,19 @@ class WorkoutServiceTest {
 
     private final WorkoutRepo workoutRepo = mock(WorkoutRepo.class);
     private final IdService idService = mock(IdService.class);
+    private final AppUserService appUserService = mock(AppUserService.class);
 
     // --------------------------------------- GET ALL --------------------------------------
     @Test
     void getAllWorkouts_shouldReturnEmptyList_whenCalledInitially() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
         List<Workout> expected = Collections.emptyList();
+        when(workoutRepo.findAllById(Collections.emptyList())).thenReturn(expected);
 
         // WHEN
-        List<Workout> actual = workoutService.getAllWorkouts();
+        List<Workout> actual = workoutService.getAllWorkouts(user);
 
         // THEN
         assertEquals(expected, actual);
@@ -35,7 +42,7 @@ class WorkoutServiceTest {
     @Test
     void getWorkoutById_shouldReturnWorkout_whenCalledWithValidId() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         String id = "1";
         Workout expected = Workout.builder()
                 .id("1")
@@ -53,7 +60,7 @@ class WorkoutServiceTest {
     @Test
     void getWorkoutById_shouldThrowException_whenCalledWithInvalidId() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         String id = "2";
 
         // WHEN & THEN
@@ -69,7 +76,9 @@ class WorkoutServiceTest {
     @Test
     void createWorkout_shouldReturnWorkout_whenCalledWithDTO() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUserResponse appUserResponse = AppUserResponse.builder().workoutIdList(new ArrayList<>()).build();
         WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"));
         Workout expected = Workout.builder()
                 .id("1")
@@ -78,22 +87,26 @@ class WorkoutServiceTest {
                 .build();
         when(idService.generateId()).thenReturn("1");
         when(workoutRepo.save(expected)).thenReturn(expected);
+        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
+        doNothing().when(appUserService).updateUser(appUserResponse);
+
 
         // WHEN
-        Workout actual = workoutService.createWorkout(workout);
+        Workout actual = workoutService.createWorkout(workout, user);
         assertEquals(expected, actual);
     }
 
     @Test
     void createWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
         WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"));
         when(workoutRepo.existsByName("Test")).thenReturn(true);
 
         // WHEN & THEN
         try {
-            workoutService.createWorkout(workout);
+            workoutService.createWorkout(workout, user);
             fail("An exception is expected, but none is thrown!");
         } catch (Exception e) {
             assertEquals("Workout already exists", e.getMessage());
@@ -104,7 +117,7 @@ class WorkoutServiceTest {
     @Test
     void updateWorkout_shouldUpdateWorkout_whenCalledWithValidId() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
         Workout expected = Workout.builder()
                 .id("1")
@@ -124,7 +137,7 @@ class WorkoutServiceTest {
     @Test
     void updateWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
 
         when(workoutRepo.existsById("1")).thenReturn(false);
@@ -143,7 +156,7 @@ class WorkoutServiceTest {
     @Test
     void deleteWorkout_shouldDeleteWorkout_whenCalledWithValidId() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         Workout workout = Workout.builder()
                 .id("1")
                 .name("Test")
@@ -160,7 +173,7 @@ class WorkoutServiceTest {
     @Test
     void deleteWorkout_shouldThrowException_whenWorkoutDoesNotExist() {
         // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService);
+        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         String id = "2";
 
         when(workoutRepo.existsById(id)).thenReturn(false);
