@@ -25,7 +25,7 @@ public class ExerciseService {
     private final IdService idService;
     private final AppUserService appUserService;
 
-    public List<Exercise> getAllExercises(User user) throws NotExistsException {
+    public List<Exercise> getAllExercises(User user) throws UsernameNotFoundException {
         AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
         List<Exercise> all = exerciseRepo.findAll();
         return all.stream()
