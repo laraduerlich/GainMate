@@ -14,11 +14,11 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AppUserDetailsService implements UserDetailsService {
 
-    private final AppUserRepository appUserRepository;
+    private final AppUserRepo appUserRepo;
 
     @Override
     public UserDetails loadUserByUsername (String username) {
-        AppUser appUser = appUserRepository.findByUsername(username)
+        AppUser appUser = appUserRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found"));
 
         return new User(appUser.username(), appUser.password(), Collections.emptyList());
