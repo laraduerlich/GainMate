@@ -5,7 +5,6 @@ import {useNavigate} from "react-router-dom";
 
 type ExerciseCreateProps = {
     createExercise: (newExercise: Exercise) => void
-
 }
 
 export default function ExerciseCreatePage({createExercise}: ExerciseCreateProps) {
@@ -14,7 +13,7 @@ export default function ExerciseCreatePage({createExercise}: ExerciseCreateProps
 
     // button handler
     const handleBackButtonClick = () => {
-        navigate("/exercises");
+        navigate("/exercises")
     }
 
     return (

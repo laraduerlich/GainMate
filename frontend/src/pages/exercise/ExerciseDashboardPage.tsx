@@ -11,14 +11,15 @@ type ExerciseDashboardProps = {
 
 export default function ExerciseDashboardPage({exercises, getAllWorkouts}: ExerciseDashboardProps) {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     // button handler
     const handleNewExerciseButtonClick = () => {
-        navigate("/exercise/new");
+        navigate("/exercise/new")
     }
 
-    // fetch all exercies
+
+    // fetch all exercises
     useEffect(() => {
         getAllWorkouts()
     }, []);

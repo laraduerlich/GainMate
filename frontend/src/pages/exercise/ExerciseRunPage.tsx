@@ -85,8 +85,8 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
         // Format "DD.MM.YYYY"
         const localDate = `${day}.${month}.${year}`;
 
-        setFormattedDate(localDate);
-    }, [exerciseId]);
+        setFormattedDate(localDate)
+    }, [exerciseId])
 
     return (
         <>

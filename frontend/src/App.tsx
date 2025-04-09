@@ -84,7 +84,10 @@ function App() {
 
                       {/* Protected Routes */}
                       <Route element={<ProtectedRoutes appUser={appUser} />}>
-                          <Route path="/welcome" element={<OverviewPage appUser={appUser}/>} />
+                          <Route path="/welcome" element={
+                              <OverviewPage appUser={appUser}
+                              />}
+                          />
 
                           {/* Exercise Pages */}
                           <Route path="/exercises" element={
@@ -93,7 +96,11 @@ function App() {
                                   getAllWorkouts={getAllExercises}
                               />}
                           />
-                          <Route path="/exercise/new" element={<ExerciseCreatePage createExercise={createExercise} />} />
+                          <Route path="/exercise/new" element={
+                              <ExerciseCreatePage
+                                  createExercise={createExercise}
+                              />}
+                          />
                           <Route path="/exercise/:id" element={
                               <ExerciseViewPage
                                   exercise={exercise}

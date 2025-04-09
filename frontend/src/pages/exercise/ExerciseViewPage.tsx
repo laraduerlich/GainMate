@@ -39,7 +39,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     }
 
     const handleBackButtonClick = () => {
-        navigate("/exercises");
+        navigate("/exercises")
     }
 
     const handleDeleteButtonClick = () => {
