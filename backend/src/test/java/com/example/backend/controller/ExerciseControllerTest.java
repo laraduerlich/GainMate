@@ -2,18 +2,21 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Exercise;
 import com.example.backend.repo.ExerciseRepo;
-import com.example.backend.service.ExerciseService;
+import com.example.backend.security.AppUserRepo;
+import com.example.backend.security.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,12 +31,26 @@ class ExerciseControllerTest {
     @Autowired
     private ExerciseRepo repo;
 
+    @Autowired
+    private AppUserRepo userRepo;
+
     // --------------------------------------- GET ALL ---------------------------------------
     @Test
-    @WithMockUser
     void getAllExercises_shouldReturnEmptyList_whenCalledInitially () throws Exception {
-       // WHEN & THEN
-       mockMvc.perform(get("/api/exercise/all"))
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
+        userRepo.save(appUser);
+
+        // WHEN & THEN
+       mockMvc.perform(get("/api/exercise/all")
+                       .with(user(user.getUsername())))
                .andExpect(status().isOk())
                .andExpect(content().json("[]"));
    }
@@ -73,8 +90,20 @@ class ExerciseControllerTest {
     @Test
     @WithMockUser
     void createExercise_shouldReturnExercise_whenCalledWithDTO () throws Exception {
-       // WHEN & THEN
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
+        userRepo.save(appUser);
+
+        // WHEN & THEN
        mockMvc.perform(post("/api/exercise/new")
+                       .with(user(user.getUsername()))
                        .contentType(MediaType.APPLICATION_JSON)
                        .content("""
                                {
