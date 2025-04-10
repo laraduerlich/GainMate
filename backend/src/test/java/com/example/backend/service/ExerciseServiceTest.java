@@ -5,7 +5,10 @@ import com.example.backend.model.ExerciseDTO;
 import com.example.backend.model.Progress;
 import com.example.backend.model.Sets;
 import com.example.backend.repo.ExerciseRepo;
+import com.example.backend.security.AppUserService;
+import com.example.backend.security.model.AppUserResponse;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.*;
 
@@ -16,17 +19,19 @@ class ExerciseServiceTest {
 
     private final ExerciseRepo exerciseRepo = mock(ExerciseRepo.class);
     private final IdService idService = mock(IdService.class);
+    private final AppUserService appUserService = mock(AppUserService.class);
 
     // --------------------------------------- GET ALL --------------------------------------
-
     @Test
     void getAllExercises_shouldReturnEmptyList_whenCalled() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
         List<Exercise> expected = Collections.emptyList();
+        when(exerciseRepo.findAllById(Collections.emptyList())).thenReturn(expected);
 
         // WHEN
-        List<Exercise> actual = exerciseService.getAllExercises();
+        List<Exercise> actual = exerciseService.getAllExercises(user);
 
         // THEN
         assertEquals(expected, actual);
@@ -36,7 +41,7 @@ class ExerciseServiceTest {
     @Test
     void getExerciseById_shouldReturnExercise_whenCalledWithValidId() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
         String id = "1";
         Exercise expected = Exercise.builder()
                 .id("1")
@@ -55,7 +60,7 @@ class ExerciseServiceTest {
     @Test
     void getExerciseById_ShouldThrowException_whenExerciseNotFound() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
         String id = "1";
 
         // WHEN & THEN
@@ -68,11 +73,12 @@ class ExerciseServiceTest {
     }
 
     // --------------------------------------- CREATE ---------------------------------------
-
     @Test
     void createExercise_shouldCreateExercise_whenCalled() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUserResponse appUserResponse = AppUserResponse.builder().exerciseIdList(new ArrayList<>()).build();
         ExerciseDTO newExercise = ExerciseDTO.builder()
                 .name("Test")
                 .note("Test")
@@ -84,9 +90,12 @@ class ExerciseServiceTest {
                 .build();
         when(idService.generateId()).thenReturn("1");
         when(exerciseRepo.save(expected)).thenReturn(expected);
+        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
+        doNothing().when(appUserService).updateUser(appUserResponse);
+
 
         // WHEN
-        Exercise actual = exerciseService.createExercise(newExercise);
+        Exercise actual = exerciseService.createExercise(newExercise, user);
 
         // THEN
         assertEquals(expected, actual);
@@ -95,7 +104,8 @@ class ExerciseServiceTest {
     @Test
     void createExercise_shouldThrowException_whenExerciseAlreadyExists() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
         ExerciseDTO newExercise = ExerciseDTO.builder()
                 .name("Test")
                 .note("Test")
@@ -104,7 +114,7 @@ class ExerciseServiceTest {
 
         // WHEN & THEN
         try {
-            exerciseService.createExercise(newExercise);
+            exerciseService.createExercise(newExercise, user);
             fail("An exception is expected, but none is thrown!");
         } catch (Exception e) {
             assertEquals("Exercise already exists!", e.getMessage());
@@ -115,7 +125,7 @@ class ExerciseServiceTest {
     @Test
     void updateExercise_shouldUpdateExercise_whenCalledWithValidId() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
         ExerciseDTO updatedExercise = ExerciseDTO.builder()
                 .name("Test")
                 .note("Test")
@@ -140,7 +150,7 @@ class ExerciseServiceTest {
     @Test
     void updateExercise_shouldThrowException_whenExerciseNotFound() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
         ExerciseDTO updatedExercise = ExerciseDTO.builder()
                 .name("Test")
                 .note("Test")
@@ -160,7 +170,7 @@ class ExerciseServiceTest {
     @Test
     void mergeDuplicateProgressEntries_shouldCleanProgressEntries_whenCalled() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
         List<Sets> sets1 = new ArrayList<>(Arrays.asList(new Sets("10 reps", "50kg"), new Sets("12 reps", "55kg")));
         List<Sets> sets2 = new ArrayList<>(Collections.singletonList(new Sets("8 reps", "60kg")));
         List<Sets> sets3 = new ArrayList<>(Collections.singletonList(new Sets("15 reps", "40kg")));
@@ -177,33 +187,36 @@ class ExerciseServiceTest {
         assertEquals(2, result.size());
     }
 
-
     // --------------------------------------- DELETE --------------------------------------
     @Test
     void deleteExercise_shouldDeleteExercise_whenCalledWithValidId() {
         // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
-        Exercise deletedExercise = Exercise.builder().id("1").build();
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUserResponse appUserResponse = AppUserResponse.builder().exerciseIdList(new ArrayList<>()).build();
+        when(exerciseRepo.existsById("1")).thenReturn(true);
+        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
+        doNothing().when(appUserService).updateUser(appUserResponse);
 
-        when(exerciseRepo.existsById(deletedExercise.id())).thenReturn(true);
 
         // WHEN
-        exerciseService.deleteExercise(deletedExercise.id());
+        exerciseService.deleteExercise("1", user);
 
         // THEN
-        verify(exerciseRepo).deleteById(deletedExercise.id());
+        verify(exerciseRepo).deleteById(anyString());
     }
 
     @Test
     void deleteExercise_shouldThrowException_whenExerciseNotFound() {
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo, idService);
+        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
+        User user = new User("testUser", "testPassword", Collections.emptyList());
         String id = "1";
 
         when(exerciseRepo.existsById(id)).thenReturn(false);
 
         // WHEN & THEN
         try {
-            exerciseService.deleteExercise(id);
+            exerciseService.deleteExercise(id, user);
             fail("An exception is expected, but none is thrown!");
         } catch (Exception e) {
             assertEquals("Exercise with id " + id + " does not exist", e.getMessage());

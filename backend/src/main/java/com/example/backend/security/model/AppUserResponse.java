@@ -6,6 +6,7 @@ import java.util.List;
 
 @Builder
 public record AppUserResponse (
+        String id,
         String username,
         String name,
         List<String> exerciseIdList,

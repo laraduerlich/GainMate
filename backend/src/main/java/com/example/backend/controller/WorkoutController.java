@@ -5,6 +5,8 @@ import com.example.backend.model.WorkoutDTO;
 import com.example.backend.service.WorkoutService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +19,13 @@ public class WorkoutController {
     private final WorkoutService workoutService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Workout>> getAllWorkouts() {
-        List<Workout> allWorkouts = workoutService.getAllWorkouts();
-        return ResponseEntity.ok(allWorkouts);
+    public ResponseEntity<List<Workout>> getAllWorkouts(@AuthenticationPrincipal User user) {
+        try {
+            List<Workout> all = workoutService.getAllWorkouts(user);
+            return ResponseEntity.ok(all);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -33,9 +39,9 @@ public class WorkoutController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Workout> createWorkout(@RequestBody WorkoutDTO workoutDTO) {
+    public ResponseEntity<Workout> createWorkout(@RequestBody WorkoutDTO workoutDTO, @AuthenticationPrincipal User user) {
         try {
-            Workout newWorkout = workoutService.createWorkout(workoutDTO);
+            Workout newWorkout = workoutService.createWorkout(workoutDTO, user);
             return ResponseEntity.ok(newWorkout);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -53,9 +59,9 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWorkout(@PathVariable String id) {
+    public ResponseEntity<Void> deleteWorkout(@PathVariable String id, @AuthenticationPrincipal User user) {
         try {
-            workoutService.deleteWorkout(id);
+            workoutService.deleteWorkout(id, user);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

@@ -25,7 +25,7 @@ class AuthorizationControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    AppUserRepository repo;
+    AppUserRepo repo;
 
     // --------------------------------------- GET USER ---------------------------------------
     @Test

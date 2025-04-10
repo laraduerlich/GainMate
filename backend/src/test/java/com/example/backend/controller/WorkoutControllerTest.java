@@ -2,15 +2,21 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Workout;
 import com.example.backend.repo.WorkoutRepo;
+import com.example.backend.security.AppUserRepo;
+import com.example.backend.security.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,12 +31,26 @@ class WorkoutControllerTest {
     @Autowired
     private WorkoutRepo repo;
 
+    @Autowired
+    private AppUserRepo userRepo;
+
     // --------------------------------------- GET ALL --------------------------------------
     @Test
-    @WithMockUser
     void getAllWorkouts_shouldReturnEmptyList_whenCalledInitially() throws Exception {
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
+        userRepo.save(appUser);
+
         // WHEN & THEN
-        mockMvc.perform(get("/api/workout/all"))
+        mockMvc.perform(get("/api/workout/all")
+                        .with(user(user.getUsername())))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
     }
@@ -66,10 +86,21 @@ class WorkoutControllerTest {
 
     // --------------------------------------- POST ----------------------------------------
     @Test
-    @WithMockUser
     void createWorkout_shouldReturnWorkout_WhenCalledWithDTO() throws Exception {
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
+        userRepo.save(appUser);
+
         // WHEN & THEN
         mockMvc.perform(post("/api/workout/new")
+                .with(user(user.getUsername()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -134,24 +165,45 @@ class WorkoutControllerTest {
 
     // --------------------------------------- DELETE ----------------------------------------
     @Test
-    @WithMockUser
     void deleteWorkout_shouldReturnWorkout_WhenCalledWithValidId() throws Exception {
         // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
         Workout workout = Workout.builder()
                 .id("1")
                 .name("test")
                 .build();
         repo.save(workout);
+        userRepo.save(appUser);
 
         // WHEN & THEN
-        mockMvc.perform(delete("/api/workout/1"))
+        mockMvc.perform(delete("/api/workout/1")
+                .with(user(user.getUsername())))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser
     void deleteWorkout_shouldThrowException_whenCalledWithInvalidId() throws Exception {
-        mockMvc.perform(delete("/api/workout/1"))
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder()
+                .id("1")
+                .username("testUser")
+                .password("testPassword")
+                .exerciseIdList(Collections.emptyList())
+                .workoutIdList(Collections.emptyList())
+                .build();
+        userRepo.save(appUser);
+
+        // WHEN & THEN
+        mockMvc.perform(delete("/api/workout/1")
+                        .with(user(user.getUsername())))
                 .andExpect(status().isNotFound());
     }
 }

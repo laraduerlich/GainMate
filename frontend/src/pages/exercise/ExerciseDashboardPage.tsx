@@ -6,21 +6,22 @@ import {useEffect} from "react";
 
 type ExerciseDashboardProps = {
     exercises: Exercise[]
-    getAllWorkouts: () => void
+    getAllExercises: () => void
 }
 
-export default function ExerciseDashboardPage({exercises, getAllWorkouts}: ExerciseDashboardProps) {
+export default function ExerciseDashboardPage({exercises, getAllExercises}: ExerciseDashboardProps) {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     // button handler
     const handleNewExerciseButtonClick = () => {
-        navigate("/exercise/new");
+        navigate("/exercise/new")
     }
 
-    // fetch all exercies
+
+    // fetch all exercises
     useEffect(() => {
-        getAllWorkouts()
+        getAllExercises()
     }, []);
 
     return (

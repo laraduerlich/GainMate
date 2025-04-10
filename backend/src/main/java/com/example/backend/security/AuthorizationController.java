@@ -1,6 +1,5 @@
 package com.example.backend.security;
 
-import com.example.backend.security.model.AppUser;
 import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
 import jakarta.servlet.http.HttpSession;
