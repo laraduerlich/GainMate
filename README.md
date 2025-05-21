@@ -54,9 +54,9 @@ gainmate/
 │── frontend/ # Frontend-Code (React)
 │   ├── public/ # Icon-Bilder für das Frontend
 │   ├── src/ # Quellcode des Frontends 
-│   │   ├── component/ 
-│   │   ├── page/ 
-│   │   ├── type/ 
+│   │   ├── components/ 
+│   │   ├── pages/ 
+│   │   ├── types/ 
 │   │   ├── utlis/ # DataService für Backend-Anbindung  
 │   │   ├── App.js 
 │   │   ├── index.js 
