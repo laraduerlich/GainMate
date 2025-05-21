@@ -1,6 +1,6 @@
 # 💪 GainMate – Deine persönliche Fitness-Webapp
 
-**GainMate** ist eine Fitness-Web-App mit Fokus auf mobile Nutzung, mit der du deine Trainingsziele strukturiert und langfristig verfolgen kannst. Die Anwendung ermöglicht es dir, Übungen zu erstellen, Workouts zusammenzustellen und deinen Fortschritt übersichtlich zu dokumentieren – alles an einem Ort.
+**GainMate** ist eine Fitness-Webapp mit Fokus auf mobile Nutzung, mit der du deine Trainingsziele strukturiert und langfristig verfolgen kannst. Die Anwendung ermöglicht es dir, Übungen zu erstellen, Workouts zusammenzustellen und deinen Fortschritt übersichtlich zu dokumentieren – alles an einem Ort.
 
 
 ## 🚀 Features
