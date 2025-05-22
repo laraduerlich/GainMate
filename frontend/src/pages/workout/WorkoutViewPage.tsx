@@ -114,22 +114,22 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
                                 className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                             />
                         </div>
+                        {/* List of all exercises for creating workouts with remove button*/}
+                        <div>
+                            <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
+                        </div>
+                        {/* List of all exercises for creating workouts with add button*/}
+                        <div>
+                            <List elements={allExercisesOfWorkout} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
+                        </div>
+                        <div className="mt-5 flex justify-center gap-4">
+                            <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => {
+                                setIsEditing(false)
+                                setAddedIdList(workout? workout.exerciseIdList : [])
+                            }} />
+                            <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
+                        </div>
                     </form>
-                    {/* List of all exercises for creating workouts with remove button*/}
-                    <div>
-                        <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
-                    </div>
-                    {/* List of all exercises for creating workouts with add button*/}
-                    <div>
-                        <List elements={allExercisesOfWorkout} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
-                    </div>
-                    <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => {
-                            setIsEditing(false)
-                            setAddedIdList(workout? workout.exerciseIdList : [])
-                        }} />
-                        <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
-                    </div>
                 </div>
             ) : (
                 <div>
