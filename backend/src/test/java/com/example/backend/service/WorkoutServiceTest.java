@@ -85,6 +85,8 @@ class WorkoutServiceTest {
                 .id("1")
                 .name("Test")
                 .exerciseIdList(List.of("1", "2", "3"))
+                .icon(WorkoutIcon.ARMS)
+                .dateList(Collections.emptyList())
                 .build();
         when(idService.generateId()).thenReturn("1");
         when(workoutRepo.save(expected)).thenReturn(expected);
@@ -101,9 +103,11 @@ class WorkoutServiceTest {
     void createWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
+        List<Workout> workouts = List.of(Workout.builder().name("Test").build());
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        WorkoutDTO workout = new WorkoutDTO("Test", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
-        when(workoutRepo.existsByName("Test")).thenReturn(true);
+        WorkoutDTO workout = WorkoutDTO.builder().name("Test").build();
+        when(appUserService.findByUsername(user.getUsername())).thenReturn(AppUserResponse.builder().workoutIdList(List.of("")).build());
+        when(workoutRepo.findAllById(anyList())).thenReturn(workouts);
 
         // WHEN & THEN
         try {
@@ -123,7 +127,9 @@ class WorkoutServiceTest {
         Workout expected = Workout.builder()
                 .id("1")
                 .name("Test1")
+                .icon(WorkoutIcon.ARMS)
                 .exerciseIdList(List.of("1", "2", "3"))
+                .dateList(Collections.emptyList())
                 .build();
         when(workoutRepo.existsById("1")).thenReturn(true);
         when(workoutRepo.save(expected)).thenReturn(expected);
@@ -188,6 +194,4 @@ class WorkoutServiceTest {
             assertEquals("Workout with id 2 does not exist", e.getMessage());
         }
     }
-
-
 }
