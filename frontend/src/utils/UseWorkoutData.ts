@@ -52,8 +52,8 @@ export default function UseWorkoutData(){
     }
 
     // update workout
-    const updateWorkout = (updatedWorkout: Workout) => {
-        axios.put("/api/workout/" + updatedWorkout.id, updatedWorkout)
+    const updateWorkout = (updatedWorkout: WorkoutDTO, id: string) => {
+        axios.put("/api/workout/" + id, updatedWorkout)
             .then((response) => {setWorkout(response.data)})
             .then(error => {
                 console.error("Error update workout: ", error)

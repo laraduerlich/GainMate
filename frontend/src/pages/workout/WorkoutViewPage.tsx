@@ -1,4 +1,4 @@
-import {Workout} from "../../types/Workout.tsx";
+import {Workout, WorkoutDTO} from "../../types/Workout.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {FormEvent, useEffect, useState} from "react";
@@ -11,7 +11,7 @@ type WorkoutViewProps = {
     exercises: Exercise[]
     getAllExercises: () => void
     getWorkoutById: (id: string) => Promise<AxiosResponse>
-    updateWorkout: (updatedWorkout: Workout) => void
+    updateWorkout: (updatedWorkout: WorkoutDTO, id: string) => void
     deleteWorkout: (id: string) => void
 }
 
@@ -62,14 +62,14 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
     const handleSaveButtonClick = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const updatedWorkout: Workout = {
-            id: id,
+        const updatedWorkout: WorkoutDTO = {
             name: editName,
             exerciseIdList: addedIdList
         }
-
-        updateWorkout(updatedWorkout)
-        setIsEditing(false)
+        if (id !== undefined) {
+            updateWorkout(updatedWorkout, id)
+            setIsEditing(false)
+        }
     }
 
     const handleEditButtonClick = () => {
