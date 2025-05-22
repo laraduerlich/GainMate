@@ -1,8 +1,8 @@
 import ExerciseCreateForm from "../../components/exercise/ExerciseCreateForm.tsx";
-import {Exercise} from "../../types/Exercise.tsx";
+import {ExerciseDTO} from "../../types/Exercise.tsx";
 
 type ExerciseCreateProps = {
-    createExercise: (newExercise: Exercise) => void
+    createExercise: (newExercise: ExerciseDTO) => void
 }
 
 export default function ExerciseCreatePage({createExercise}: ExerciseCreateProps) {

@@ -80,6 +80,10 @@ public class ExerciseService {
 
     // method to clean the progress List
     public static List<Progress> mergeDuplicateProgressEntries(List<Progress> progressList) {
+        // null Check
+        if (progressList == null) {
+            return new ArrayList<>();
+        }
         return new ArrayList<>(progressList.stream() // // Convert list to a Stream
                 .collect(Collectors.toMap(
                         Progress::date, // Group by `date` as the key

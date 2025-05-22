@@ -1,10 +1,10 @@
 import {FormEvent, useState} from "react";
-import {Exercise} from "../../types/Exercise.tsx";
+import {ExerciseDTO} from "../../types/Exercise.tsx";
 import ButtonWithIcon from "../ButtonWithIcon.tsx";
 import {useNavigate} from "react-router-dom";
 
 type ExerciseCreateFormProps = {
-    createExercise: (newExercise: Exercise) => void
+    createExercise: (newExercise: ExerciseDTO) => void
 }
 
 export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormProps) {
@@ -17,7 +17,7 @@ export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormP
     // button handlers
     const handleSubmit = (event: FormEvent)=> {
         event.preventDefault()
-        const newExercise: Exercise = {
+        const newExercise: ExerciseDTO = {
             name: name,
             note: note
         }
