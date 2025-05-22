@@ -26,7 +26,7 @@ export default function WorkoutDashboardPage({workouts, getAllWorkouts}: Workout
     return (
         <>
             <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
-                my workouts</h2>
+                Workouts</h2>
             <div className="absolute right-2 top-20">
                 <ButtonWithIcon icon={"/new-icon.png"} type={"button"} onClick={handleNewButtonClick} />
             </div>

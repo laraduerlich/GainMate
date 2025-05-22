@@ -28,13 +28,13 @@ export default function OverviewPage({appUser}: OverviewPageProps) {
                     type={"button"}
                     onClick={handleGoToExerciseDashboard}
                     className="px-4 py-3 bg-zinc-400 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
-                    exercises
+                    Exercises
                 </button>
                 <button
                     type={"button"}
                     onClick={handleGoToWorkoutDashboard}
                     className="px-4 py-3 bg-zinc-400 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
-                    workouts
+                    Workouts
                 </button>
             </div>
         </>
