@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
+import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
 import com.example.backend.security.AppUserService;
 import com.example.backend.security.model.AppUserResponse;
@@ -79,7 +80,7 @@ class WorkoutServiceTest {
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
         AppUserResponse appUserResponse = AppUserResponse.builder().workoutIdList(new ArrayList<>()).build();
-        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"), Collections.emptyList());
+        WorkoutDTO workout = new WorkoutDTO("Test", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
         Workout expected = Workout.builder()
                 .id("1")
                 .name("Test")
@@ -101,7 +102,7 @@ class WorkoutServiceTest {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"), Collections.emptyList());
+        WorkoutDTO workout = new WorkoutDTO("Test", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
         when(workoutRepo.existsByName("Test")).thenReturn(true);
 
         // WHEN & THEN
@@ -118,7 +119,7 @@ class WorkoutServiceTest {
     void updateWorkout_shouldUpdateWorkout_whenCalledWithValidId() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"), Collections.emptyList());
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
         Workout expected = Workout.builder()
                 .id("1")
                 .name("Test1")
@@ -138,7 +139,7 @@ class WorkoutServiceTest {
     void updateWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"), Collections.emptyList());
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
 
         when(workoutRepo.existsById("1")).thenReturn(false);
 

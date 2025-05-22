@@ -53,6 +53,7 @@ public class WorkoutService {
             Workout newWorkout = Workout.builder()
                     .id(idService.generateId())
                     .name(workoutDTO.name())
+                    .icon(workoutDTO.icon())
                     .exerciseIdList(workoutDTO.exerciseIdList())
                     .dateList(new ArrayList<>())
                     .build();
@@ -71,6 +72,7 @@ public class WorkoutService {
             Workout updatedWorkout = Workout.builder()
                     .id(id)
                     .name(workoutDTO.name())
+                    .icon(workoutDTO.icon())
                     .exerciseIdList(workoutDTO.exerciseIdList())
                     .dateList(workoutDTO.dateList())
                     .build();
