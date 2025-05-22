@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class WorkoutService {
                     .id(idService.generateId())
                     .name(workoutDTO.name())
                     .exerciseIdList(workoutDTO.exerciseIdList())
+                    .dateList(new ArrayList<>())
                     .build();
             workoutRepo.save(newWorkout);
             // Update user with new workout ID
@@ -64,6 +66,7 @@ public class WorkoutService {
                     .id(id)
                     .name(workoutDTO.name())
                     .exerciseIdList(workoutDTO.exerciseIdList())
+                    .dateList(workoutDTO.dateList())
                     .build();
             return workoutRepo.save(updatedWorkout);
 

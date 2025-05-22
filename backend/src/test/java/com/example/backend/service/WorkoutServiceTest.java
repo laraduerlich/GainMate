@@ -79,7 +79,7 @@ class WorkoutServiceTest {
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
         AppUserResponse appUserResponse = AppUserResponse.builder().workoutIdList(new ArrayList<>()).build();
-        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"));
+        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"), Collections.emptyList());
         Workout expected = Workout.builder()
                 .id("1")
                 .name("Test")
@@ -101,7 +101,7 @@ class WorkoutServiceTest {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"));
+        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"), Collections.emptyList());
         when(workoutRepo.existsByName("Test")).thenReturn(true);
 
         // WHEN & THEN
@@ -118,7 +118,7 @@ class WorkoutServiceTest {
     void updateWorkout_shouldUpdateWorkout_whenCalledWithValidId() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"), Collections.emptyList());
         Workout expected = Workout.builder()
                 .id("1")
                 .name("Test1")
@@ -138,7 +138,7 @@ class WorkoutServiceTest {
     void updateWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"), Collections.emptyList());
 
         when(workoutRepo.existsById("1")).thenReturn(false);
 
