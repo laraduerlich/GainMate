@@ -96,7 +96,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
                 <form onSubmit={handleAddButtonClick}>
                     <div>
                         <label>
-                            Repetition:
+                            Reps:
                             <input
                                 type="number"
                                 value={reps}
@@ -104,6 +104,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
                                 min="1"
                                 step="1"
                                 required
+                                className="text-center"
                             />
                         </label>
                         <br />
@@ -116,27 +117,46 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
                                 min="1"
                                 step="0.5"
                                 required
+                                className="text-center"
                             />
                         </label>
                     </div>
-                    <ButtonWithIcon icon={"add"} type={"submit"} />
+                    <div className="mt-3">
+                        <ButtonWithIcon icon={"/add-icon.png"} type={"submit"} />
+                    </div>
                 </form>
             </div>
-            <div>
-                <ul>
-                    {sets.map((oneSet) => (
-                        <li
-                            key={`${oneSet.repetition}-${oneSet.weight}`}>
-                                <span>
-                                    {oneSet.repetition} x {oneSet.weight} kg
-                                </span>
-                        </li>
-                    ))}
-                </ul>
+            <div className="max-w-screen-xl mx-auto">
+                <table className="mt-3 ml text-xs w-[350px]">
+                    <thead className="bg-zinc-800">
+                        <tr className="align-middle">
+                            <th className="p-3">Reps</th>
+                            <th className="p-3">x</th>
+                            <th className="p-3">Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {sets.map((oneSet: Sets) => (
+                        <tr className="border-b border-opacity-20 border-gray-300"
+                            key={`${oneSet.repetition}-${oneSet.weight}`}
+                        >
+                        <td className="p-3">
+                            <p>{oneSet.repetition}</p>
+                        </td>
+                            <td className="p-3">
+                                <p>x</p>
+                            </td>
+                        <td className="p-3">
+                            <p>{oneSet.weight} kg</p>
+                        </td>
+                        </tr>))}
+                    </tbody>
+                </table>
             </div>
-
-            <ButtonWithIcon icon={"done"} type={"button"} onClick={handleDoneButtonClick} />
-            <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
+            <div className="mt-5 flex justify-center gap-4">
+                <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />
+                <ButtonWithIcon icon={"/check-icon.png"} type={"button"} onClick={handleDoneButtonClick} />
+            </div>
         </>
     )
 }

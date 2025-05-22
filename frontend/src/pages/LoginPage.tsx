@@ -37,7 +37,9 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
 
     return (
         <>
-            <h2>Login</h2>
+            <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
+                Login
+            </h2>
             <div>
                 <form onSubmit={handleLoginButtonClick}>
                     <input
@@ -46,6 +48,7 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
                         placeholder={"Username"}
                         value={username}
                         onChange={(event) => setUsername(event.target.value)}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
                     <input
                         id={"password"}
@@ -53,12 +56,15 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
                         placeholder={"password"}
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
-                    <ButtonWithIcon icon={"login"} type={"submit"} />
+                    <div className="mt-5 flex justify-center gap-4">
+                        <ButtonWithIcon icon={"/login-icon.png"} type={"submit"} />
+                    </div>
                 </form>
-                <div>
+                <div className="mt-5 flex justify-center gap-4">
                     <h3>No account yet?</h3>
-                    <ButtonWithIcon icon={"register"} type={"button"} onClick={handleGoToRegisterButtonClick} />
+                    <ButtonWithIcon icon={"/register-icon.png"} type={"button"} onClick={handleGoToRegisterButtonClick} />
                 </div>
             </div>
         </>

@@ -3,6 +3,7 @@ import {Exercise} from "../../types/Exercise.tsx";
 import {FormEvent, useState} from "react";
 import ButtonWithIcon from "../ButtonWithIcon.tsx";
 import {Workout} from "../../types/Workout.tsx";
+import {useNavigate} from "react-router-dom";
 
 type WorkoutCreateFormProps = {
     exercises: Exercise[]
@@ -11,18 +12,28 @@ type WorkoutCreateFormProps = {
 
 export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCreateFormProps) {
 
-    const [idList, setIdList] = useState<string[]>([])
+    const navigate = useNavigate()
+
+    const exerciseIds: (string | undefined)[] = exercises.map(exercise => exercise.id)
+    const [addedIdList, setAddedIdList] = useState<string[]>([])
+    const [allExerciseIdList, setAllExerciseIdList] = useState<(string | undefined)[]>(exerciseIds)
     const [name, setName] = useState<string>("")
 
-    // added exercises for creating a workout
+    // List with added exercises for the workout
     const addedExercises: Exercise[] = exercises.filter(exercise =>
-        exercise.id !== undefined && idList.includes(exercise.id)
+        exercise.id !== undefined && addedIdList.includes(exercise.id)
+    )
+
+    // List with all exercises
+    const allExercises: Exercise[] = exercises.filter(exercise =>
+        exercise.id !== undefined && allExerciseIdList.includes(exercise.id)
     )
 
     // button handler
     const handleAddButtonClick = (id: string | undefined) => {
         if (id !== undefined) {
-            setIdList([...idList, id])
+            setAddedIdList([...addedIdList, id])
+            setAllExerciseIdList(idExercise => idExercise.filter(idExercise => idExercise !== id))
         } else {
             console.error("Invalid ID for adding exercise.");
         }
@@ -30,7 +41,8 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
 
     const handleRemoveButtonClick = (id: string | undefined) => {
         if (id !== undefined) {
-            setIdList(idList.filter(idExercise => idExercise !== id))
+            setAddedIdList(addedIdList.filter(idExercise => idExercise !== id))
+            setAllExerciseIdList([...allExerciseIdList, id])
         } else {
             console.error("Invalid ID for removing exercise.");
         }
@@ -41,10 +53,14 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
 
         const newWorkout: Workout = {
             name: name,
-            exerciseIdList: idList
+            exerciseIdList: addedIdList
         }
 
         createWorkout(newWorkout)
+    }
+
+    const handleBackButtonClick = () => {
+        navigate("/workouts");
     }
 
     return (
@@ -57,8 +73,8 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                         type={"text"}
                         placeholder={"name of the workout ..."}
                         onChange={(event) => setName(event.target.value)}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
-                    <ButtonWithIcon icon={"save"} type={"submit"} />
                 </form>
                 {/* List of all exercises for creating workouts with remove button*/}
                 <div>
@@ -66,7 +82,11 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                 </div>
                 {/* List of all exercises for creating workouts with add button*/}
                 <div>
-                    <List elements={exercises} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
+                    <List elements={allExercises} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
+                </div>
+                <div className="mt-5 flex justify-center gap-4">
+                    <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick}/>
+                    <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
                 </div>
             </div>
         </>

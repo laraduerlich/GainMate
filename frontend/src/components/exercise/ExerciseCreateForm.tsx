@@ -1,12 +1,15 @@
 import {FormEvent, useState} from "react";
 import {Exercise} from "../../types/Exercise.tsx";
 import ButtonWithIcon from "../ButtonWithIcon.tsx";
+import {useNavigate} from "react-router-dom";
 
 type ExerciseCreateFormProps = {
     createExercise: (newExercise: Exercise) => void
 }
 
 export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormProps) {
+
+    const navigate = useNavigate()
 
     const [name, setName] = useState<string>("");
     const [note, setNote] = useState<string>("");
@@ -21,6 +24,10 @@ export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormP
         createExercise(newExercise);
     }
 
+    const handleBackButtonClick = () => {
+        navigate("/workouts");
+    }
+
     return (
         <>
             <form onSubmit={handleSubmit}>
@@ -31,6 +38,7 @@ export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormP
                         type={"text"}
                         placeholder={"name of the exercise ..."}
                         onChange={(event) => setName(event.target.value)}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
                     <input
                         id={"note"}
@@ -38,9 +46,13 @@ export default function ExerciseCreateForm({createExercise}: ExerciseCreateFormP
                         type={"text"}
                         placeholder={"notes ..."}
                         onChange={(event) => setNote(event.target.value)}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
                 </div>
-                <ButtonWithIcon onSubmit={handleSubmit} icon={"add"} type={"submit"} />
+                <div className="mt-5 flex justify-center gap-4">
+                    <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />
+                    <ButtonWithIcon onSubmit={handleSubmit} icon={"/save-icon.png"} type={"submit"} />
+                </div>
             </form>
         </>
     )

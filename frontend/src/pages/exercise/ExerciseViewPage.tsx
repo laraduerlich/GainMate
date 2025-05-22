@@ -73,27 +73,28 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
                             name={"name"}
                             value={editExercise.name}
                             onChange={handleEditChange}
-                            className="bg-white text-black border border-gray-300 p-2 rounded-md"
+                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                         />
                         <input
                             name={"note"}
                             value={editExercise.note}
                             onChange={handleEditChange}
-                            className="bg-white text-black border border-gray-300 p-2 rounded-md"
+                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                         />
                     </div>
-                    <div>
-                        <ButtonWithIcon icon={"save"} type={"submit"} />
-                        <ButtonWithIcon icon={"back"} type={"button"} onClick={() => setIsEditing(false)} />
+                    <div className="mt-5 flex justify-center gap-4">
+                        <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => setIsEditing(false)} />
+                        <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
                     </div>
                 </form>
-
             ) : (
                 <div>
                     <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
-                    <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
-                    <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick}/>
-                    <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
+                    <div className="mt-5 flex justify-center gap-4">
+                        <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />
+                        <ButtonWithIcon icon={"/edit-icon.png"} type={"button"} onClick={handleEditButtonClick} />
+                        <ButtonWithIcon icon={"/delete-icon.png"} type={"button"} onClick={handleDeleteButtonClick}/>
+                    </div>
                 </div>
             )}
         </>

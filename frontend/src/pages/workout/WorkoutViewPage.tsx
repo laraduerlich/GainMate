@@ -7,38 +7,53 @@ import List from "../../components/List.tsx";
 import {AxiosResponse} from "axios";
 
 type WorkoutViewProps = {
-    workout: Workout | undefined,
-    exercises: Exercise[],
-    getWorkoutById: (id: string) => Promise<AxiosResponse>,
-    updateWorkout: (updatedWorkout: Workout) => void,
+    workout: Workout | undefined
+    exercises: Exercise[]
+    getAllExercises: () => void
+    getWorkoutById: (id: string) => Promise<AxiosResponse>
+    updateWorkout: (updatedWorkout: Workout) => void
     deleteWorkout: (id: string) => void
 }
 
-export default function WorkoutViewPage({workout, exercises, getWorkoutById, updateWorkout, deleteWorkout}: WorkoutViewProps) {
+export default function WorkoutViewPage({workout, exercises, getAllExercises,getWorkoutById, updateWorkout, deleteWorkout}: WorkoutViewProps) {
 
     const {id} = useParams<{id: string}>()
     const navigate = useNavigate()
+
+    // IdList with all exercise ids, which are not yet saved in the workout
+    const exerciseIdsOfWorkout: (string | undefined)[] = exercises
+        .filter(exercise => exercise.id && !workout?.exerciseIdList.includes(exercise.id))
+        .map(exercise => exercise.id)
+
     const [isEditing, setIsEditing] = useState(false)
     const [editName, setEditName] = useState<string>(workout ? workout.name : "")
-    const [idList, setIdList] = useState<string[]>(workout ? workout.exerciseIdList : [])
+    const [addedIdList, setAddedIdList] = useState<string[]>(workout? workout.exerciseIdList : [])
+    const [exerciseIdList, setExerciseIdList] = useState<(string | undefined)[]>(exerciseIdsOfWorkout)
 
-    // exercises form the workout
-    const exerciseList: Exercise[] = exercises.filter((exercise: Exercise) =>
-            exercise.id !== undefined && idList.includes(exercise.id)
+    // List with added exercises from the workout
+    const addedExercises: Exercise[] = exercises.filter(exercise =>
+        exercise.id !== undefined && addedIdList.includes(exercise.id)
+    )
+
+    // List with all exercises which are not yet in the workout
+    const allExercisesOfWorkout: Exercise[] = exercises.filter(exercise =>
+        exercise.id !== undefined && exerciseIdList.includes(exercise.id)
     )
 
     // button handler
-    const handleAddButtonClick = (exerciseId: string | undefined) => {
-        if (exerciseId !== undefined) {
-            setIdList([...idList, exerciseId])
+    const handleAddButtonClick = (id: string | undefined) => {
+        if (id !== undefined) {
+            setAddedIdList([...addedIdList, id])
+            setExerciseIdList(idExercise => idExercise.filter(idExercise => idExercise !== id))
         } else {
             console.error("Invalid ID for adding exercise.");
         }
     }
 
-    const handleRemoveButtonClick = (exerciseId: string | undefined) => {
-        if (exerciseId !== undefined) {
-            setIdList(idList.filter(idExercise => idExercise !== exerciseId))
+    const handleRemoveButtonClick = (id: string | undefined) => {
+        if (id !== undefined) {
+            setAddedIdList(addedIdList.filter(idExercise => idExercise !== id))
+            setExerciseIdList([...exerciseIdList, id])
         } else {
             console.error("Invalid ID for removing exercise.");
         }
@@ -50,7 +65,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
         const updatedWorkout: Workout = {
             id: id,
             name: editName,
-            exerciseIdList: idList
+            exerciseIdList: addedIdList
         }
 
         updateWorkout(updatedWorkout)
@@ -70,7 +85,7 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
     }
 
     const handleBackButtonClick = () => {
-        navigate("/workouts");
+        navigate("/workouts")
     }
 
     // Load workout
@@ -79,10 +94,10 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
             getWorkoutById(id)
                 .then((response) => {
                     setEditName(response.data.name)
-                    setIdList(response.data.exerciseIdList)
+                    setAddedIdList(response.data.exerciseIdList)
                 })
         }
-
+        getAllExercises()
     }, [id]);
 
     return (
@@ -96,36 +111,46 @@ export default function WorkoutViewPage({workout, exercises, getWorkoutById, upd
                                 value={editName}
                                 placeholder={workout?.name}
                                 onChange={(event) => setEditName(event.target.value)}
-                                className="bg-white text-black border border-gray-300 p-2 rounded-md"
+                                className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                             />
                         </div>
-                        <ButtonWithIcon icon={"save"} type={"submit"} />
                     </form>
                     {/* List of all exercises for creating workouts with remove button*/}
                     <div>
-                        <List elements={exerciseList} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
+                        <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
                     </div>
                     {/* List of all exercises for creating workouts with add button*/}
                     <div>
-                        <List elements={exercises} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
+                        <List elements={allExercisesOfWorkout} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
                     </div>
-                    <ButtonWithIcon icon={"back"} type={"button"} onClick={() => setIsEditing(false)} />
+                    <div className="mt-5 flex justify-center gap-4">
+                        <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => {
+                            setIsEditing(false)
+                            setAddedIdList(workout? workout.exerciseIdList : [])
+                        }} />
+                        <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
+                    </div>
                 </div>
             ) : (
                 <div>
-                    {workout? workout.name : ""}
-                    <ButtonWithIcon icon={"edit"} type={"button"} onClick={handleEditButtonClick} />
-                    <ButtonWithIcon icon={"delete"} type={"button"} onClick={handleDeleteButtonClick} />
-                    <ul>
-                        {exerciseList.map((exercise) => (
+                    <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
+                        {workout? workout.name : ""}
+                    </h2>
+                    <ul className="list-disc pl-5 text-left">
+                        {addedExercises.map((exercise) => (
                             <li
                                 key={exercise.id}
+                                className="list-disc pl-5"
                             >
                                 {exercise.name}
                             </li>
                         ))}
                     </ul>
-                    <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
+                    <div className="mt-5 flex justify-center gap-4">
+                        <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />
+                        <ButtonWithIcon icon={"/edit-icon.png"} type={"button"} onClick={handleEditButtonClick} />
+                        <ButtonWithIcon icon={"/delete-icon.png"} type={"button"} onClick={handleDeleteButtonClick} />
+                    </div>
                 </div>
             )}
         </>
