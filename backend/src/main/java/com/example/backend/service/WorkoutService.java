@@ -38,8 +38,15 @@ public class WorkoutService {
     }
 
     public Workout createWorkout(WorkoutDTO workoutDTO, User user) throws AlreadyExistsException, UsernameNotFoundException {
+        // Filter workouts assigned to the user
+        AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+        List<Workout> filteredWorkoutsByUser = workoutRepo.findAllById(appUserResponse.workoutIdList());
+
+        boolean exists = filteredWorkoutsByUser.stream()
+                .anyMatch(workout -> workout.name().equals(workoutDTO.name()));
+
         // Check if the name is already in the repo
-        if (workoutRepo.existsByName(workoutDTO.name())) {
+        if (exists) {
             throw new AlreadyExistsException("Workout already exists");
         } else {
             // Save new workout
@@ -51,7 +58,6 @@ public class WorkoutService {
                     .build();
             workoutRepo.save(newWorkout);
             // Update user with new workout ID
-            AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
             appUserResponse.workoutIdList().add(newWorkout.id());
             appUserService.updateUser(appUserResponse);
 

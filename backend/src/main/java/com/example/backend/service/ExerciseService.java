@@ -40,8 +40,15 @@ public class ExerciseService {
     }
 
     public Exercise createExercise(ExerciseDTO exerciseDTO, User user) throws AlreadyExistsException, UsernameNotFoundException {
-       // Check if the name is already in the repo
-        if (exerciseRepo.existsByName(exerciseDTO.name())) {
+        // Filter exercises assigned to the user
+        AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+        List<Exercise> filteredExercisesByUser = exerciseRepo.findAllById(appUserResponse.exerciseIdList());
+
+        boolean exists = filteredExercisesByUser.stream()
+                .anyMatch(exercise -> exercise.name().equals(exerciseDTO.name()));
+
+        // Check if the name is already in the repo
+        if (exists) {
             throw new AlreadyExistsException("Exercise already exists!");
         } else {
             // Save new exercise
@@ -51,8 +58,8 @@ public class ExerciseService {
                     .note(exerciseDTO.note())
                     .build();
             exerciseRepo.save(newExercise);
+
             // Update user with the new exercise ID
-            AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
             appUserResponse.exerciseIdList().add(newExercise.id());
             appUserService.updateUser(appUserResponse);
 
