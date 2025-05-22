@@ -16,9 +16,9 @@ export default function ButtonWithIcon({
             <button
                 type={type}
                 onClick={onClick}
-                className="px-6 py-3 dark:bg-gray-800 text-white font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-gray-700 hover:scale-105 focus:outline-none"
+                className="px-4 py-3 bg-zinc-400 text-white font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none"
             >
-                {icon}
+                <img src={icon} alt="icon" className="w-5 h-5" />
             </button>
         </>
     )

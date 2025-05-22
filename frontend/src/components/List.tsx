@@ -70,36 +70,39 @@ export default function List({elements, use, handelButtonClick}: ExerciseListPro
     return (
         <>
             <div>
-                <div>
-                    <Searchbar value={searchInput} onChange={setSearchInput} />
+                <div className="flex flex-col sm:flex-row items-center w-full max-w-3xl mx-auto my-6 space-y-4 sm:space-y-0 sm:space-x-4">
+                    {(elements.length != 0) ? (
+                        <Searchbar value={searchInput} onChange={setSearchInput} />
+                    ) : null}
                 </div>
                 <div>
                     {/* List of all exercises with view and add button */}
-                    <ul>
+                    <ul className="flex flex-col gap-4 w-full">
                         {filteredElements.map((element) => (
                             <li
-                                key={element.id}>
-                                <span>
+                                key={element.id}
+                                className="w-full max-w-md px-4 py-3 flex items-center gap-20 bg-zinc-500 rounded-xl shadow-sm backdrop-blur-md hover:bg-zinc-300 transition-colors duration-200">
+                                <span className="flex-grow text-zinc-800 text-base font-medium truncate">
                                     {element.name}
                                 </span>
-                                <div>
+                                <div className="ml-auto shrink-0">
                                     {(use === "dashboardExercise") ? (
-                                                <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewExerciseButtonClick(element.id)}} />)
+                                                <ButtonWithIcon icon={"/view-icon.png"} type={"button"} onClick={() => {handleViewExerciseButtonClick(element.id)}} />)
 
                                         :(use === "dashboardWorkouts") ? (
-                                            <div>
-                                                <ButtonWithIcon icon={"start"} type={"button"} onClick={() => {handleStartWorkoutButtonClick(element.id)}} />
-                                                <ButtonWithIcon icon={"view"} type={"button"} onClick={() => {handleViewWorkoutButtonClick(element.id)}} />
+                                            <div className="flex justify-center gap-2">
+                                                <ButtonWithIcon icon={"/start-icon.png"} type={"button"} onClick={() => {handleStartWorkoutButtonClick(element.id)}} />
+                                                <ButtonWithIcon icon={"/view-icon.png"} type={"button"} onClick={() => {handleViewWorkoutButtonClick(element.id)}} />
                                             </div>)
 
                                         :(use === "addWorkout") ? (
-                                                <ButtonWithIcon icon={"add"} type={"button"} onClick={() => {handleAddButtonClick(element.id)}} />)
+                                                <ButtonWithIcon icon={"/add-icon.png"} type={"button"} onClick={() => {handleAddButtonClick(element.id)}} />)
 
                                         :(use === "removeWorkout") ? (
-                                                <ButtonWithIcon icon={"remove"} type={"button"} onClick={() => {handleRemoveButtonClick(element.id)}} />)
+                                                <ButtonWithIcon icon={"/remove-icon.png"} type={"button"} onClick={() => {handleRemoveButtonClick(element.id)}} />)
 
                                         :(use === "inWorkout") ? (
-                                                <ButtonWithIcon icon={"start"} type={"button"} onClick={() => {handleStartButtonClick(element.id)}} />)
+                                                <ButtonWithIcon icon={"/start-icon.png"} type={"button"} onClick={() => {handleStartButtonClick(element.id)}} />)
                                         : null }
                                 </div>
                             </li>

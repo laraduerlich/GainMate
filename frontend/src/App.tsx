@@ -32,7 +32,9 @@ function App() {
     // Sidebar
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+        if(appUser !== undefined && appUser !== null) {
+            setIsSidebarOpen(!isSidebarOpen)
+        }
     };
 
     // Auth
@@ -71,12 +73,12 @@ function App() {
 
     return (
       <>
-          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} logoutButtonClick={handleLogoutButtonClick}/>
-          <div className="flex flex-col items-center justify-center h-screen-dvh bg-gray-100 dark:bg-gray-900">
+          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} logoutButtonClick={handleLogoutButtonClick} appUser={appUser}/>
+          <div className="flex flex-col items-center justify-center h-screen-dvh bg-gray-100 dark:bg-zinc-700">
               <Header toggleSidebar={toggleSidebar}/>
 
               {/* Main Content */}
-              <main className="flex-1 flex flex-col items-center justify-center w-full px-6">
+              <main className="mt-10 flex-1 flex flex-col items-center justify-center w-full px-6">
                   <Routes>
                       <Route path="/login" element={<LoginPage fetchUser={fetchUser} />} />
                       <Route path="/register" element={<RegisterPage />} />
@@ -133,6 +135,7 @@ function App() {
                               <WorkoutViewPage
                                   workout={workout}
                                   exercises={allExercises}
+                                  getAllExercises={getAllExercises}
                                   getWorkoutById={getWorkoutById}
                                   updateWorkout={updateWorkout}
                                   deleteWorkout={deleteWorkout}

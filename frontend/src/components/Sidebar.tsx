@@ -1,13 +1,15 @@
 import ButtonWithIcon from "./ButtonWithIcon.tsx";
 import {useNavigate} from "react-router-dom";
+import {AppUser} from "../types/AppUser.tsx";
 
 type SidebarProps = {
     isOpen: boolean,
     setIsOpen: (isOpen: boolean) => void
     logoutButtonClick: () => void
+    appUser: AppUser | undefined | null
 }
 
-export default function Sidebar({isOpen, setIsOpen, logoutButtonClick}: SidebarProps) {
+export default function Sidebar({isOpen, setIsOpen, logoutButtonClick, appUser}: SidebarProps) {
 
     const navigate = useNavigate()
 
@@ -17,40 +19,38 @@ export default function Sidebar({isOpen, setIsOpen, logoutButtonClick}: SidebarP
 
     return (
         <>
-            <div className={`transition-transform duration-300 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} fixed left-0 top-0 h-full bg-white w-60 shadow-md`}>
-            <div className="flex flex-col h-full p-3 w-60 dark:bg-gray-50 dark:text-gray-800">
-                <div className="space-y-3">
-                    <div className="flex items-center justify-between" onClick={() => isOpen}>
-                        <h2>Overview</h2>
-                        <button className="p-2" onClick={() => isOpen}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-5 fill-current dark:text-gray-800">
-                                <rect width="352" height="32" x="80" y="96"></rect>
-                                <rect width="352" height="32" x="80" y="240"></rect>
-                                <rect width="352" height="32" x="80" y="384"></rect>
-                            </svg>
-                        </button>
-                    </div>
-                    <div className="flex-1">
-                        <ul className="pt-2 pb-4 space-y-1 text-sm">
-                            <li className="rounded-sm">
-                                <ButtonWithIcon icon={"Exercises"} type={"button"} onClick={() => {
+            <div className={`transition-transform duration-300 transform ${
+                isOpen ? 'translate-x-0' : '-translate-x-full'
+            } fixed left-0 top-0 h-full w-60 bg-zinc-800 shadow-md z-50`}>
+                <div className="flex flex-col h-full p-3 w-60 bg-zinc-800">
+                    <div className="space-y-3">
+                        <div className="flex flex-col items-start px-4 pt-4 pb-2">
+                            <h2>What‘s the plan,</h2>
+                            <h2>{appUser ? appUser.name : ""}?</h2>
+                        </div>
+                        <div className="flex flex-col pt-5 space-y-4">
+                            <button
+                                type={"button"}
+                                onClick={() => {
                                     setIsOpen(!isOpen)
                                     navigate("/exercises")
-                                }} />
-                            </li>
-                            <li className="rounded-sm">
-                                <ButtonWithIcon icon={"Workouts"} type={"button"} onClick={() => {
+                                }}
+                                className="px-4 py-3 bg-zinc-500 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
+                                exercises
+                            </button>
+                            <button
+                                type={"button"}
+                                onClick={() => {
                                     setIsOpen(!isOpen)
                                     navigate("/workouts")
-                                }} />
-                            </li>
-                            <li className="rounded-sm">
-                                <ButtonWithIcon icon={"Logout"} type={"button"} onClick={handleLogoutButtonClick} />
-                            </li>
-                        </ul>
+                                }}
+                                className="px-4 py-3 bg-zinc-500 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
+                                workouts
+                            </button>
+                        </div>
+                        <ButtonWithIcon icon={"/logout-icon.png"} type={"button"} onClick={handleLogoutButtonClick} />
                     </div>
                 </div>
-            </div>
             </div>
         </>
     )

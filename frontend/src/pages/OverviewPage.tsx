@@ -1,5 +1,4 @@
 import {useNavigate} from "react-router-dom";
-import ButtonWithIcon from "../components/ButtonWithIcon.tsx";
 import {AppUser} from "../types/AppUser.tsx";
 
 type OverviewPageProps = {
@@ -21,9 +20,23 @@ export default function OverviewPage({appUser}: OverviewPageProps) {
 
     return (
         <>
-            <h2>Welcome {appUser? appUser.name : ""}</h2>
-            <ButtonWithIcon icon={"exercises"} type={"button"} onClick={handleGoToExerciseDashboard} />
-            <ButtonWithIcon icon={"workouts"} type={"button"} onClick={handleGoToWorkoutDashboard} />
+            <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
+                Welcome {appUser? appUser.name : ""}!
+            </h2>
+            <div className="flex flex-col space-y-4">
+                <button
+                    type={"button"}
+                    onClick={handleGoToExerciseDashboard}
+                    className="px-4 py-3 bg-zinc-400 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
+                    exercises
+                </button>
+                <button
+                    type={"button"}
+                    onClick={handleGoToWorkoutDashboard}
+                    className="px-4 py-3 bg-zinc-400 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
+                    workouts
+                </button>
+            </div>
         </>
     )
 }

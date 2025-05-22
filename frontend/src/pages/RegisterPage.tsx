@@ -40,7 +40,9 @@ export default function RegisterPage() {
     return (
         <>
             <div>
-                <h2>Bitte register</h2>
+                <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
+                    Please register
+                </h2>
                 <form onSubmit={handleRegisterButtonClick}>
                     <input
                         id={"name"}
@@ -48,6 +50,7 @@ export default function RegisterPage() {
                         type={"text"}
                         placeholder={"Name..."}
                         onChange={handleChange}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
                     <input
                         id={"username"}
@@ -55,6 +58,7 @@ export default function RegisterPage() {
                         type={"text"}
                         placeholder={"Username..."}
                         onChange={handleChange}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
                     <input
                         id={"password"}
@@ -62,13 +66,16 @@ export default function RegisterPage() {
                         type={"password"}
                         placeholder={"Password..."}
                         onChange={handleChange}
+                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
-                    <ButtonWithIcon icon={"register"} type={"submit"} />
+                    <div className="mt-5 flex justify-center gap-4">
+                        <ButtonWithIcon icon={"/add-icon.png"} type={"submit"} />
+                    </div>
                 </form>
             </div>
-            <div>
+            <div className="mt-5 flex justify-center gap-4">
                 <h3>Already register?</h3>
-                <ButtonWithIcon icon={"Go to Login"} type={"button"} onClick={handleGoToLoginButton} />
+                <ButtonWithIcon icon={"/login-icon.png"} type={"button"} onClick={handleGoToLoginButton} />
             </div>
         </>
     )

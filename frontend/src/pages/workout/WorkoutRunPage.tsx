@@ -47,14 +47,16 @@ export default function WorkoutRunPage({workout, exercises, getWorkoutById}: Wor
 
     return (
         <>
-            <div>
-                {workout ? workout.name : ""}
-            </div>
+            <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
+                {workout? workout.name : ""}
+            </h2>
             <div>
                 <List elements={openExerciseList} use={"inWorkout"} handelButtonClick={handleStartButtonClick} />
             </div>
-            <ButtonWithIcon icon={"finish"} type={"button"} onClick={handleFinishedButtonClick}/>
-            <ButtonWithIcon icon={"back"} type={"button"} onClick={handleBackButtonClick} />
+            <div className="mt-5 flex justify-center gap-4">
+                <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />
+                <ButtonWithIcon icon={"/finish-icon.png"} type={"button"} onClick={handleFinishedButtonClick}/>
+            </div>
         </>
     )
 }
