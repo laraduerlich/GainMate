@@ -4,6 +4,7 @@ import com.example.backend.exception.AlreadyExistsException;
 import com.example.backend.exception.NotExistsException;
 import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
+import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
 import com.example.backend.security.AppUserService;
 import com.example.backend.security.model.AppUserResponse;
@@ -53,7 +54,7 @@ public class WorkoutService {
             Workout newWorkout = Workout.builder()
                     .id(idService.generateId())
                     .name(workoutDTO.name())
-                    .icon(workoutDTO.icon())
+                    .icon(WorkoutIcon.ARMS) // set to ARMS to save in the repo for future feature
                     .exerciseIdList(workoutDTO.exerciseIdList())
                     .dateList(new ArrayList<>())
                     .build();
