@@ -2,12 +2,12 @@ import List from "../List.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
 import {FormEvent, useState} from "react";
 import ButtonWithIcon from "../ButtonWithIcon.tsx";
-import {Workout} from "../../types/Workout.tsx";
+import {WorkoutDTO} from "../../types/Workout.tsx";
 import {useNavigate} from "react-router-dom";
 
 type WorkoutCreateFormProps = {
     exercises: Exercise[]
-    createWorkout: (workout: Workout) => void
+    createWorkout: (workout: WorkoutDTO) => void
 }
 
 export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCreateFormProps) {
@@ -50,12 +50,10 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
 
     const handleSaveButtonClick = (event: FormEvent) => {
         event.preventDefault();
-
-        const newWorkout: Workout = {
+        const newWorkout: WorkoutDTO = {
             name: name,
             exerciseIdList: addedIdList
         }
-
         createWorkout(newWorkout)
     }
 
@@ -65,17 +63,17 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
 
     return (
         <>
-            <div>
-                <form onSubmit={handleSaveButtonClick}>
-                    <input
+            <form onSubmit={handleSaveButtonClick}>
+                  <div>
+                      <input
                         id={"name"}
                         name={"name"}
                         type={"text"}
                         placeholder={"name of the workout ..."}
                         onChange={(event) => setName(event.target.value)}
                         className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
-                    />
-                </form>
+                      />
+                  </div>
                 {/* List of all exercises for creating workouts with remove button*/}
                 <div>
                     <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
@@ -88,7 +86,7 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                     <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick}/>
                     <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
                 </div>
-            </div>
+            </form>
         </>
     )
 }

@@ -41,7 +41,7 @@ export default function RegisterPage() {
         <>
             <div>
                 <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
-                    Please register
+                    Start your fitness journey 🚀
                 </h2>
                 <form onSubmit={handleRegisterButtonClick}>
                     <input

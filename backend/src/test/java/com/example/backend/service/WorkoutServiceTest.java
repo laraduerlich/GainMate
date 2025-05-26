@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
+import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
 import com.example.backend.security.AppUserService;
 import com.example.backend.security.model.AppUserResponse;
@@ -79,11 +80,13 @@ class WorkoutServiceTest {
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
         AppUserResponse appUserResponse = AppUserResponse.builder().workoutIdList(new ArrayList<>()).build();
-        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"));
+        WorkoutDTO workout = new WorkoutDTO("Test", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
         Workout expected = Workout.builder()
                 .id("1")
                 .name("Test")
                 .exerciseIdList(List.of("1", "2", "3"))
+                .icon(WorkoutIcon.ARMS)
+                .dateList(Collections.emptyList())
                 .build();
         when(idService.generateId()).thenReturn("1");
         when(workoutRepo.save(expected)).thenReturn(expected);
@@ -100,9 +103,11 @@ class WorkoutServiceTest {
     void createWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
+        List<Workout> workouts = List.of(Workout.builder().name("Test").build());
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        WorkoutDTO workout = new WorkoutDTO("Test", List.of("1", "2", "3"));
-        when(workoutRepo.existsByName("Test")).thenReturn(true);
+        WorkoutDTO workout = WorkoutDTO.builder().name("Test").build();
+        when(appUserService.findByUsername(user.getUsername())).thenReturn(AppUserResponse.builder().workoutIdList(List.of("")).build());
+        when(workoutRepo.findAllById(anyList())).thenReturn(workouts);
 
         // WHEN & THEN
         try {
@@ -118,11 +123,13 @@ class WorkoutServiceTest {
     void updateWorkout_shouldUpdateWorkout_whenCalledWithValidId() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
         Workout expected = Workout.builder()
                 .id("1")
                 .name("Test1")
+                .icon(WorkoutIcon.ARMS)
                 .exerciseIdList(List.of("1", "2", "3"))
+                .dateList(Collections.emptyList())
                 .build();
         when(workoutRepo.existsById("1")).thenReturn(true);
         when(workoutRepo.save(expected)).thenReturn(expected);
@@ -138,7 +145,7 @@ class WorkoutServiceTest {
     void updateWorkout_shouldThrowException_whenWorkoutAlreadyExists() {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", List.of("1", "2", "3"));
+        WorkoutDTO updatedWorkout = new WorkoutDTO("Test1", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
 
         when(workoutRepo.existsById("1")).thenReturn(false);
 
@@ -187,6 +194,4 @@ class WorkoutServiceTest {
             assertEquals("Workout with id 2 does not exist", e.getMessage());
         }
     }
-
-
 }

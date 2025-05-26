@@ -1,4 +1,4 @@
-import {Workout} from "../../types/Workout.tsx";
+import {Workout, WorkoutDTO} from "../../types/Workout.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {FormEvent, useEffect, useState} from "react";
@@ -11,7 +11,7 @@ type WorkoutViewProps = {
     exercises: Exercise[]
     getAllExercises: () => void
     getWorkoutById: (id: string) => Promise<AxiosResponse>
-    updateWorkout: (updatedWorkout: Workout) => void
+    updateWorkout: (updatedWorkout: WorkoutDTO, id: string) => void
     deleteWorkout: (id: string) => void
 }
 
@@ -62,14 +62,14 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
     const handleSaveButtonClick = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        const updatedWorkout: Workout = {
-            id: id,
+        const updatedWorkout: WorkoutDTO = {
             name: editName,
             exerciseIdList: addedIdList
         }
-
-        updateWorkout(updatedWorkout)
-        setIsEditing(false)
+        if (id !== undefined) {
+            updateWorkout(updatedWorkout, id)
+            setIsEditing(false)
+        }
     }
 
     const handleEditButtonClick = () => {
@@ -114,22 +114,22 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
                                 className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                             />
                         </div>
+                        {/* List of all exercises for creating workouts with remove button*/}
+                        <div>
+                            <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
+                        </div>
+                        {/* List of all exercises for creating workouts with add button*/}
+                        <div>
+                            <List elements={allExercisesOfWorkout} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
+                        </div>
+                        <div className="mt-5 flex justify-center gap-4">
+                            <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => {
+                                setIsEditing(false)
+                                setAddedIdList(workout? workout.exerciseIdList : [])
+                            }} />
+                            <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
+                        </div>
                     </form>
-                    {/* List of all exercises for creating workouts with remove button*/}
-                    <div>
-                        <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
-                    </div>
-                    {/* List of all exercises for creating workouts with add button*/}
-                    <div>
-                        <List elements={allExercisesOfWorkout} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
-                    </div>
-                    <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => {
-                            setIsEditing(false)
-                            setAddedIdList(workout? workout.exerciseIdList : [])
-                        }} />
-                        <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
-                    </div>
                 </div>
             ) : (
                 <div>

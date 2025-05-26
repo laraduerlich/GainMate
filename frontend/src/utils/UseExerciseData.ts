@@ -1,6 +1,6 @@
 import axios from "axios";
 import {useState} from "react";
-import {Exercise} from "../types/Exercise.tsx";
+import {Exercise, ExerciseDTO} from "../types/Exercise.tsx";
 import {useNavigate} from "react-router-dom";
 
 export default function UseExerciseData() {
@@ -31,7 +31,7 @@ export default function UseExerciseData() {
     }
 
     // Create new exercise
-    const createExercise = (newExercise: Exercise) => {
+    const createExercise = (newExercise: ExerciseDTO) => {
         // Check if exercise has a name
         if (!newExercise.name) {
             alert("Please enter a name")
@@ -51,7 +51,12 @@ export default function UseExerciseData() {
 
     // Update exercise
     const updateExercise = (updatedExercise: Exercise) => {
-        axios.put("/api/exercise/" + updatedExercise.id, updatedExercise)
+        const dto: ExerciseDTO = {
+            name: updatedExercise.name,
+            note: updatedExercise.note,
+            progressList: updatedExercise.progressList
+        }
+        axios.put("/api/exercise/" + updatedExercise.id, dto)
             .then((response) => {setExercise(response.data)})
             .catch(error => {
                 console.error("Error update Exercise:" + error)

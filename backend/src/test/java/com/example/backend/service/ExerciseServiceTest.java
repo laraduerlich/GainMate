@@ -105,12 +105,11 @@ class ExerciseServiceTest {
     void createExercise_shouldThrowException_whenExerciseAlreadyExists() {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
-        User user = new User("testUser", "testPassword", Collections.emptyList());
-        ExerciseDTO newExercise = ExerciseDTO.builder()
-                .name("Test")
-                .note("Test")
-                .build();
-        when(exerciseRepo.existsByName("Test")).thenReturn(true);
+        List<Exercise> exercises = List.of(Exercise.builder().name("Test").build());
+        User user = new User("testUser", "testPassword",Collections.emptyList());
+        ExerciseDTO newExercise = ExerciseDTO.builder().name("Test").build();
+        when(appUserService.findByUsername(user.getUsername())).thenReturn(AppUserResponse.builder().exerciseIdList(List.of("")).build());
+        when(exerciseRepo.findAllById(anyList())).thenReturn(exercises);
 
         // WHEN & THEN
         try {

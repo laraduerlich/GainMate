@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Workout} from "../types/Workout.tsx";
+import {Workout, WorkoutDTO} from "../types/Workout.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -32,7 +32,13 @@ export default function UseWorkoutData(){
     }
 
     // Create new workout
-    const createWorkout = (newWorkout: Workout) => {
+    const createWorkout = (newWorkout: WorkoutDTO) => {
+        // Check if workout has a name
+        if (!newWorkout.name) {
+            alert("Please enter a name")
+            return;
+        }
+
         axios.post("/api/workout/new", newWorkout)
             .then((response) => {
                 setAllWorkouts([...allWorkouts, response.data])
@@ -40,13 +46,14 @@ export default function UseWorkoutData(){
             })
             .catch(error => {
                 console.error("Error create workout: ", error)
+                alert("Workout already exists")
             })
 
     }
 
     // update workout
-    const updateWorkout = (updatedWorkout: Workout) => {
-        axios.put("/api/workout/" + updatedWorkout.id, updatedWorkout)
+    const updateWorkout = (updatedWorkout: WorkoutDTO, id: string) => {
+        axios.put("/api/workout/" + id, updatedWorkout)
             .then((response) => {setWorkout(response.data)})
             .then(error => {
                 console.error("Error update workout: ", error)

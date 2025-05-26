@@ -1,10 +1,10 @@
 import WorkoutCreateForm from "../../components/workout/WorkoutCreateForm.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
-import {Workout} from "../../types/Workout.tsx";
+import {WorkoutDTO} from "../../types/Workout.tsx";
 import {useEffect} from "react";
 
 type WorkoutCreateProps = {
-    createWorkout: (workout: Workout) => void
+    createWorkout: (workout: WorkoutDTO) => void
     exercises: Exercise[]
     getAllExercises: () => void
 }

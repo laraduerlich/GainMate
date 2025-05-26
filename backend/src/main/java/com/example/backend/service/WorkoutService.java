@@ -4,6 +4,7 @@ import com.example.backend.exception.AlreadyExistsException;
 import com.example.backend.exception.NotExistsException;
 import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
+import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
 import com.example.backend.security.AppUserService;
 import com.example.backend.security.model.AppUserResponse;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,19 +39,27 @@ public class WorkoutService {
     }
 
     public Workout createWorkout(WorkoutDTO workoutDTO, User user) throws AlreadyExistsException, UsernameNotFoundException {
+        // Filter workouts assigned to the user
+        AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+        List<Workout> filteredWorkoutsByUser = workoutRepo.findAllById(appUserResponse.workoutIdList());
+
+        boolean exists = filteredWorkoutsByUser.stream()
+                .anyMatch(workout -> workout.name().equals(workoutDTO.name()));
+
         // Check if the name is already in the repo
-        if (workoutRepo.existsByName(workoutDTO.name())) {
+        if (exists) {
             throw new AlreadyExistsException("Workout already exists");
         } else {
             // Save new workout
             Workout newWorkout = Workout.builder()
                     .id(idService.generateId())
                     .name(workoutDTO.name())
+                    .icon(WorkoutIcon.ARMS) // set to ARMS to save in the repo for future feature
                     .exerciseIdList(workoutDTO.exerciseIdList())
+                    .dateList(new ArrayList<>())
                     .build();
             workoutRepo.save(newWorkout);
             // Update user with new workout ID
-            AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
             appUserResponse.workoutIdList().add(newWorkout.id());
             appUserService.updateUser(appUserResponse);
 
@@ -63,7 +73,9 @@ public class WorkoutService {
             Workout updatedWorkout = Workout.builder()
                     .id(id)
                     .name(workoutDTO.name())
+                    .icon(workoutDTO.icon())
                     .exerciseIdList(workoutDTO.exerciseIdList())
+                    .dateList(workoutDTO.dateList())
                     .build();
             return workoutRepo.save(updatedWorkout);
 

@@ -36,7 +36,7 @@ export default function Sidebar({isOpen, setIsOpen, logoutButtonClick, appUser}:
                                     navigate("/exercises")
                                 }}
                                 className="px-4 py-3 bg-zinc-500 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
-                                exercises
+                                Exercises
                             </button>
                             <button
                                 type={"button"}
@@ -45,7 +45,7 @@ export default function Sidebar({isOpen, setIsOpen, logoutButtonClick, appUser}:
                                     navigate("/workouts")
                                 }}
                                 className="px-4 py-3 bg-zinc-500 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
-                                workouts
+                                Workouts
                             </button>
                         </div>
                         <ButtonWithIcon icon={"/logout-icon.png"} type={"button"} onClick={handleLogoutButtonClick} />
