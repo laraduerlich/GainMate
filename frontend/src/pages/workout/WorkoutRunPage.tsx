@@ -9,10 +9,11 @@ import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 type WorkoutRunProps = {
     workout: Workout | undefined,
     exercises: Exercise[],
+    getAllExercises: () => void
     getWorkoutById: (id: string) => Promise<AxiosResponse>,
 }
 
-export default function WorkoutRunPage({workout, exercises, getWorkoutById}: WorkoutRunProps) {
+export default function WorkoutRunPage({workout, exercises, getAllExercises, getWorkoutById}: WorkoutRunProps) {
 
     const {id} = useParams<{id: string}>()
     const navigate = useNavigate()
@@ -42,7 +43,7 @@ export default function WorkoutRunPage({workout, exercises, getWorkoutById}: Wor
         if (id !== undefined){
             getWorkoutById(id)
         }
-
+        getAllExercises()
     }, [id]);
 
     return (

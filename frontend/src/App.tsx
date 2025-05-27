@@ -145,6 +145,7 @@ function App() {
                               <WorkoutRunPage
                                   workout={workout}
                                   exercises={allExercises}
+                                  getAllExercises={getAllExercises}
                                   getWorkoutById={getWorkoutById}
                               />}
                           />
