@@ -41,7 +41,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
             progressList: [...editExercise.progressList || [],
                 {
                     date: formattedDate,
-                    sets: [...sets, newSet]
+                    sets: sets
                 }]
         })
 
@@ -51,12 +51,18 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
     }
 
     const handleDoneButtonClick = () => {
-        updateExercise(editExercise);
+        updateExercise(editExercise)
+
+        // reset Sets
+        setSets([])
 
         navigate("/start-workout/" + workoutId)
     }
 
     const handleBackButtonClick = () => {
+        // reset Sets
+        setSets([])
+
         navigate("/start-workout/" + workoutId)
     }
 
