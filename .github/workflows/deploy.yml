@@ -3,7 +3,7 @@ name: "Deploy App"
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-frontend:
@@ -13,7 +13,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       - name: Build Frontend
         working-directory: frontend
@@ -35,14 +35,14 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: frontend-build
-          path: backend/src/resources/static
+          path: backend/src/main/resources/static
 
-      - name: Setup JDK
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: "21"
-          distribution: "temurin"
-          cache: "maven"
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
 
       - name: Build with maven
         run: mvn -B package --file backend/pom.xml
@@ -60,20 +60,20 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: gainmate.jar
+          name: app.jar
           path: backend/target
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKERHUB_PASSWORD}}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{secrets.DOCKERHUB_TAG}}
+          tags: ${{ secrets.DOCKERHUB_TAG }}
           context: .
 
   deploy:
@@ -83,4 +83,4 @@ jobs:
     steps:
       - name: Trigger Render.com Deployment
         run: |
-          curl -X POST ${{secrets.RENDER_DEPLOY_HOOK}}
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
