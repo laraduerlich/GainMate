@@ -41,7 +41,7 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
             progressList: [...editExercise.progressList || [],
                 {
                     date: formattedDate,
-                    sets: [...sets, newSet]
+                    sets: sets
                 }]
         })
 
@@ -51,12 +51,18 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
     }
 
     const handleDoneButtonClick = () => {
-        updateExercise(editExercise);
+        updateExercise(editExercise)
+
+        // reset Sets
+        setSets([])
 
         navigate("/start-workout/" + workoutId)
     }
 
     const handleBackButtonClick = () => {
+        // reset Sets
+        setSets([])
+
         navigate("/start-workout/" + workoutId)
     }
 
@@ -91,42 +97,43 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
     return (
         <>
             <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
+            <br />
             <p>Datum: {formattedDate}</p>
+            <br />
             <div>
                 <form onSubmit={handleAddButtonClick}>
                     <div>
-                        <label>
-                            Reps:
-                            <input
-                                type="number"
-                                value={reps}
-                                onChange={(event: ChangeEvent<HTMLInputElement>) => setReps(event.target.value)}
-                                min="1"
-                                step="1"
-                                required
-                                className="text-center"
-                            />
-                        </label>
-                        <br />
-                        <label>
-                            Weight (kg):
-                            <input
-                                type="number"
-                                value={weight}
-                                onChange={(event: ChangeEvent<HTMLInputElement>) => setWeight(event.target.value)}
-                                min="1"
-                                step="0.5"
-                                required
-                                className="text-center"
-                            />
-                        </label>
+                        <input
+                            id={"reps"}
+                            name={"Reps"}
+                            placeholder={"Reps..."}
+                            type="number"
+                            value={reps}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => setReps(event.target.value)}
+                            min="1"
+                            step="1"
+                            required
+                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                        />
+                        <input
+                            id={"weight"}
+                            name={"Weight"}
+                            placeholder={"Weight in kg..."}
+                            type="number"
+                            value={weight}
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => setWeight(event.target.value)}
+                            min="1"
+                            step="0.5"
+                            required
+                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                        />
                     </div>
                     <div className="mt-3">
                         <ButtonWithIcon icon={"/add-icon.png"} type={"submit"} />
                     </div>
                 </form>
             </div>
-            <div className="max-w-screen-xl mx-auto">
+            <div>
                 <table className="mt-3 ml text-xs w-[350px]">
                     <thead className="bg-zinc-800">
                         <tr className="align-middle">
