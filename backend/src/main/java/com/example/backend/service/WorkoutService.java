@@ -94,8 +94,4 @@ public class WorkoutService {
             throw new NotExistsException("Workout with id " + id + " does not exist");
         }
     }
-
-    public void deleteAllWorkouts(List<String> workoutIds) {
-        workoutRepo.deleteAllById(workoutIds);
-    }
 }

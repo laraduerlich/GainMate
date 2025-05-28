@@ -193,18 +193,4 @@ class WorkoutServiceTest {
             assertEquals("Workout with id 2 does not exist", e.getMessage());
         }
     }
-
-    // --------------------------------------- DELETE ALL --------------------------------------
-    @Test
-    void deleteAllWorkouts_shouldDeleteAllWorkoutsFromList_whenCalledWithIdList() {
-        // GIVEN
-        WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
-        List<String> workoutIds = List.of("1", "2", "3");
-
-        // WHEN
-        workoutService.deleteAllWorkouts(workoutIds);
-
-        // THEN
-        verify(workoutRepo).deleteAllById(anyList());
-    }
 }

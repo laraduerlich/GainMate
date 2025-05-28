@@ -114,8 +114,4 @@ public class ExerciseService {
             throw new NotExistsException("Exercise with id " + id + " does not exist");
         }
     }
-
-    public void deleteAllExercise(List<String> exerciseIds) {
-        exerciseRepo.deleteAllById(exerciseIds);
-    }
 }

@@ -2,6 +2,8 @@ package com.example.backend.service;
 
 import com.example.backend.exception.AlreadyExistsException;
 import com.example.backend.repo.AppUserRepo;
+import com.example.backend.repo.ExerciseRepo;
+import com.example.backend.repo.WorkoutRepo;
 import com.example.backend.security.model.AppUser;
 import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
@@ -18,11 +20,11 @@ import java.util.ArrayList;
 public class AppUserService {
 
     private final AppUserRepo appUserRepo;
+    private final ExerciseRepo exerciseRepo;
+    private final WorkoutRepo workoutRepo;
+
     private final PasswordEncoder passwordEncoder;
     private final IdService idService;
-
-    private final ExerciseService exerciseService;
-    private final WorkoutService workoutService;
 
     public AppUserResponse findByUsername(String username) throws UsernameNotFoundException {
         AppUser appUser = appUserRepo.findByUsername(username)
@@ -76,8 +78,8 @@ public class AppUserService {
                 .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
 
         // delete all workouts and exercises
-        exerciseService.deleteAllExercise(appUser.exerciseIdList());
-        workoutService.deleteAllWorkouts(appUser.workoutIdList());
+        workoutRepo.deleteAllById(appUser.workoutIdList());
+        exerciseRepo.deleteAllById(appUser.exerciseIdList());
 
         appUserRepo.delete(appUser);
     }

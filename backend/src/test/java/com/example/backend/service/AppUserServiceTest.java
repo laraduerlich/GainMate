@@ -1,6 +1,8 @@
 package com.example.backend.service;
 
 import com.example.backend.repo.AppUserRepo;
+import com.example.backend.repo.ExerciseRepo;
+import com.example.backend.repo.WorkoutRepo;
 import com.example.backend.security.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.User;
@@ -17,17 +19,17 @@ import static org.mockito.Mockito.*;
 class AppUserServiceTest {
 
     private final AppUserRepo appUserRepo = mock(AppUserRepo.class);
+    private final ExerciseRepo exerciseRepo = mock(ExerciseRepo.class);
+    private final WorkoutRepo workoutRepo = mock(WorkoutRepo.class);
+
     private final PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
     private final IdService idService = mock(IdService.class);
-
-    private final ExerciseService exerciseService = mock(ExerciseService.class);
-    private final WorkoutService workoutService = mock(WorkoutService.class);
 
     // --------------------------------------- DELETE USER --------------------------------------
     @Test
     void deleteUser_shouldDeleteUser_whenCalledWithValidUser() throws UsernameNotFoundException {
         // GIVEN
-        AppUserService appUserService = new AppUserService(appUserRepo, passwordEncoder, idService, exerciseService, workoutService);
+        AppUserService appUserService = new AppUserService(appUserRepo, exerciseRepo, workoutRepo, passwordEncoder, idService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
 
         when(appUserRepo.findByUsername(user.getUsername())).thenReturn(Optional.ofNullable(AppUser.builder().build()));
@@ -37,14 +39,14 @@ class AppUserServiceTest {
 
         // THEN
         verify(appUserRepo).delete(any());
-        verify(exerciseService).deleteAllExercise(any());
-        verify(workoutService).deleteAllWorkouts(any());
+        verify(exerciseRepo).deleteAllById(any());
+        verify(workoutRepo).deleteAllById(any());
     }
 
     @Test
     void deleteUser_shouldThrowException_whenCalledWithInvalidUser() throws UsernameNotFoundException {
         // GIVEN
-        AppUserService appUserService = new AppUserService(appUserRepo, passwordEncoder, idService, exerciseService, workoutService);
+        AppUserService appUserService = new AppUserService(appUserRepo, exerciseRepo, workoutRepo, passwordEncoder, idService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
 
         when(appUserRepo.findByUsername(user.getUsername())).thenReturn(Optional.empty());

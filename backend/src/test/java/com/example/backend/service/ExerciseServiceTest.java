@@ -219,19 +219,4 @@ class ExerciseServiceTest {
             assertEquals("Exercise with id " + id + " does not exist", e.getMessage());
         }
     }
-
-    // --------------------------------------- DELETE ALL --------------------------------------
-    @Test
-    void deleteAllExercises_shouldDeleteAllExercisesFromList_whenCalledWithIdList() {
-        // GIVEN
-        ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
-        List<String> exerciseIds = List.of("1", "2", "3");
-
-        // WHEN
-        exerciseService.deleteAllExercise(exerciseIds);
-
-        // THEN
-        verify(exerciseRepo).deleteAllById(anyList());
-    }
-
 }
