@@ -1,11 +1,12 @@
-package com.example.backend.security;
+package com.example.backend.service;
 
 import com.example.backend.exception.AlreadyExistsException;
+import com.example.backend.repo.AppUserRepo;
 import com.example.backend.security.model.AppUser;
 import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
-import com.example.backend.service.IdService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class AppUserService {
     private final AppUserRepo appUserRepo;
     private final PasswordEncoder passwordEncoder;
     private final IdService idService;
+
+    private final ExerciseService exerciseService;
+    private final WorkoutService workoutService;
 
     public AppUserResponse findByUsername(String username) throws UsernameNotFoundException {
         AppUser appUser = appUserRepo.findByUsername(username)
@@ -65,5 +69,16 @@ public class AppUserService {
                 .workoutIdList(updatedAppUserResponse.workoutIdList())
                 .build();
         appUserRepo.save(updated);
+    }
+
+    public void deleteUser(User user) throws UsernameNotFoundException {
+        AppUser appUser = appUserRepo.findByUsername(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+
+        // delete all workouts and exercises
+        exerciseService.deleteAllExercise(appUser.exerciseIdList());
+        workoutService.deleteAllWorkouts(appUser.workoutIdList());
+
+        appUserRepo.delete(appUser);
     }
 }
