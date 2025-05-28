@@ -6,7 +6,6 @@ import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
 import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
-import com.example.backend.security.AppUserService;
 import com.example.backend.security.model.AppUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -94,5 +93,9 @@ public class WorkoutService {
         } else {
             throw new NotExistsException("Workout with id " + id + " does not exist");
         }
+    }
+
+    public void deleteAllWorkouts(List<String> workoutIds) {
+        workoutRepo.deleteAllById(workoutIds);
     }
 }

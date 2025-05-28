@@ -6,7 +6,6 @@ import com.example.backend.model.Exercise;
 import com.example.backend.model.ExerciseDTO;
 import com.example.backend.model.Progress;
 import com.example.backend.repo.ExerciseRepo;
-import com.example.backend.security.AppUserService;
 import com.example.backend.security.model.AppUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -114,5 +113,9 @@ public class ExerciseService {
         } else {
             throw new NotExistsException("Exercise with id " + id + " does not exist");
         }
+    }
+
+    public void deleteAllExercise(List<String> exerciseIds) {
+        exerciseRepo.deleteAllById(exerciseIds);
     }
 }
