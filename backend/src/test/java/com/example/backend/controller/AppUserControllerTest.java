@@ -1,0 +1,68 @@
+package com.example.backend.controller;
+
+import com.example.backend.model.Exercise;
+import com.example.backend.model.Workout;
+import com.example.backend.repo.AppUserRepo;
+import com.example.backend.repo.ExerciseRepo;
+import com.example.backend.repo.WorkoutRepo;
+import com.example.backend.security.model.AppUser;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD) // Spring ApplicationContext is reloaded before each test method
+@AutoConfigureMockMvc
+class AppUserControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private AppUserRepo userRepo;
+
+    @Autowired
+    private ExerciseRepo exerciseRepo;
+
+    @Autowired
+    private WorkoutRepo workoutRepo;
+
+    // --------------------------------------- DELETE ---------------------------------------
+    @Test
+    @WithMockUser
+    void deleteUser_shouldDeleteUser_whenCalledWithValidUser() throws Exception {
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        AppUser appUser = AppUser.builder().username("testUser").exerciseIdList(List.of("1")).workoutIdList(List.of("1")).build();
+        userRepo.save(appUser);
+        exerciseRepo.save(Exercise.builder().id("1").build());
+        workoutRepo.save(Workout.builder().id("1").build());
+
+        // WHEN & WHEN
+        mockMvc.perform(delete("/api/account")
+                .with(user(user.getUsername())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteUser_shouldThrowException_whenUserIsNotFound () throws Exception {
+        // GIVEN
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+
+        mockMvc.perform(delete("/api/account")
+                .with(user(user.getUsername())))
+                .andExpect(status().isNotFound());
+    }
+}
