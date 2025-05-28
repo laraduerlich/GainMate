@@ -1,4 +1,4 @@
-package com.example.backend.security;
+package com.example.backend.repo;
 
 import com.example.backend.security.model.AppUser;
 import org.springframework.data.mongodb.repository.MongoRepository;

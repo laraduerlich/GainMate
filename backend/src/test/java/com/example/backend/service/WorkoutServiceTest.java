@@ -4,7 +4,6 @@ import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
 import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
-import com.example.backend.security.AppUserService;
 import com.example.backend.security.model.AppUserResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.User;

@@ -1,5 +1,6 @@
 package com.example.backend.security;
 
+import com.example.backend.repo.AppUserRepo;
 import com.example.backend.security.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

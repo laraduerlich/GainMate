@@ -2,6 +2,7 @@ package com.example.backend.security;
 
 import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
+import com.example.backend.service.AppUserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
