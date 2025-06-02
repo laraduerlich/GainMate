@@ -1,13 +1,13 @@
 package com.example.backend.controller;
 
+import com.example.backend.security.model.AppUserDTO;
+import com.example.backend.security.model.AppUserResponse;
 import com.example.backend.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/account")
@@ -15,6 +15,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppUserController {
 
     private final AppUserService appUserService;
+
+    @PostMapping("/register")
+    public ResponseEntity<AppUserResponse> registerUser(@RequestBody AppUserDTO newUser) {
+        try {
+            AppUserResponse response = appUserService.createUser(newUser);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<AppUserResponse> updateUser(@AuthenticationPrincipal User user) {
+        try {
+            AppUserResponse response = appUserService.updateUser(user);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User user) {

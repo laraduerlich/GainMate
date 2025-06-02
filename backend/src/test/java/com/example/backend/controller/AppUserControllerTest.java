@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -38,6 +39,49 @@ class AppUserControllerTest {
 
     @Autowired
     private WorkoutRepo workoutRepo;
+    @Autowired
+    private AppUserRepo appUserRepo;
+
+    // --------------------------------------- REGISTER ---------------------------------------
+    @Test
+    @WithMockUser
+    void registerUser_shouldReturnUserDto() throws Exception {
+        // GIVEN
+        String username = "testuser";
+
+        // WHEN & THEN
+        mockMvc.perform(post("/api/account/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                        "username": "testuser",
+                        "password": "testpassword",
+                        "name": "test"
+                        }
+"""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("test"));
+    }
+
+    @Test
+    @WithMockUser
+    void registerUser_shouldThrowException_whenUsernameIsAlreadyUsed() throws Exception {
+        // GIVEN
+        String username = "testuser";
+        appUserRepo.save(AppUser.builder().name("test").username(username).build());
+
+        // WHEN & THEN
+        mockMvc.perform(post("/api/account/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                        "username": "testuser",
+                        "password": "testpassword",
+                        "name": "test"
+                        }
+"""))
+                .andExpect(status().isBadRequest());
+    }
 
     // --------------------------------------- DELETE ---------------------------------------
     @Test

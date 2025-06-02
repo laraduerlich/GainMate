@@ -30,16 +30,6 @@ public class AuthorizationController {
         // This method is only here to make the login endpoint accessible to the frontend
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AppUserResponse> registerUser(@RequestBody AppUserDTO newUser) {
-        try {
-            AppUserResponse response = appUserService.createUser(newUser);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
     @PostMapping("/logout")
     public void logoutUser(HttpSession session) {
         session.invalidate();
