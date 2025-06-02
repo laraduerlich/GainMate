@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.security.model.AppUser;
 import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
 import com.example.backend.service.AppUserService;
@@ -27,9 +28,9 @@ public class AppUserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<AppUserResponse> updateUser(@AuthenticationPrincipal User user) {
+    public ResponseEntity<AppUserResponse> updateUser(@AuthenticationPrincipal User user, @RequestBody AppUserDTO updatedUser) {
         try {
-            AppUserResponse response = appUserService.updateUser(user);
+            AppUserResponse response = appUserService.updateUser(user, updatedUser);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

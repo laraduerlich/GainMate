@@ -83,6 +83,32 @@ class AppUserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    // --------------------------------------- UPDATE ---------------------------------------
+    @Test
+    @WithMockUser
+    void updateUser_shouldUpdateUser_whenCalledWithValidUser() throws Exception {
+        // GIVEN
+        AppUser appUser = AppUser.builder().username("testUser").build();
+        User user = new User("testUser", "testPassword", Collections.emptyList());
+        userRepo.save(appUser);
+
+        // WHEN & THEN
+        mockMvc.perform(put("/api/account/update")
+                .with(user(user.getUsername()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                        "username": "testUser2",
+                        "password": "testpassword",
+                        "name": "test"
+                        }
+"""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("testUser2"));
+
+    }
+
+
     // --------------------------------------- DELETE ---------------------------------------
     @Test
     @WithMockUser
