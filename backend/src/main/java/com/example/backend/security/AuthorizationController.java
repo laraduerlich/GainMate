@@ -1,5 +1,6 @@
 package com.example.backend.security;
 
+import com.example.backend.security.model.AppUser;
 import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
 import com.example.backend.service.AppUserService;
@@ -21,7 +22,14 @@ public class AuthorizationController {
     @GetMapping("/me")
     public ResponseEntity<AppUserResponse> getCurrentUser(@AuthenticationPrincipal User user) {
         String username = user.getUsername();
-        AppUserResponse response = appUserService.findByUsername(username);
+        AppUser appUser = appUserService.findByUsername(username);
+        AppUserResponse response = AppUserResponse.builder()
+                .id(appUser.id())
+                .username(appUser.username())
+                .name(appUser.name())
+                .exerciseIdList(appUser.exerciseIdList())
+                .workoutIdList(appUser.workoutIdList())
+                .build();
         return ResponseEntity.ok(response);
     }
 

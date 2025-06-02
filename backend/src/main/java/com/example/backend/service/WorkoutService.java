@@ -6,7 +6,8 @@ import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
 import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
-import com.example.backend.security.model.AppUserResponse;
+import com.example.backend.security.model.AppUser;
+import com.example.backend.security.model.AppUserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,10 +26,10 @@ public class WorkoutService {
     private final AppUserService appUserService;
 
     public List<Workout> getAllWorkouts(User user) throws UsernameNotFoundException {
-        AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
+        AppUser appUser = appUserService.findByUsername(user.getUsername());
         List<Workout> all = workoutRepo.findAll();
         return all.stream()
-                .filter(workout -> appUserResponse.workoutIdList().contains(workout.id()))
+                .filter(workout -> appUser.workoutIdList().contains(workout.id()))
                 .collect(Collectors.toList());
     }
 
@@ -39,8 +40,8 @@ public class WorkoutService {
 
     public Workout createWorkout(WorkoutDTO workoutDTO, User user) throws AlreadyExistsException, UsernameNotFoundException {
         // Filter workouts assigned to the user
-        AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
-        List<Workout> filteredWorkoutsByUser = workoutRepo.findAllById(appUserResponse.workoutIdList());
+        AppUser appUser = appUserService.findByUsername(user.getUsername());
+        List<Workout> filteredWorkoutsByUser = workoutRepo.findAllById(appUser.workoutIdList());
 
         boolean exists = filteredWorkoutsByUser.stream()
                 .anyMatch(workout -> workout.name().equals(workoutDTO.name()));
@@ -59,8 +60,15 @@ public class WorkoutService {
                     .build();
             workoutRepo.save(newWorkout);
             // Update user with new workout ID
-            appUserResponse.workoutIdList().add(newWorkout.id());
-            appUserService.updateUser(appUserResponse);
+            AppUserDTO updatedUser = AppUserDTO.builder()
+                    .username(appUser.username())
+                    .password(appUser.password())
+                    .name(appUser.name())
+                    .exerciseIdList(appUser.exerciseIdList())
+                    .workoutIdList(appUser.workoutIdList())
+                    .build();
+            updatedUser.workoutIdList().add(newWorkout.id());
+            appUserService.updateUser(user, updatedUser);
 
             return newWorkout;
         }
@@ -87,9 +95,16 @@ public class WorkoutService {
         if (workoutRepo.existsById(id)) {
             workoutRepo.deleteById(id);
             // Update user
-            AppUserResponse appUserResponse = appUserService.findByUsername(user.getUsername());
-            appUserResponse.workoutIdList().remove(id);
-            appUserService.updateUser(appUserResponse);
+            AppUser appUser = appUserService.findByUsername(user.getUsername());
+            AppUserDTO updatedUser = AppUserDTO.builder()
+                    .username(appUser.username())
+                    .password(appUser.password())
+                    .name(appUser.name())
+                    .exerciseIdList(appUser.exerciseIdList())
+                    .workoutIdList(appUser.workoutIdList())
+                    .build();
+            updatedUser.workoutIdList().remove(id);
+            appUserService.updateUser(user, updatedUser);
         } else {
             throw new NotExistsException("Workout with id " + id + " does not exist");
         }

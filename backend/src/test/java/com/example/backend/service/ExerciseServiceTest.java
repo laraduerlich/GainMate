@@ -5,7 +5,7 @@ import com.example.backend.model.ExerciseDTO;
 import com.example.backend.model.Progress;
 import com.example.backend.model.Sets;
 import com.example.backend.repo.ExerciseRepo;
-import com.example.backend.security.model.AppUserResponse;
+import com.example.backend.security.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.User;
 
@@ -77,7 +77,7 @@ class ExerciseServiceTest {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        AppUserResponse appUserResponse = AppUserResponse.builder().exerciseIdList(new ArrayList<>()).build();
+        AppUser appUser = AppUser.builder().exerciseIdList(new ArrayList<>()).build();
         ExerciseDTO newExercise = ExerciseDTO.builder()
                 .name("Test")
                 .note("Test")
@@ -89,9 +89,7 @@ class ExerciseServiceTest {
                 .build();
         when(idService.generateId()).thenReturn("1");
         when(exerciseRepo.save(expected)).thenReturn(expected);
-        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
-        doNothing().when(appUserService).updateUser(appUserResponse);
-
+        when(appUserService.findByUsername("testUser")).thenReturn(appUser);
 
         // WHEN
         Exercise actual = exerciseService.createExercise(newExercise, user);
@@ -107,7 +105,7 @@ class ExerciseServiceTest {
         List<Exercise> exercises = List.of(Exercise.builder().name("Test").build());
         User user = new User("testUser", "testPassword",Collections.emptyList());
         ExerciseDTO newExercise = ExerciseDTO.builder().name("Test").build();
-        when(appUserService.findByUsername(user.getUsername())).thenReturn(AppUserResponse.builder().exerciseIdList(List.of("")).build());
+        when(appUserService.findByUsername(user.getUsername())).thenReturn(AppUser.builder().exerciseIdList(List.of("")).build());
         when(exerciseRepo.findAllById(anyList())).thenReturn(exercises);
 
         // WHEN & THEN
@@ -191,10 +189,9 @@ class ExerciseServiceTest {
         // GIVEN
         ExerciseService exerciseService = new ExerciseService(exerciseRepo,idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        AppUserResponse appUserResponse = AppUserResponse.builder().exerciseIdList(new ArrayList<>()).build();
+        AppUser appUser = AppUser.builder().exerciseIdList(new ArrayList<>()).build();
         when(exerciseRepo.existsById("1")).thenReturn(true);
-        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
-        doNothing().when(appUserService).updateUser(appUserResponse);
+        when(appUserService.findByUsername("testUser")).thenReturn(appUser);
 
         // WHEN
         exerciseService.deleteExercise("1", user);

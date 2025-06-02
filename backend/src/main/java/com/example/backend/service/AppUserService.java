@@ -26,16 +26,9 @@ public class AppUserService {
     private final PasswordEncoder passwordEncoder;
     private final IdService idService;
 
-    public AppUserResponse findByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = appUserRepo.findByUsername(username)
+    public AppUser findByUsername(String username) throws UsernameNotFoundException {
+        return appUserRepo.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
-        return AppUserResponse.builder()
-                .id(appUser.id())
-                .username(appUser.username())
-                .name(appUser.name())
-                .exerciseIdList(appUser.exerciseIdList())
-                .workoutIdList(appUser.workoutIdList())
-                .build();
     }
 
     public AppUserResponse createUser(AppUserDTO newUser) throws AlreadyExistsException {
@@ -58,24 +51,28 @@ public class AppUserService {
         }
     }
 
-    public void updateUser(AppUserResponse updatedAppUserResponse) throws UsernameNotFoundException {
-        AppUser user = appUserRepo.findByUsername(updatedAppUserResponse.username())
-                .orElseThrow(() -> new UsernameNotFoundException(updatedAppUserResponse.username()));
+    public AppUserResponse updateUser(User user, AppUserDTO updatedUser) throws UsernameNotFoundException {
+        appUserRepo.findByUsername(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User" + user.getUsername() + "is not found"));
 
-        AppUser updated = AppUser.builder()
-                .id(user.id())
-                .username(user.username())
-                .password(user.password())
-                .name(user.name())
-                .exerciseIdList(updatedAppUserResponse.exerciseIdList())
-                .workoutIdList(updatedAppUserResponse.workoutIdList())
-                .build();
-        appUserRepo.save(updated);
+         String newPassword = passwordEncoder.encode(updatedUser.password());
+         AppUser updated = AppUser.builder()
+                    .username(updatedUser.username())
+                    .password(newPassword)
+                    .name(updatedUser.name())
+                    .exerciseIdList(updatedUser.exerciseIdList())
+                    .workoutIdList(updatedUser.workoutIdList())
+                    .build();
+         appUserRepo.save(updated);
+         return AppUserResponse.builder()
+                 .username(updated.username())
+                 .name(updated.name())
+                 .build();
     }
 
     public void deleteUser(User user) throws UsernameNotFoundException {
         AppUser appUser = appUserRepo.findByUsername(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(user.getUsername()));
+                .orElseThrow(() -> new UsernameNotFoundException("User" + user.getUsername() + "is not found"));
 
         // delete all workouts and exercises
         workoutRepo.deleteAllById(appUser.workoutIdList());

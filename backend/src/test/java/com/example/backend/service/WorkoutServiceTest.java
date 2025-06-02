@@ -4,7 +4,7 @@ import com.example.backend.model.Workout;
 import com.example.backend.model.WorkoutDTO;
 import com.example.backend.model.WorkoutIcon;
 import com.example.backend.repo.WorkoutRepo;
-import com.example.backend.security.model.AppUserResponse;
+import com.example.backend.security.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.User;
 
@@ -78,7 +78,7 @@ class WorkoutServiceTest {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        AppUserResponse appUserResponse = AppUserResponse.builder().workoutIdList(new ArrayList<>()).build();
+        AppUser appUser = AppUser.builder().workoutIdList(new ArrayList<>()).build();
         WorkoutDTO workout = new WorkoutDTO("Test", WorkoutIcon.ARMS, List.of("1", "2", "3"), Collections.emptyList());
         Workout expected = Workout.builder()
                 .id("1")
@@ -89,9 +89,7 @@ class WorkoutServiceTest {
                 .build();
         when(idService.generateId()).thenReturn("1");
         when(workoutRepo.save(expected)).thenReturn(expected);
-        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
-        doNothing().when(appUserService).updateUser(appUserResponse);
-
+        when(appUserService.findByUsername("testUser")).thenReturn(appUser);
 
         // WHEN
         Workout actual = workoutService.createWorkout(workout, user);
@@ -105,7 +103,7 @@ class WorkoutServiceTest {
         List<Workout> workouts = List.of(Workout.builder().name("Test").build());
         User user = new User("testUser", "testPassword", Collections.emptyList());
         WorkoutDTO workout = WorkoutDTO.builder().name("Test").build();
-        when(appUserService.findByUsername(user.getUsername())).thenReturn(AppUserResponse.builder().workoutIdList(List.of("")).build());
+        when(appUserService.findByUsername(user.getUsername())).thenReturn(AppUser.builder().workoutIdList(List.of("")).build());
         when(workoutRepo.findAllById(anyList())).thenReturn(workouts);
 
         // WHEN & THEN
@@ -164,10 +162,9 @@ class WorkoutServiceTest {
         // GIVEN
         WorkoutService workoutService = new WorkoutService(workoutRepo, idService, appUserService);
         User user = new User("testUser", "testPassword", Collections.emptyList());
-        AppUserResponse appUserResponse = AppUserResponse.builder().workoutIdList(new ArrayList<>()).build();
+        AppUser appUser = AppUser.builder().workoutIdList(new ArrayList<>()).build();
         when(workoutRepo.existsById("1")).thenReturn(true);
-        when(appUserService.findByUsername("testUser")).thenReturn(appUserResponse);
-        doNothing().when(appUserService).updateUser(appUserResponse);
+        when(appUserService.findByUsername("testUser")).thenReturn(appUser);
 
         // WHEN
         workoutService.deleteWorkout("1", user);
