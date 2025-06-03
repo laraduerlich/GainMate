@@ -1,5 +1,5 @@
 import './App.css'
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import OverviewPage from "./pages/OverviewPage.tsx";
 import ExerciseDashboardPage from "./pages/exercise/ExerciseDashboardPage.tsx";
 import ExerciseCreatePage from "./pages/exercise/ExerciseCreatePage.tsx";
@@ -18,13 +18,15 @@ import Sidebar from "./components/Sidebar.tsx";
 import {AppUser} from "./types/AppUser.tsx";
 import axios from "axios";
 import ProtectedRoutes from "./pages/ProtectedRoutes.tsx";
-import LoginPage from "./pages/LoginPage.tsx";
-import RegisterPage from "./pages/RegisterPage.tsx";
+import LoginPage from "./pages/user/LoginPage.tsx";
+import RegisterPage from "./pages/user/RegisterPage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
+import UserPage from "./pages/user/UserPage.tsx";
+import GoodbyePage from "./pages/user/GoodbyePage.tsx";
 
 function App() {
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const {allExercises, exercise, getAllExercises, getExerciseById, createExercise, updateExercise, deleteExercise} = UseExerciseData()
     const {allWorkouts, workout, getAllWorkouts, getWorkoutById, createWorkout, updateWorkout, deleteWorkout} = UseWorkoutData()
@@ -43,9 +45,7 @@ function App() {
     const fetchUser = () => {
         axios.get("/api/auth/me")
             .then((response) => {
-                console.log(response.data)
                 setAppUser(response.data)
-                navigate("/welcome")
             })
             .catch(error => {
                 setAppUser(null)
@@ -54,13 +54,12 @@ function App() {
     }
 
     // logout
-    const handleLogoutButtonClick = () => {
+    const handleLogout = () => {
         axios.post("/api/auth/logout")
             .then(() => {
                 setAppUser(null)
                 fetchUser()
-                setIsSidebarOpen(!isSidebarOpen)
-                navigate("/login")
+                setIsSidebarOpen(false)
             })
             .catch(error => {
                 console.error("User could not logout", error)
@@ -73,7 +72,7 @@ function App() {
 
     return (
       <>
-          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} logoutButtonClick={handleLogoutButtonClick} appUser={appUser}/>
+          <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} logoutButtonClick={handleLogout} appUser={appUser}/>
           <div className="flex flex-col items-center justify-center h-screen-dvh bg-gray-100 dark:bg-zinc-700">
               <Header toggleSidebar={toggleSidebar}/>
 
@@ -83,11 +82,18 @@ function App() {
                       <Route path="/login" element={<LoginPage fetchUser={fetchUser} />} />
                       <Route path="/register" element={<RegisterPage />} />
                       <Route path="/" element={<LandingPage />} />
+                      <Route path="/goodbye" element={<GoodbyePage />} />
 
                       {/* Protected Routes */}
                       <Route element={<ProtectedRoutes appUser={appUser} />}>
                           <Route path="/welcome" element={
                               <OverviewPage appUser={appUser}
+                              />}
+                          />
+                          <Route path={"/account"} element={
+                              <UserPage appUser={appUser}
+                                        fetchUser={fetchUser}
+                                        logout={handleLogout}
                               />}
                           />
 

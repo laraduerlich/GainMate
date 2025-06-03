@@ -23,8 +23,12 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
             }
             })
             .then(() => {
-                fetchUser();
-                navigate("/welcome");
+                return fetchUser()
+            })
+            .then(() => {
+                setTimeout(() => { // minimum delay so that React can take over the state
+                    navigate("/welcome");
+                }, 300);
             })
             .catch(() => {
                 console.error("Invalid credentials")
