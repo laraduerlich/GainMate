@@ -56,6 +56,7 @@ public class AppUserService {
         AppUser appUser = appUserRepo.findByUsername(user.getUsername())
                 .orElseThrow(() -> new NotExistsException("User" + user.getUsername() + "is not found"));
 
+        // Check if the password was changed and encode the new one
         if (updatedUser.password() != null && !updatedUser.password().isBlank()) {
             String newPassword = passwordEncoder.encode(updatedUser.password());
             AppUser updated = AppUser.builder()
@@ -71,7 +72,7 @@ public class AppUserService {
                     .username(updated.username())
                     .name(updated.name())
                     .build();
-        } else {
+        } else { // otherwise the old password will be used
             AppUser updated = AppUser.builder()
                     .id(appUser.id())
                     .password(appUser.password())
