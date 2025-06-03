@@ -7,3 +7,11 @@ export type AppUser = {
     exerciseIdList?: string[]
     workoutIdList?: string[]
 }
+
+export type AppUserDTO = {
+    username: string
+    password?: string
+    name: string
+    exerciseIdList?: string[]
+    workoutIdList?: string[]
+}
