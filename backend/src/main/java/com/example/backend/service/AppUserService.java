@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.exception.AlreadyExistsException;
+import com.example.backend.exception.NotExistsException;
 import com.example.backend.repo.AppUserRepo;
 import com.example.backend.repo.ExerciseRepo;
 import com.example.backend.repo.WorkoutRepo;
@@ -51,28 +52,45 @@ public class AppUserService {
         }
     }
 
-    public AppUserResponse updateUser(User user, AppUserDTO updatedUser) throws UsernameNotFoundException {
-        appUserRepo.findByUsername(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User" + user.getUsername() + "is not found"));
+    public AppUserResponse updateUser(User user, AppUserDTO updatedUser) throws NotExistsException {
+        AppUser appUser = appUserRepo.findByUsername(user.getUsername())
+                .orElseThrow(() -> new NotExistsException("User" + user.getUsername() + "is not found"));
 
-         String newPassword = passwordEncoder.encode(updatedUser.password());
-         AppUser updated = AppUser.builder()
-                    .username(updatedUser.username())
+        if (updatedUser.password() != null && !updatedUser.password().isBlank()) {
+            String newPassword = passwordEncoder.encode(updatedUser.password());
+            AppUser updated = AppUser.builder()
+                    .id(appUser.id())
                     .password(newPassword)
-                    .name(updatedUser.name())
-                    .exerciseIdList(updatedUser.exerciseIdList())
-                    .workoutIdList(updatedUser.workoutIdList())
+                    .username(updatedUser.username() != null ? updatedUser.username() : appUser.username())
+                    .name(updatedUser.name() != null ? updatedUser.name() : appUser.name())
+                    .exerciseIdList(updatedUser.exerciseIdList() != null ? updatedUser.exerciseIdList() : appUser.exerciseIdList())
+                    .workoutIdList(updatedUser.workoutIdList() != null ? updatedUser.workoutIdList() : appUser.workoutIdList())
                     .build();
-         appUserRepo.save(updated);
-         return AppUserResponse.builder()
-                 .username(updated.username())
-                 .name(updated.name())
-                 .build();
+            appUserRepo.save(updated);
+            return AppUserResponse.builder()
+                    .username(updated.username())
+                    .name(updated.name())
+                    .build();
+        } else {
+            AppUser updated = AppUser.builder()
+                    .id(appUser.id())
+                    .password(appUser.password())
+                    .username(updatedUser.username() != null ? updatedUser.username() : appUser.username())
+                    .name(updatedUser.name() != null ? updatedUser.name() : appUser.name())
+                    .exerciseIdList(updatedUser.exerciseIdList() != null ? updatedUser.exerciseIdList() : appUser.exerciseIdList())
+                    .workoutIdList(updatedUser.workoutIdList() != null ? updatedUser.workoutIdList() : appUser.workoutIdList())
+                    .build();
+            appUserRepo.save(updated);
+            return AppUserResponse.builder()
+                    .username(updated.username())
+                    .name(updated.name())
+                    .build();
+        }
     }
 
-    public void deleteUser(User user) throws UsernameNotFoundException {
+    public void deleteUser(User user) throws NotExistsException {
         AppUser appUser = appUserRepo.findByUsername(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User" + user.getUsername() + "is not found"));
+                .orElseThrow(() -> new NotExistsException("User" + user.getUsername() + "is not found"));
 
         // delete all workouts and exercises
         workoutRepo.deleteAllById(appUser.workoutIdList());
