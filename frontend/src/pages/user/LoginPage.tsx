@@ -1,5 +1,5 @@
 import {FormEvent, useState} from "react";
-import ButtonWithIcon from "../components/ButtonWithIcon.tsx";
+import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
