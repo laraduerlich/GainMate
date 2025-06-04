@@ -1,6 +1,6 @@
 import {FormEvent, useState} from "react";
-import {AppUser} from "../types/AppUser.tsx";
-import ButtonWithIcon from "../components/ButtonWithIcon.tsx";
+import {AppUser} from "../../types/AppUser.tsx";
+import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -24,7 +24,7 @@ export default function RegisterPage() {
     const handleRegisterButtonClick = (event: FormEvent) => {
         event.preventDefault()
 
-        axios.post("/api/auth/register", newAppUser)
+        axios.post("/api/account/register", newAppUser)
             .then(() =>
                 navigate("/login")
             )

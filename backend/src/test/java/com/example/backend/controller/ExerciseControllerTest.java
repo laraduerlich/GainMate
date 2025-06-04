@@ -2,7 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Exercise;
 import com.example.backend.repo.ExerciseRepo;
-import com.example.backend.security.AppUserRepo;
+import com.example.backend.repo.AppUserRepo;
 import com.example.backend.security.model.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

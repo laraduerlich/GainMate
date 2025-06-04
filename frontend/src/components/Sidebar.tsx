@@ -15,6 +15,7 @@ export default function Sidebar({isOpen, setIsOpen, logoutButtonClick, appUser}:
 
     const handleLogoutButtonClick = () => {
         logoutButtonClick()
+        navigate("/login")
     }
 
     return (
@@ -46,6 +47,15 @@ export default function Sidebar({isOpen, setIsOpen, logoutButtonClick, appUser}:
                                 }}
                                 className="px-4 py-3 bg-zinc-500 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
                                 Workouts
+                            </button>
+                            <button
+                                type={"button"}
+                                onClick={() => {
+                                    setIsOpen(!isOpen)
+                                    navigate("/account")
+                                }}
+                                className="px-4 py-3 bg-zinc-500 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
+                                Account
                             </button>
                         </div>
                         <ButtonWithIcon icon={"/logout-icon.png"} type={"button"} onClick={handleLogoutButtonClick} />

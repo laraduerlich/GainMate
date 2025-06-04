@@ -31,7 +31,6 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     const handleSaveButtonClick = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         updateExercise(editExercise)
-        console.log("test")
         setIsEditing(false)
     }
 
