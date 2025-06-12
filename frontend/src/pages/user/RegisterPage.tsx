@@ -69,13 +69,13 @@ export default function RegisterPage() {
                         className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
                     <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/add-icon.png"} type={"submit"} />
+                        <ButtonWithIcon icon={"/icon/user/add-icon.png"} type={"submit"} />
                     </div>
                 </form>
             </div>
             <div className="mt-5 flex justify-center gap-4">
                 <h3>Already register?</h3>
-                <ButtonWithIcon icon={"/login-icon.png"} type={"button"} onClick={handleGoToLoginButton} />
+                <ButtonWithIcon icon={"/icon/user/login-icon.png"} type={"button"} onClick={handleGoToLoginButton} />
             </div>
         </>
     )
