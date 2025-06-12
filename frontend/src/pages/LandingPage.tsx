@@ -26,12 +26,12 @@ export default function LandingPage() {
             <br></br>
             <div className="mt-5 flex justify-center gap-4">
                 <h3>Already register?</h3>
-                <ButtonWithIcon icon={"/login-icon.png"} type={"button"} onClick={handleGoToLoginButtonClick} />
+                <ButtonWithIcon icon={"/icon/user/login-icon.png"} type={"button"} onClick={handleGoToLoginButtonClick} />
             </div>
             <br></br>
             <div className="mt-5 flex justify-center gap-4">
                 <h3>Let's go to Register</h3>
-                <ButtonWithIcon icon={"/register-icon.png"} type={"button"} onClick={handleGoToRegisterButtonClick} />
+                <ButtonWithIcon icon={"/icon/user/register-icon.png"} type={"button"} onClick={handleGoToRegisterButtonClick} />
             </div>
         </>
     )
