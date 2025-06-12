@@ -54,7 +54,8 @@ export default function Calendar({year, month, events}: CalendarProps) {
                                         <img
                                             src={event.iconUrl}
                                             alt=""
-                                            className="w-4 h-4"                                        />
+                                            className="w-4 h-4"
+                                        />
                                     </div>
                                 )}
                             </div>
