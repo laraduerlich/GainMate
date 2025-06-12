@@ -1,7 +1,7 @@
-import {Workout} from "../../types/Workout.tsx";
+import {Workout, WorkoutDTO} from "../../types/Workout.tsx";
 import {Exercise} from "../../types/Exercise.tsx";
 import {AxiosResponse} from "axios";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import List from "../../components/List.tsx";
 import ButtonWithIcon from "../../components/ButtonWithIcon.tsx";
@@ -11,12 +11,15 @@ type WorkoutRunProps = {
     exercises: Exercise[],
     getAllExercises: () => void
     getWorkoutById: (id: string) => Promise<AxiosResponse>,
+    updateWorkout: (updatedWorkout: WorkoutDTO, id: string) => void
 }
 
-export default function WorkoutRunPage({workout, exercises, getAllExercises, getWorkoutById}: WorkoutRunProps) {
+export default function WorkoutRunPage({workout, exercises, getAllExercises, getWorkoutById, updateWorkout}: WorkoutRunProps) {
 
-    const {id} = useParams<{id: string}>()
+    const {workoutId} = useParams<{workoutId: string}>()
     const navigate = useNavigate()
+
+    const [formattedDate, setFormattedDate] = useState("");
 
     // exercises form the workout
     const openExerciseList: Exercise[] = exercises.filter((exercise: Exercise) =>
@@ -26,11 +29,21 @@ export default function WorkoutRunPage({workout, exercises, getAllExercises, get
     // button handler
     const handleStartButtonClick = (exerciseId: string | undefined) => {
         if (exerciseId !== undefined) {
-            navigate("/workout/"+ id + "/exercise/" + exerciseId)
+            navigate("/workout/"+ workoutId + "/exercise/" + exerciseId)
         }
     }
 
     const handleFinishedButtonClick = () => {
+        if (workout !== undefined && workoutId !== undefined) {
+            const workoutDTO: WorkoutDTO = {
+                name: workout.name,
+                icon: workout.icon,
+                exerciseIdList: workout.exerciseIdList,
+                dateList: [...(workout.dateList || []), formattedDate]
+            }
+            console.log(workoutDTO.dateList)
+            updateWorkout(workoutDTO, workoutId)
+        }
         navigate("/workouts")
     }
 
@@ -38,13 +51,26 @@ export default function WorkoutRunPage({workout, exercises, getAllExercises, get
         navigate("/workouts")
     }
 
-    // Load workout
+    // Load workout, all exercises & current date
     useEffect(() => {
-        if (id !== undefined){
-            getWorkoutById(id)
+        if (workoutId !== undefined){
+            getWorkoutById(workoutId)
         }
+
         getAllExercises()
-    }, [id]);
+
+        // Get current date
+        const date = new Date();
+
+        // Day and month always with leading zero if they are single-digit
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+
+        // Format "YYYY-MM-DD"
+        const localDate = `${year}-${month}-${day}`;
+        setFormattedDate(localDate)
+    }, [workoutId]);
 
     return (
         <>
