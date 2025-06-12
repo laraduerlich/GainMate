@@ -14,7 +14,7 @@ type ExerciseViewProps = {
 
 export default function ExerciseViewPage ({exercise, getExerciseById, updateExercise, deleteExercise}: ExerciseViewProps) {
 
-    const {id} = useParams<{id: string}>()
+    const {exerciseId} = useParams<{exerciseId: string}>()
     const navigate = useNavigate()
     const [isEditing, setIsEditing] = useState(false)
     const [editExercise, setEditExercise] = useState<Exercise>(exercise ? exercise : {id: "", name: ""})
@@ -43,8 +43,8 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     }
 
     const handleDeleteButtonClick = () => {
-        if (id !== undefined) {
-            deleteExercise(id)
+        if (exerciseId !== undefined) {
+            deleteExercise(exerciseId)
         } else {
             console.log("Id is undefined")
         }
@@ -52,8 +52,8 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
 
     // Load exercise
     useEffect(() => {
-        if (id !== undefined) {
-            getExerciseById(id)
+        if (exerciseId !== undefined) {
+            getExerciseById(exerciseId)
                 .then((response) => {
                     return setEditExercise({
                         id: response.data.id,
@@ -62,7 +62,7 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
                     })
                 })
         }
-    }, [id]);
+    }, [exerciseId]);
 
     return (
         <>

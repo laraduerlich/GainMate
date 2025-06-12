@@ -18,6 +18,10 @@ export default function OverviewPage({appUser}: OverviewPageProps) {
         navigate("/workouts")
     }
 
+    const handleGoToProgressPage = () => {
+        navigate("/progress")
+    }
+
     const handleGoToUserPage = () => {
         navigate("/account")
     }
@@ -39,6 +43,12 @@ export default function OverviewPage({appUser}: OverviewPageProps) {
                     onClick={handleGoToWorkoutDashboard}
                     className="px-4 py-3 bg-zinc-400 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
                     Workouts
+                </button>
+                <button
+                    type={"button"}
+                    onClick={handleGoToProgressPage}
+                    className="px-4 py-3 bg-zinc-400 text-black font-semibold rounded-lg shadow-lg transform transition duration-300 hover:bg-zinc-200 hover:scale-105 focus:outline-none">
+                    Progress
                 </button>
                 <button
                     type={"button"}

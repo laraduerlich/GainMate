@@ -1,7 +1,6 @@
 package com.example.backend.security;
 
 import com.example.backend.security.model.AppUser;
-import com.example.backend.security.model.AppUserDTO;
 import com.example.backend.security.model.AppUserResponse;
 import com.example.backend.service.AppUserService;
 import jakarta.servlet.http.HttpSession;
@@ -21,8 +20,7 @@ public class AuthorizationController {
 
     @GetMapping("/me")
     public ResponseEntity<AppUserResponse> getCurrentUser(@AuthenticationPrincipal User user) {
-        String username = user.getUsername();
-        AppUser appUser = appUserService.findByUsername(username);
+        AppUser appUser = appUserService.findByUsername(user.getUsername());
         AppUserResponse response = AppUserResponse.builder()
                 .id(appUser.id())
                 .username(appUser.username())

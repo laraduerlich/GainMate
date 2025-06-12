@@ -63,12 +63,12 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
                         className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
                     />
                     <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/login-icon.png"} type={"submit"} />
+                        <ButtonWithIcon icon={"/icon/user/login-icon.png"} type={"submit"} />
                     </div>
                 </form>
                 <div className="mt-5 flex justify-center gap-4">
                     <h3>No account yet?</h3>
-                    <ButtonWithIcon icon={"/register-icon.png"} type={"button"} onClick={handleGoToRegisterButtonClick} />
+                    <ButtonWithIcon icon={"/icon/user/register-icon.png"} type={"button"} onClick={handleGoToRegisterButtonClick} />
                 </div>
             </div>
         </>

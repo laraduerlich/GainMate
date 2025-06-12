@@ -23,6 +23,7 @@ import RegisterPage from "./pages/user/RegisterPage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
 import UserPage from "./pages/user/UserPage.tsx";
 import GoodbyePage from "./pages/user/GoodbyePage.tsx";
+import ProgressPage from "./pages/user/ProgressPage.tsx";
 
 function App() {
 
@@ -96,6 +97,11 @@ function App() {
                                         logout={handleLogout}
                               />}
                           />
+                          <Route path={"/progress"} element={
+                              <ProgressPage workouts={allWorkouts}
+                                            getAllWorkouts={getAllWorkouts}
+                              />}
+                          />
 
                           {/* Exercise Pages */}
                           <Route path="/exercises" element={
@@ -109,7 +115,7 @@ function App() {
                                   createExercise={createExercise}
                               />}
                           />
-                          <Route path="/exercise/:id" element={
+                          <Route path="/exercise/:exerciseId" element={
                               <ExerciseViewPage
                                   exercise={exercise}
                                   getExerciseById={getExerciseById}
@@ -137,7 +143,7 @@ function App() {
                                   getAllExercises={getAllExercises}
                               />}
                           />
-                          <Route path="/workout/:id" element={
+                          <Route path="/workout/:workoutId" element={
                               <WorkoutViewPage
                                   workout={workout}
                                   exercises={allExercises}
@@ -147,12 +153,13 @@ function App() {
                                   deleteWorkout={deleteWorkout}
                               />}
                           />
-                          <Route path="/start-workout/:id" element={
+                          <Route path="/start-workout/:workoutId" element={
                               <WorkoutRunPage
                                   workout={workout}
                                   exercises={allExercises}
                                   getAllExercises={getAllExercises}
                                   getWorkoutById={getWorkoutById}
+                                  updateWorkout={updateWorkout}
                               />}
                           />
                       </Route>
