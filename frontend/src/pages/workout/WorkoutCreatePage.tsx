@@ -18,7 +18,7 @@ export default function WorkoutCreatePage({createWorkout, exercises, getAllExerc
     return (
         <>
             <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
-                Create a workout
+                Create a Workout
             </h2>
             <div>
                 <WorkoutCreateForm createWorkout={createWorkout} exercises={exercises}/>

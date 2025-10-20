@@ -74,6 +74,7 @@ export default function WorkoutRunPage({workout, exercises, getAllExercises, get
 
     return (
         <>
+
             <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
                 {workout? workout.name : ""}
             </h2>

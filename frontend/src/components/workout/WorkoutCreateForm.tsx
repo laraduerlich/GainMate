@@ -77,25 +77,28 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
 
     return (
         <>
-            <form onSubmit={handleSaveButtonClick}>
-                {/* Workout Name & Icon */}
-                <div className="flex flex-row gap-4">
-                    <div>
+            <form
+                onSubmit={handleSaveButtonClick}
+                className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6"
+            >
+                {/* Input-fields */}
+                <div className="bg-zinc-700 rounded-lg p-4 shadow-inner space-y-4">
+                    <h3 className="text-sm font-semibold text-zinc-100 mb-2">New Workout</h3>
+
                         <input
                             id={"name"}
                             name={"name"}
                             type={"text"}
                             placeholder={"name of the workout ..."}
                             onChange={handleChange}
-                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 p-4 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
-                    </div>
-                    <div>
+
                         <select
                             id={"icon"}
                             name={"icon"}
                             onChange={handleChange}
-                            className="w-22 py-2 pl-3 text-sm pt-3 mt-2 p-4 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         >
                             <option value={"LEGS"}>legs</option>
                             <option value={"ARMS"}>arms</option>
@@ -103,23 +106,33 @@ export default function WorkoutCreateForm({exercises, createWorkout}: WorkoutCre
                             <option value={"SHOULDERS"}>shoulders</option>
                             <option value={"CHEST"}>chest</option>
                         </select>
-                    </div>
                 </div>
 
                 {/* Exercises: Added */}
-                <div>
-                    <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
-                </div>
+                {addedExercises && addedExercises.length > 0  && (
+                    <div>
+                        <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
+                    </div>
+                )}
 
                 {/* Exercises: All */}
-                <div>
-                    <List elements={allExercises} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
-                </div>
+                {allExercises && allExercises.length > 0 && (
+                    <div>
+                        <List elements={allExercises} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
+                    </div>
+                )}
 
-                {/* Action Buttons */}
+                {/* Buttons */}
                 <div className="mt-5 flex justify-center gap-4">
-                    <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick}/>
-                    <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
+                    <ButtonWithIcon
+                        icon={"/goBack-icon.png"}
+                        type={"button"}
+                        onClick={handleBackButtonClick}
+                    />
+                    <ButtonWithIcon
+                        icon={"/save-icon.png"}
+                        type={"submit"}
+                    />
                 </div>
             </form>
         </>

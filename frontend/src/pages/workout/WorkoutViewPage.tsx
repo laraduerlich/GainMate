@@ -29,7 +29,7 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
     const [editName, setEditName] = useState<string>(workout ? workout.name : "")
     const [editIcon, setEditIcon] = useState(workout ? workout.icon : "LEGS")
     const [addedIdList, setAddedIdList] = useState<string[]>(workout? workout.exerciseIdList : [])
-    const [exerciseIdList, setExerciseIdList] = useState<(string | undefined)[]>(exerciseIdsOfWorkout)
+    const [exerciseIdListNotInWorkout, setExerciseIdListNotInWorkout] = useState<(string | undefined)[]>(exerciseIdsOfWorkout)
 
     // List with added exercises from the workout
     const addedExercises: Exercise[] = exercises.filter(exercise =>
@@ -37,15 +37,15 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
     )
 
     // List with all exercises which are not yet in the workout
-    const allExercisesOfWorkout: Exercise[] = exercises.filter(exercise =>
-        exercise.id !== undefined && exerciseIdList.includes(exercise.id)
+    const allExercisesNotInWorkout: Exercise[] = exercises.filter(exercise =>
+        exercise.id !== undefined && exerciseIdListNotInWorkout.includes(exercise.id)
     )
 
     // button handler
     const handleAddButtonClick = (id: string | undefined) => {
         if (id !== undefined) {
             setAddedIdList([...addedIdList, id])
-            setExerciseIdList(idExercise => idExercise.filter(idExercise => idExercise !== id))
+            setExerciseIdListNotInWorkout(idExercise => idExercise.filter(idExercise => idExercise !== id))
         } else {
             console.error("Invalid ID for adding exercise.");
         }
@@ -54,7 +54,7 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
     const handleRemoveButtonClick = (id: string | undefined) => {
         if (id !== undefined) {
             setAddedIdList(addedIdList.filter(idExercise => idExercise !== id))
-            setExerciseIdList([...exerciseIdList, id])
+            setExerciseIdListNotInWorkout([...exerciseIdListNotInWorkout, id])
         } else {
             console.error("Invalid ID for removing exercise.");
         }
@@ -90,8 +90,10 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
         navigate("/workouts")
     }
 
-    // Load workout
+    // Load workout & all exercises
     useEffect(() => {
+        getAllExercises()
+
         if (workoutId !== undefined){
             getWorkoutById(workoutId)
                 .then((response) => {
@@ -99,30 +101,33 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
                     setAddedIdList(response.data.exerciseIdList)
                 })
         }
-        getAllExercises()
     }, [workoutId]);
 
     return (
         <>
             {isEditing ? (
                 <div>
-                    <form onSubmit={handleSaveButtonClick}>
-                        <div className="flex flex-row gap-4">
-                            <div>
+                    <form
+                        onSubmit={handleSaveButtonClick}
+                        className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6"
+                    >
+                        {/* Input-fields */}
+                        <div className="bg-zinc-700 rounded-lg p-4 shadow-inner space-y-4">
+                            <h3 className="text-sm font-semibold text-zinc-100 mb-2">Edit Workout</h3>
+
                                 <input
                                     name={"name"}
                                     value={editName}
                                     placeholder={workout?.name}
                                     onChange={(event) => setEditName(event.target.value)}
-                                    className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                                    className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 />
-                            </div>
-                            <div>
+
                                 <select
                                     id={"icon"}
                                     name={"icon"}
                                     onChange={(event) => setEditIcon(event.target.value as "LEGS" | "ARMS" | "BACK" | "SHOULDERS" | "CHEST")}
-                                    className="w-22 py-2 pl-3 text-sm pt-3 mt-2 p-4 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                                    className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 >
                                     <option value={"LEGS"}>legs</option>
                                     <option value={"ARMS"}>arms</option>
@@ -130,57 +135,80 @@ export default function WorkoutViewPage({workout, exercises, getAllExercises,get
                                     <option value={"SHOULDERS"}>shoulders</option>
                                     <option value={"CHEST"}>chest</option>
                                 </select>
-                            </div>
                         </div>
-                        {/* List of all exercises for creating workouts with remove button*/}
+
+                        {/* Exercises: Added */}
                         <div>
                             <List elements={addedExercises} use={"removeWorkout"} handelButtonClick={handleRemoveButtonClick}/>
                         </div>
-                        {/* List of all exercises for creating workouts with add button*/}
+
+                        {/* Exercises: All, which not yet in the workout */}
                         <div>
-                            <List elements={allExercisesOfWorkout} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
+                            <List elements={allExercisesNotInWorkout} use={"addWorkout"} handelButtonClick={handleAddButtonClick}/>
                         </div>
+
+                        {/* Buttons */}
                         <div className="mt-5 flex justify-center gap-4">
-                            <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => {
-                                setIsEditing(false)
-                                setAddedIdList(workout? workout.exerciseIdList : [])
-                            }} />
-                            <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
+                            <ButtonWithIcon
+                                icon={"/goBack-icon.png"}
+                                type={"button"}
+                                onClick={() => {
+                                    setIsEditing(false)
+                                    setAddedIdList(workout? workout.exerciseIdList : [])}}
+                            />
+                            <ButtonWithIcon
+                                icon={"/save-icon.png"}
+                                type={"submit"}
+                            />
                         </div>
                     </form>
                 </div>
             ) : (
-                <div className="p-6 rounded-xl bg-zinc-500 shadow-xl text-zinc-800 max-w-xl mx-auto">
-                    <h2 className="text-xl font-bold text-zinc-800 mb-4 text-center">
-                        {workout? workout.name : ""}
-                    </h2>
-                    {/* Icon */}
-                    {workout?.icon && (
-                        <div className="flex justify-center mb-6">
-                            <div className="w-20 h-20 bg-blue-300 rounded-full flex items-center justify-center shadow-md">
-                                <img
-                                    src={`/icon/workout/${workout.icon}.png`}
-                                    alt="icon"
-                                    className="w-12 h-12"
-                                />
+                <div className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6">
+                    {/* Title & Icon Section */}
+                    <div className="bg-zinc-700 rounded-lg p-4 shadow-inner space-y-4">
+                        <h2 className="text-lg font-bold text-zinc-100 text-center">
+                            {workout?.name || ""}
+                        </h2>
+                        {workout?.icon && (
+                            <div className="flex justify-center">
+                                <div className="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center shadow-md">
+                                    <img
+                                        src={`/icon/workout/${workout.icon}.png`}
+                                        alt="Workout Icon"
+                                        className="w-8 h-8"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )}
-
-                    {/* Exercises */}
-                    <ul className="list-disc space-y-2 text-left pl-6 text-zinc-800">
-                        {addedExercises.map((exercise) => (
-                            <li key={exercise.id}>{exercise.name}</li>
-                        ))}
-                    </ul>
+                        )}
+                        {/* Exercise List */}
+                        <ul className="list-disc pl-5 space-y-1 text-sm text-left text-zinc-200">
+                            {addedExercises.map((exercise) => (
+                                <li key={exercise.id}>{exercise.name}</li>
+                            ))}
+                        </ul>
+                    </div>
 
                     {/* Buttons */}
-                    <div className="mt-8 flex justify-center gap-4">
-                        <ButtonWithIcon icon="/goBack-icon.png" type="button" onClick={handleBackButtonClick} />
-                        <ButtonWithIcon icon="/edit-icon.png" type="button" onClick={handleEditButtonClick} />
-                        <ButtonWithIcon icon="/delete-icon.png" type="button" onClick={handleDeleteButtonClick} />
+                    <div className="flex justify-center gap-4">
+                        <ButtonWithIcon
+                            icon="/goBack-icon.png"
+                            type="button"
+                            onClick={handleBackButtonClick}
+                        />
+                        <ButtonWithIcon
+                            icon="/edit-icon.png"
+                            type="button"
+                            onClick={handleEditButtonClick}
+                        />
+                        <ButtonWithIcon
+                            icon="/delete-icon.png"
+                            type="button"
+                            onClick={handleDeleteButtonClick}
+                        />
                     </div>
                 </div>
+
             )}
         </>
     )

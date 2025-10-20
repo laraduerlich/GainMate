@@ -58,7 +58,8 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
                     return setEditExercise({
                         id: response.data.id,
                         name: response.data.name,
-                        note: response.data.note
+                        note: response.data.note,
+                        progressList: response.data.progressList
                     })
                 })
         }
@@ -67,28 +68,47 @@ export default function ExerciseViewPage ({exercise, getExerciseById, updateExer
     return (
         <>
             {isEditing ? (
-                <form onSubmit={handleSaveButtonClick}>
-                    <div>
+                <form
+                    onSubmit={handleSaveButtonClick}
+                    className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6"
+                >
+                    {/* Input-fields */}
+                    <div className="bg-zinc-700 rounded-lg p-4 shadow-inner space-y-4">
+                        <h3 className="text-sm font-semibold text-zinc-100 mb-2">Edit Exercise</h3>
+
                         <input
-                            name={"name"}
+                            name="name"
                             value={editExercise.name}
                             onChange={handleEditChange}
-                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                            placeholder="Exercise Name"
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
+
                         <input
-                            name={"note"}
+                            name="note"
                             value={editExercise.note}
                             onChange={handleEditChange}
-                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+                            placeholder="Notes (optional)"
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
-                    <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={() => setIsEditing(false)} />
-                        <ButtonWithIcon icon={"/save-icon.png"} type={"submit"} />
+
+                    {/* Buttons */}
+                    <div className="flex justify-center gap-4">
+                        <ButtonWithIcon
+                            icon="/goBack-icon.png"
+                            type="button"
+                            onClick={() => setIsEditing(false)}
+                        />
+                        <ButtonWithIcon
+                            icon="/save-icon.png"
+                            type="submit"
+                        />
                     </div>
                 </form>
+
             ) : (
-                <div>
+                <div className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6">
                     <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
                     <div className="mt-5 flex justify-center gap-4">
                         <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />

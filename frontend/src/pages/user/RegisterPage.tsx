@@ -39,43 +39,53 @@ export default function RegisterPage() {
 
     return (
         <>
-            <div>
-                <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
-                    Start your fitness journey 🚀
-                </h2>
-                <form onSubmit={handleRegisterButtonClick}>
-                    <input
-                        id={"name"}
-                        name={"name"}
-                        type={"text"}
-                        placeholder={"Name..."}
-                        onChange={handleChange}
-                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+            <div className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6">
+                {/* Login Card */}
+                <div className="bg-zinc-700 rounded-lg p-4 shadow-inner space-y-4">
+                    <h2 className="text-lg font-semibold text-zinc-100 text-center">
+                        Start your fitness journey 🚀
+                    </h2>
+
+                    <form onSubmit={handleRegisterButtonClick} className="space-y-3">
+                        <input
+                            id={"name"}
+                            name={"name"}
+                            type={"text"}
+                            placeholder={"Name..."}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                        <input
+                            id={"username"}
+                            name={"username"}
+                            type={"text"}
+                            placeholder={"Username..."}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                        <input
+                            id={"password"}
+                            name={"password"}
+                            type={"password"}
+                            placeholder={"Password..."}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                        <div className="flex justify-center pt-2">
+                            <ButtonWithIcon icon={"/add-icon.png"} type={"submit"} />
+                        </div>
+                    </form>
+                </div>
+
+                {/* Login Redirect */}
+                <div className="flex flex-col items-center gap-2">
+                    <p className="text-sm text-zinc-300">Already an account?</p>
+                    <ButtonWithIcon
+                        icon={"/icon/user/login-icon.png"}
+                        type={"button"}
+                        onClick={handleGoToLoginButton}
                     />
-                    <input
-                        id={"username"}
-                        name={"username"}
-                        type={"text"}
-                        placeholder={"Username..."}
-                        onChange={handleChange}
-                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
-                    />
-                    <input
-                        id={"password"}
-                        name={"password"}
-                        type={"password"}
-                        placeholder={"Password..."}
-                        onChange={handleChange}
-                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
-                    />
-                    <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/icon/user/add-icon.png"} type={"submit"} />
-                    </div>
-                </form>
-            </div>
-            <div className="mt-5 flex justify-center gap-4">
-                <h3>Already register?</h3>
-                <ButtonWithIcon icon={"/icon/user/login-icon.png"} type={"button"} onClick={handleGoToLoginButton} />
+                </div>
             </div>
         </>
     )
