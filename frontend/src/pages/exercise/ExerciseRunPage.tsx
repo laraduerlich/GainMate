@@ -33,15 +33,16 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
             weight: weight.toString()
         }
 
-        setSets([...sets, newSet])
+        // update sets-State
+        setSets(prev => [...prev, newSet])
 
-        // add Progress to Exercise
+        // add progressList only with the new set
         setEditExercise({
             ...editExercise,
             progressList: [...editExercise.progressList || [],
                 {
                     date: formattedDate,
-                    sets: sets
+                    sets: [newSet]
                 }]
         })
 
@@ -96,73 +97,82 @@ export default function ExerciseRunPage({exercise, getExerciseById, updateExerci
 
     return (
         <>
-            <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
-            <br />
-            <p>Datum: {formattedDate}</p>
-            <br />
-            <div>
-                <form onSubmit={handleAddButtonClick}>
-                    <div>
-                        <input
-                            id={"reps"}
-                            name={"Reps"}
-                            placeholder={"Reps..."}
-                            type="number"
-                            value={reps}
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => setReps(event.target.value)}
-                            min="1"
-                            step="1"
-                            required
-                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
-                        />
-                        <input
-                            id={"weight"}
-                            name={"Weight"}
-                            placeholder={"Weight in kg..."}
-                            type="number"
-                            value={weight}
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => setWeight(event.target.value)}
-                            min="1"
-                            step="0.5"
-                            required
-                            className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
-                        />
-                    </div>
-                    <div className="mt-3">
-                        <ButtonWithIcon icon={"/add-icon.png"} type={"submit"} />
-                    </div>
-                </form>
-            </div>
-            <div>
-                <table className="mt-3 ml text-xs w-[350px]">
-                    <thead className="bg-zinc-800">
-                        <tr className="align-middle">
-                            <th className="p-3">Reps</th>
-                            <th className="p-3">x</th>
-                            <th className="p-3">Weight</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {sets.map((oneSet: Sets) => (
-                        <tr className="border-b border-opacity-20 border-gray-300"
-                            key={`${oneSet.repetition}-${oneSet.weight}`}
-                        >
-                        <td className="p-3">
-                            <p>{oneSet.repetition}</p>
-                        </td>
-                            <td className="p-3">
-                                <p>x</p>
-                            </td>
-                        <td className="p-3">
-                            <p>{oneSet.weight} kg</p>
-                        </td>
-                        </tr>))}
-                    </tbody>
-                </table>
-            </div>
-            <div className="mt-5 flex justify-center gap-4">
-                <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />
-                <ButtonWithIcon icon={"/check-icon.png"} type={"button"} onClick={handleDoneButtonClick} />
+            <div className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6">
+                <ExerciseCard exercise={exercise ? exercise : {id: "", name: "",}} />
+                {/*<p>Datum: {formattedDate}</p>*/}
+                <div>
+                    <form
+                        onSubmit={handleAddButtonClick}
+                    >
+                        {/* Input-fields */}
+                        <div className="bg-zinc-700 rounded-lg p-4 shadow-inner space-y-4">
+                            <h3 className="text-sm font-semibold text-zinc-100 mb-2">Note your Progress!</h3>
+
+                            <input
+                                id={"reps"}
+                                name={"Reps"}
+                                placeholder={"Reps..."}
+                                type="number"
+                                value={reps}
+                                onChange={(event: ChangeEvent<HTMLInputElement>) => setReps(event.target.value)}
+                                min="1"
+                                step="1"
+                                required
+                                className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            />
+
+                            <input
+                                id={"weight"}
+                                name={"Weight"}
+                                placeholder={"Weight in kg..."}
+                                type="number"
+                                value={weight}
+                                onChange={(event: ChangeEvent<HTMLInputElement>) => setWeight(event.target.value)}
+                                min="1"
+                                step="0.5"
+                                required
+                                className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            />
+                        </div>
+
+                        {/* Button */}
+                        <div className="mt-3">
+                            <ButtonWithIcon icon={"/add-icon.png"} type={"submit"} />
+                        </div>
+
+                        <div className="bg-zinc-700 mt-3 rounded-lg p-4 shadow-inner space-y-2">
+                            <table className="w-full text-xs text-zinc-200">
+                                <thead>
+                                <tr className="text-left border-b border-zinc-600">
+                                    <th className="p-3">Reps</th>
+                                    <th className="p-3">x</th>
+                                    <th className="p-3">Weight</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {sets.map((oneSet: Sets) => (
+                                    <tr className="border-b border-zinc-600"
+                                        key={`${oneSet.repetition}-${oneSet.weight}`}
+                                    >
+                                        <td className="p-3">
+                                            <p>{oneSet.repetition}</p>
+                                        </td>
+                                        <td className="p-3">
+                                            <p>x</p>
+                                        </td>
+                                        <td className="p-3">
+                                            <p>{oneSet.weight} kg</p>
+                                        </td>
+                                    </tr>))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <div className="mt-5 flex justify-center gap-4">
+                    <ButtonWithIcon icon={"/goBack-icon.png"} type={"button"} onClick={handleBackButtonClick} />
+                    <ButtonWithIcon icon={"/check-icon.png"} type={"button"} onClick={handleDoneButtonClick} />
+                </div>
             </div>
         </>
     )

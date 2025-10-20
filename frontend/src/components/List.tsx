@@ -69,23 +69,25 @@ export default function List({elements, use, handelButtonClick}: ExerciseListPro
 
     return (
         <>
-            <div>
-                <div className="flex flex-col sm:flex-row items-center w-full max-w-3xl mx-auto my-6 space-y-4 sm:space-y-0 sm:space-x-4">
-                    {(elements.length != 0) ? (
+            <div className="w-full max-w-2xl mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6">
+                {/* Searchbar */}
+                {elements.length !== 0 && (
+                    <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
                         <Searchbar value={searchInput} onChange={setSearchInput} />
-                    ) : null}
-                </div>
+                    </div>
+                )}
                 <div>
                     {/* List of all exercises with view and add button */}
-                    <ul className="flex flex-col gap-4 w-full">
+                    <ul className="flex flex-col gap-4">
                         {filteredElements.map((element) => (
                             <li
                                 key={element.id}
-                                className="w-full max-w-md px-4 py-3 flex items-center gap-20 bg-zinc-500 rounded-xl shadow-sm backdrop-blur-md hover:bg-zinc-300 transition-colors duration-200">
-                                <span className="flex-grow text-zinc-800 text-base font-medium truncate">
+                                className="w-full bg-zinc-700 rounded-lg shadow-inner px-4 py-2 flex items-center justify-between hover:bg-zinc-600 transition-colors duration-200"
+                            >
+                                <span className="text-zinc-100 text-sm font-medium truncate">
                                     {element.name}
                                 </span>
-                                <div className="ml-auto shrink-0">
+                                <div className="flex items-center gap-2 ml-4 shrink-0">
                                     {(use === "dashboardExercise") ? (
                                                 <ButtonWithIcon icon={"/view-icon.png"} type={"button"} onClick={() => {handleViewExerciseButtonClick(element.id)}} />)
 

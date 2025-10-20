@@ -99,34 +99,40 @@ export default function UserPage({appUser, fetchUser,logout}:UserPageProps) {
                     </div>
                 </form>
             ) : (
-                <div>
-                    <div className= "w-full max-w-md px-4 py-3 flex items-center gap-20 bg-zinc-500 rounded-xl shadow-sm backdrop-blur-md">
-                    <table className="mt-3 ml text-xs w-[200px]">
-                        <thead className="bg-zinc-800">
-                        <tr className="align-middle">
-                            <th>{""}</th>
-                            <th>{""}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr className="text-left px-4 py-2 text-base text-zinc-800"
-                            key={"savedExercises"}
-                        >
-                            <td>Saved Exercises:</td>
-                            <td>{appUser?.exerciseIdList ? (appUser.exerciseIdList.length) : ("0")}</td>
-                        </tr>
-                        <tr className="text-left px-4 py-2 text-base text-zinc-800"
-                            key={"savedWorkouts"}
-                        >
-                            <td>Saved Workouts:</td>
-                            <td>{appUser?.workoutIdList ? (appUser.workoutIdList.length) : ("0")}</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6">
+                    {/* Info Card */}
+                    <div className="bg-zinc-700 rounded-lg p-4 shadow-inner">
+                        <h3 className="text-zinc-100 text-sm font-semibold mb-3">Your Statistics</h3>
+                        <table className="w-full text-sm text-left text-zinc-200">
+                            <tbody>
+                            <tr className="border-b border-zinc-600">
+                                <td className="py-2">Saved Exercises</td>
+                                <td className="py-2 text-right font-medium">
+                                    {appUser?.exerciseIdList?.length ?? 0}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="py-2">Saved Workouts</td>
+                                <td className="py-2 text-right font-medium">
+                                    {appUser?.workoutIdList?.length ?? 0}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/edit-icon.png"} type={"button"} onClick={handleEditButtonClick} />
-                        <ButtonWithIcon icon={"/delete-icon.png"} type={"button"} onClick={() => setShowConfirm(true)} />
+
+                    {/* Action Buttons */}
+                    <div className="flex justify-center gap-4">
+                        <ButtonWithIcon
+                            icon="/edit-icon.png"
+                            type="button"
+                            onClick={handleEditButtonClick}
+                        />
+                        <ButtonWithIcon
+                            icon="/delete-icon.png"
+                            type="button"
+                            onClick={() => setShowConfirm(true)}
+                        />
                     </div>
                 </div>
             )}

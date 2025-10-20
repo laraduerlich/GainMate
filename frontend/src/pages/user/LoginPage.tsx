@@ -41,36 +41,45 @@ export default function LoginPage({fetchUser}: LoginPageProps) {
 
     return (
         <>
-            <h2 className="text-lg font-semibold text-zinc-300 px-4 pt-4 pb-2">
-                Login
-            </h2>
-            <div>
-                <form onSubmit={handleLoginButtonClick}>
-                    <input
-                        id={"username"}
-                        type={"text"}
-                        placeholder={"Username"}
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
+            <div className="w-full max-w-md mx-auto p-6 bg-zinc-800 rounded-xl shadow-md space-y-6">
+                {/* Login Card */}
+                <div className="bg-zinc-700 rounded-lg p-4 shadow-inner space-y-4">
+                    <h2 className="text-lg font-semibold text-zinc-100 text-center">Login</h2>
+
+                    <form onSubmit={handleLoginButtonClick} className="space-y-3">
+                        <input
+                            id="username"
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(event) => setUsername(event.target.value)}
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            className="w-full px-3 py-2 text-sm text-zinc-100 bg-zinc-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                        <div className="flex justify-center pt-2">
+                            <ButtonWithIcon icon="/icon/user/login-icon.png" type="submit" />
+                        </div>
+                    </form>
+                </div>
+
+                {/* Registration Redirect */}
+                <div className="flex flex-col items-center gap-2">
+                    <p className="text-sm text-zinc-300">Not yet an account?</p>
+                    <ButtonWithIcon
+                        icon="/icon/user/register-icon.png"
+                        type="button"
+                        onClick={handleGoToRegisterButtonClick}
                     />
-                    <input
-                        id={"password"}
-                        type={"password"}
-                        placeholder={"password"}
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        className="w-full py-2 pl-3 text-sm pt-3 mt-2 text-zinc-800 rounded-md bg-zinc-300 backdrop-blur-md focus:outline-none"
-                    />
-                    <div className="mt-5 flex justify-center gap-4">
-                        <ButtonWithIcon icon={"/icon/user/login-icon.png"} type={"submit"} />
-                    </div>
-                </form>
-                <div className="mt-5 flex justify-center gap-4">
-                    <h3>No account yet?</h3>
-                    <ButtonWithIcon icon={"/icon/user/register-icon.png"} type={"button"} onClick={handleGoToRegisterButtonClick} />
                 </div>
             </div>
+
         </>
     )
 }
